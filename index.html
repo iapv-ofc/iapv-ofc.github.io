@@ -29,12 +29,20 @@
     </script>
 
     <!-- Estilos personalizados --><style>
-        /* Estilo dos cards de evento - MUDADO: Largura aumentada em 10% */
+        /* Estilo dos cards de evento */
         .event-card {
-            width: 330px; /* Era 300px */
+            /* MUDADO: Tamanho aumentado em 10% */
+            width: 330px; /* 300px * 1.1 */ 
             flex-shrink: 0;
             scroll-snap-align: start;
+            /* REMOVIDO: border-color aqui, a sombra agora é mais sutil via Tailwind no JS */
         }
+        
+        /* MUDADO: Ajuste da sombra das imagens de evento */
+        .event-card img {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+        }
+
 
         /* Estilo dos botões do Swiper (para combinar com a referência) */
         .swiper-button-next,
@@ -97,7 +105,7 @@
             color: #e0e0e0;
         }
 
-        /* Estilo para as bolinhas do Swiper (Galeria) - Mantido, mas não usado diretamente agora */
+        /* Estilo para as bolinhas do Swiper (Galeria - se fosse usada) */
         .swiper-pagination-bullet {
             background-color: #aaa; /* Cor da bolinha inativa */
             opacity: 0.7;
@@ -107,23 +115,25 @@
             opacity: 1;
         }
 
-        /* Estilo da galeria de fotos (do Uiverse) - MUDADO: Tamanho, borda e sombra */
+        /* MUDADO: Estilo da galeria de fotos (SEM as bordas do Uiverse) */
         .photo-gallery-card-frame {
-            width: 220px;   /* Era 200px, aumentado em 10% */
-            height: 275px;  /* Era 250px, aumentado em 10% */
+            /* MUDADO: Tamanho aumentado em 10% */
+            width: 220px; /* 200px * 1.1 */
+            height: 275px; /* 250px * 1.1 */
             
-            /* Estilos do Uiverse */
-            border: none; /* REMOVIDO: 'border: none;' explicitamente */
-            border-radius: 10px;
-            background: radial-gradient(ellipse farthest-side at 76% 77%, rgba(245, 228, 212, 0.25) 4%, rgba(255, 255, 255, 0) calc(4% + 1px)), radial-gradient(circle at 76% 40%, #fef6ec 4%, rgba(255, 255, 255, 0) 4.18%), linear-gradient(135deg, #ff0000 0%, #000036 100%), radial-gradient(ellipse at 28% 0%, #ffcfac 0%, rgba(98, 149, 144, 0.5) 100%), linear-gradient(180deg, #cd6e8a 0%, #f5eab0 69%, #d6c8a2 70%, #a2758d 100%);
-            background-blend-mode: normal, normal, screen, overlay, normal;
-            box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3); /* MUDADO: Sombra mais suave */
+            /* REMOVIDO: background complexo do Uiverse */
+            background: none; /* Remove o gradiente colorido */
+            border: none; /* Garante que não há borda */
+            border-radius: 10px; /* Mantém o arredondamento */
             
-            /* Adiciona padding para criar a "moldura" */
-            padding: 8px;
+            /* MUDADO: Sombra mais suave */
+            box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2); /* Sombra mais sutil */
             
-            /* Classes de tema (para a sombra) */
-            @apply shadow-lg dark:shadow-black/50;
+            /* REMOVIDO: Padding, pois não há mais "moldura" */
+            padding: 0; 
+            
+            /* Classes de tema (para a sombra - Tailwind) */
+            @apply dark:shadow-black/30; /* Sombra um pouco mais forte no dark mode para contraste */
         }
 
         .photo-gallery-card-frame img {
@@ -131,7 +141,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 6px; /* Borda interna levemente arredondada */
+            /* MUDADO: Borda interna levemente arredondada (agora segue o card) */
+            border-radius: 10px; /* Arredondamento igual ao do card pai */
+            /* REMOVIDO: borda da imagem */
         }
     </style>
 </head>
@@ -388,7 +400,6 @@
         // --- 2. ESTADO GLOBAL ---
         let currentUnitId = 'cajuru'; // Unidade padrão
         let swiperEventos; // Variável para guardar o slider de eventos
-        let swiperFotos; // Variável para guardar o slider de fotos
         
         // --- 3. FUNÇÕES DE ATUALIZAÇÃO ---
 
@@ -444,12 +455,11 @@
             const calendarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
             const mapPinIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
 
-            // MUDADO: Classes para light/dark mode no card
+            // MUDADO: Classes para light/dark mode no card, e sombra mais suave
             return `
                 <div class="swiper-slide h-auto">
-                    <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" class="event-card bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden block h-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
-                        <img src="${event.img}" alt="${event.title}" class="w-full h-40 object-cover">
-                        <div class="p-5 flex flex-col">
+                    <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" class="event-card bg-white dark:bg-gray-800 shadow-md dark:shadow-black/30 rounded-lg overflow-hidden block h-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+                        <img src="${event.img}" alt="${event.title}" class="w-full h-40 object-cover shadow-sm"> <!-- Sombra leve na imagem --><div class="p-5 flex flex-col">
                             <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${event.title}</h4>
                             <div class="text-sm text-gray-600 dark:text-gray-400 mb-2 flex items-center">
                                 ${calendarIcon}
@@ -562,15 +572,10 @@
             // Configura a caixa de pesquisa de eventos
             document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
 
-            // Inicializa o Swiper de EVENTOS - MUDADO: Adicionado autoplay e loop
+            // Inicializa o Swiper de EVENTOS
             swiperEventos = new Swiper('#eventos-slider', {
                 slidesPerView: 1, // Quantos slides por vez
                 spaceBetween: 20,  // Espaço entre eles
-                loop: true, // NOVO: Loop infinito
-                autoplay: { // NOVO: Passa automaticamente
-                    delay: 3000, // 3 segundos
-                    disableOnInteraction: false, // Continua passando mesmo se o usuário interagir
-                },
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
@@ -592,15 +597,11 @@
                 }
             });
 
-            // MUDADO: Inicializa o Swiper de FOTOS (agora como carrossel de cards, com autoplay e loop)
-            swiperFotos = new Swiper('#fotos-slider', {
+            // MUDADO: Inicializa o Swiper de FOTOS (agora como carrossel de cards)
+            new Swiper('#fotos-slider', {
                 slidesPerView: 'auto', // Permite que os cards definam sua própria largura
                 spaceBetween: 30,  // Espaço entre os cards
-                loop: true, // NOVO: Loop infinito
-                autoplay: { // NOVO: Passa automaticamente
-                    delay: 3000, // 3 segundos
-                    disableOnInteraction: false, // Continua passando mesmo se o usuário interagir
-                },
+                
                 navigation: {
                     nextEl: '#fotos .swiper-button-next', // Escopo para a seção #fotos
                     prevEl: '#fotos .swiper-button-prev',
