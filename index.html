@@ -17,12 +17,15 @@
     <script>
         // Configuração para o Tailwind (para o tema escuro e fontes)
         tailwind.config = {
-            darkMode: 'class', // Ativa o modo escuro
+            darkMode: 'media', // MUDADO: De 'class' para 'media' (automático)
             theme: {
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'], // Fonte bonita, similar à referência
                     },
+                    colors: {
+                        'accent': '#005DCC', // NOVA: Cor de destaque
+                    }
                 },
             },
         };
@@ -30,14 +33,6 @@
 
     <!-- Estilos personalizados -->
     <style>
-        /* Força o tema escuro */
-        html {
-            background-color: #111827; /* bg-gray-900 */
-            color: #f3f4f6; /* text-gray-100 */
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
-        
         /* Estilo dos cards de evento */
         .event-card {
             width: 300px;
@@ -75,12 +70,12 @@
             fill: none;
         }
 
-        /* Estilo para o Select (Dropdown) */
+        /* Estilo para o Select (Dropdown) - Fica na capa, mantém o visual */
         .custom-select-filter {
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            padding: 12px 48px 12px 24px; /* Mais padding à direita para a seta */
+            padding: 12px 48px 12px 24px; 
             font-size: 16px;
             font-weight: 600;
             color: #e0e0e0;
@@ -91,7 +86,7 @@
             transition: all 0.2s ease-in-out;
             cursor: pointer;
             width: 100%;
-            background-image: none; /* Remove a seta padrão */
+            background-image: none;
         }
         .custom-select-filter:hover {
             background-color: rgba(255, 255, 255, 0.2);
@@ -99,17 +94,27 @@
         .custom-select-filter:focus {
             outline: none;
             ring: 2px;
-            ring-color: #2563eb;
+            ring-color: #005DCC; /* MUDADO: Cor de destaque */
         }
-        /* Cor do dropdown */
         .custom-select-filter option {
-            background-color: #1f2937; /* bg-gray-800 */
+            background-color: #1f2937;
             color: #e0e0e0;
+        }
+
+        /* NOVO: Estilo para as bolinhas do Swiper (Galeria) */
+        .swiper-pagination-bullet {
+            background-color: #aaa; /* Cor da bolinha inativa */
+            opacity: 0.7;
+        }
+        .swiper-pagination-bullet-active {
+            background-color: #005DCC; /* MUDADO: Cor de destaque */
+            opacity: 1;
         }
     </style>
 </head>
 
-<body class="bg-gray-900 text-gray-100 antialiased">
+<!-- MUDADO: Classes do body para tema light/dark -->
+<body class="bg-gray-50 dark:bg-[#161616] text-gray-900 dark:text-gray-100 antialiased">
 
     <!-- ===== SEÇÃO 1: CAPA E FILTRO GLOBAL ===== -->
     <header class="h-screen min-h-[600px] w-full flex flex-col items-center justify-center relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://placehold.co/1920x1080/1a202c/7f8c9a?text=Foto+da+Igreja');">
@@ -152,45 +157,46 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                 <!-- Missão -->
                 <div class="flex flex-col items-center">
-                    <i data-lucide="compass" class="lucide-icon w-12 h-12 text-blue-500 mb-4"></i>
+                    <i data-lucide="compass" class="lucide-icon w-12 h-12 text-accent mb-4"></i> <!-- MUDADO -->
                     <h3 class="text-2xl font-bold mb-3">Missão</h3>
-                    <p class="text-gray-300 leading-relaxed">
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> <!-- MUDADO -->
                         Levar a palavra de Deus a todos, vivendo o amor de Cristo e servindo ao próximo com alegria e dedicação.
                     </p>
                 </div>
 
                 <!-- Visão -->
                 <div class="flex flex-col items-center">
-                    <i data-lucide="eye" class="lucide-icon w-12 h-12 text-blue-500 mb-4"></i>
+                    <i data-lucide="eye" class="lucide-icon w-12 h-12 text-accent mb-4"></i> <!-- MUDADO -->
                     <h3 class="text-2xl font-bold mb-3">Visão</h3>
-                    <p class="text-gray-300 leading-relaxed">
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> <!-- MUDADO -->
                         Ser uma igreja relevante e transformadora, que impacta a sociedade através de células que multiplicam discípulos.
                     </p>
                 </div>
 
                 <!-- Valores -->
                 <div class="flex flex-col items-center">
-                    <i data-lucide="gem" class="lucide-icon w-12 h-12 text-blue-500 mb-4"></i>
+                    <i data-lucide="gem" class="lucide-icon w-12 h-12 text-accent mb-4"></i> <!-- MUDADO -->
                     <h3 class="text-2xl font-bold mb-3">Valores</h3>
-                    <p class="text-gray-300 leading-relaxed">
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> <!-- MUDADO -->
                         Comunhão, Adoração, Serviço, Evangelismo e Discipulado. Pilares que sustentam nossa fé e nossas ações.
                     </p>
                 </div>
             </div>
         </section>
 
-        <hr class="border-gray-700/50 max-w-6xl mx-auto" />
+        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" /> <!-- MUDADO -->
 
         <!-- ===== SEÇÃO 3: EVENTOS ===== -->
         <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl font-bold text-center mb-4">Eventos</h2>
-            <p class="text-lg text-gray-400 text-center mb-10">
-                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-blue-400">Cajuru</span>
+            <p class="text-lg text-gray-600 dark:text-gray-400 text-center mb-10"> <!-- MUDADO -->
+                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Cajuru</span> <!-- MUDADO -->
             </p>
 
             <!-- Caixa de Pesquisa -->
             <div class="mb-8 max-w-lg mx-auto">
-                <input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <!-- MUDADO: Classes de light/dark para o input -->
+                <input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent">
             </div>
 
             <!-- Carrossel (Swiper.js) -->
@@ -206,19 +212,19 @@
             </div>
 
             <!-- Mensagem de "Nenhum resultado" -->
-            <p id="eventos-nenhum-resultado" class="text-center text-gray-500 mt-8 text-lg hidden">
+            <p id="eventos-nenhum-resultado" class="text-center text-gray-500 dark:text-gray-400 mt-8 text-lg hidden"> <!-- MUDADO -->
                 Nenhum evento encontrado com esse nome.
             </p>
         </section>
 
-        <hr class="border-gray-700/50 max-w-6xl mx-auto" />
+        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" /> <!-- MUDADO -->
 
         <!-- ===== SEÇÃO 4: FOTOS ===== -->
         <section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl font-bold text-center mb-10">Galeria de Fotos</h2>
 
             <!-- Carrossel de Fotos (Automático) -->
-            <div id="fotos-slider" class.swiper-container rounded-lg overflow-hidden relative">
+            <div id="fotos-slider" class="swiper-container rounded-lg overflow-hidden relative">
                 <div class="swiper-wrapper">
                     <!-- Slides de Fotos -->
                     <div class="swiper-slide"><img src="https://placehold.co/1200x600/1f2937/9ca3af?text=Foto+Culto+1" alt="Foto da Igreja 1" class="w-full h-auto object-cover aspect-video"></div>
@@ -232,7 +238,8 @@
 
             <!-- Botão do Álbum (Link dinâmico) -->
             <div class="text-center mt-10">
-                <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform duration-200 hover:bg-blue-700 hover:scale-105">
+                <!-- MUDADO: Classes do botão para usar a cor de destaque -->
+                <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-accent text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform duration-200 hover:bg-accent/90 hover:scale-105">
                     Ver Álbum Completo da <span id="fotos-unidade-nome">Cajuru</span>
                 </a>
             </div>
@@ -240,7 +247,8 @@
 
 
         <!-- ===== SEÇÃO 5: CONTATO E MAPA ===== -->
-        <footer id="contato" class="py-20 px-4 bg-gray-950/50">
+        <!-- MUDADO: Fundo do rodapé para light/dark -->
+        <footer id="contato" class="py-20 px-4 bg-gray-100 dark:bg-gray-900/50">
             <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
                 
                 <!-- Coluna Esquerda: Mapa -->
@@ -263,37 +271,38 @@
                     <!-- Parte 1: Endereço -->
                     <div class="flex items-start gap-4">
                         <div class="pt-1">
-                            <i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-blue-500"></i>
+                            <i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO -->
                         </div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Endereço</h4>
-                            <p id="contato-endereco" class="text-lg text-gray-300">Carregando...</p>
+                            <p id="contato-endereco" class="text-lg text-gray-700 dark:text-gray-300">Carregando...</p> <!-- MUDADO -->
                         </div>
                     </div>
 
                     <!-- Parte 2: Horários -->
                     <div class="flex items-start gap-4">
                         <div class="pt-1">
-                            <i data-lucide="clock" class="lucide-icon w-6 h-6 text-blue-500"></i>
+                            <i data-lucide="clock" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO -->
                         </div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Horário dos Cultos</h4>
-                            <p id="contato-horarios" class="text-lg text-gray-300 whitespace-pre-line">Carregando...</p>
+                            <p id="contato-horarios" class="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line">Carregando...</p> <!-- MUDADO -->
                         </div>
                     </div>
 
                     <!-- Parte 3: Redes Sociais -->
                     <div class="flex items-start gap-4">
                         <div class="pt-1">
-                            <i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-blue-500"></i>
+                            <i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO -->
                         </div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Siga-nos</h4>
                             <div class="flex gap-5 mt-2">
-                                <a id="social-instagram" href="#" target="_blank" class="text-gray-400 hover:text-blue-500 transition-colors">
+                                <!-- MUDADO: Classes de hover dos ícones -->
+                                <a id="social-instagram" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
                                     <i data-lucide="instagram" class="lucide-icon w-8 h-8"></i>
                                 </a>
-                                <a id="social-youtube" href="#" target="_blank" class="text-gray-400 hover:text-blue-500 transition-colors">
+                                <a id="social-youtube" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
                                     <i data-lucide="youtube" class="lucide-icon w-8 h-8"></i>
                                 </a>
                             </div>
@@ -309,7 +318,6 @@
     <!-- ===== JAVASCRIPT PRINCIPAL ===== -->
     <script>
         // --- 1. BASE DE DADOS (Embutida para Teste) ---
-        // ATUALIZADO: Adicionei "time", "location", "startDate" e "endDate"
         const churchData = {
             "cajuru": {
                 "id": "cajuru",
@@ -439,17 +447,18 @@
             const calendarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
             const mapPinIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
 
+            // MUDADO: Classes para light/dark mode no card
             return `
                 <div class="swiper-slide h-auto">
-                    <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" class="event-card bg-gray-800 rounded-lg overflow-hidden shadow-lg block h-full hover:bg-gray-700 transition-colors duration-200">
+                    <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" class="event-card bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden block h-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                         <img src="${event.img}" alt="${event.title}" class="w-full h-40 object-cover">
                         <div class="p-5 flex flex-col">
-                            <h4 class="text-xl font-bold text-white mb-2">${event.title}</h4>
-                            <div class="text-sm text-gray-400 mb-2 flex items-center">
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${event.title}</h4>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-2 flex items-center">
                                 ${calendarIcon}
                                 <span class="ml-1.5">${event.date}${event.time ? ` • ${event.time}` : ''}</span>
                             </div>
-                            <div class="text-sm text-gray-300 flex items-center">
+                            <div class="text-sm text-gray-700 dark:text-gray-300 flex items-center">
                                 ${mapPinIcon}
                                 <span class="ml-1.5">${location}</span>
                             </div>
