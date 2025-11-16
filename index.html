@@ -3,13 +3,467 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IAPV</title>
+    <title>Igreja Palavra e Verdade</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.395.0/dist/lucide.min.js"></script>
+    <script>
+        // Configuração para o Tailwind (para o tema escuro e fontes)
+        tailwind.config = {
+            darkMode: 'class', // Ativa o modo escuro
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'], // Fonte bonita, similar à referência
+                    },
+                },
+            },
+        };
+    </script>
+
     <style>
-        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        /* Força o tema escuro */
+        html {
+            background-color: #111827; /* bg-gray-900 */
+            color: #f3f4f6; /* text-gray-100 */
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        /* Estilo dos cards de evento */
+        .event-card {
+            width: 300px;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+        }
+
+        /* Estilo dos botões do Swiper (para combinar com a referência) */
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            transition: all 0.2s ease-in-out;
+        }
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 20px;
+            font-weight: 900;
+        }
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Garante que os ícones do Lucide sejam criados */
+        .lucide-icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        /* Estilo para o Select (Dropdown) */
+        .custom-select-filter {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding: 12px 48px 12px 24px; /* Mais padding à direita para a seta */
+            font-size: 16px;
+            font-weight: 600;
+            color: #e0e0e0;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            width: 100%;
+            background-image: none; /* Remove a seta padrão */
+        }
+        .custom-select-filter:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .custom-select-filter:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: #2563eb;
+        }
+        /* Cor do dropdown */
+        .custom-select-filter option {
+            background-color: #1f2937; /* bg-gray-800 */
+            color: #e0e0e0;
+        }
     </style>
 </head>
-<body>
-    <h1>Bem-vindo ao site da Igreja Apostólica Palavra e Verdade!</h1>
-    <p>Em breve, um novo site cheio de bênçãos.</p>
+
+<body class="bg-gray-900 text-gray-100 antialiased">
+
+    <header class="h-screen min-h-[600px] w-full flex flex-col items-center justify-center relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://placehold.co/1920x1080/1a202c/7f8c9a?text=Foto+da+Igreja');">
+        <div class="absolute inset-0 bg-black/60 z-0"></div>
+
+        <div class="relative z-10 flex flex-col items-center text-center px-4">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white shadow-lg">
+                Bem vindo(a) á Igreja Palavra e Verdade
+            </h1>
+            <p class="mt-4 text-xl sm:text-2xl md:text-3xl text-gray-200 font-light shadow-md">
+                Uma igreja em célula
+            </p>
+
+            <div class="mt-12">
+                <label for="unit-select-filter" class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
+                <div class="relative w-72 mx-auto">
+                    <select id="unit-select-filter" class="custom-select-filter">
+                        <option value="sede">SEDE</option>
+                        <option value="jdpaulista">JD. PAULISTA</option>
+                        <option value="pari">PARI</option>
+                        <option value="guarulhos">GUARULHOS</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-300">
+                        <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full">
+
+        <section id="sobre" class="py-20 px-4 max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <div class="flex flex-col items-center">
+                    <i data-lucide="compass" class="lucide-icon w-12 h-12 text-blue-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-3">Missão</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Levar a palavra de Deus a todos, vivendo o amor de Cristo e servindo ao próximo com alegria e dedicação.
+                    </p>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <i data-lucide="eye" class="lucide-icon w-12 h-12 text-blue-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-3">Visão</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Ser uma igreja relevante e transformadora, que impacta a sociedade através de células que multiplicam discípulos.
+                    </p>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <i data-lucide="gem" class="lucide-icon w-12 h-12 text-blue-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-3">Valores</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Comunhão, Adoração, Serviço, Evangelismo e Discipulado. Pilares que sustentam nossa fé e nossas ações.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-700/50 max-w-6xl mx-auto" />
+
+        <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-4">Eventos</h2>
+            <p class="text-lg text-gray-400 text-center mb-10">
+                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-blue-400">Sede</span>
+            </p>
+
+            <div class="mb-8 max-w-lg mx-auto">
+                <input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="relative">
+                <div id="eventos-slider" class="swiper-container">
+                    <div class="swiper-wrapper" id="eventos-wrapper">
+                        </div>
+                </div>
+                <div class="swiper-button-prev -left-4 md:-left-12"></div>
+                <div class="swiper-button-next -right-4 md:-right-12"></div>
+            </div>
+
+            <p id="eventos-nenhum-resultado" class="text-center text-gray-500 mt-8 text-lg hidden">
+                Nenhum evento encontrado com esse nome.
+            </p>
+        </section>
+
+        <hr class="border-gray-700/50 max-w-6xl mx-auto" />
+
+        <section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-10">Galeria de Fotos</h2>
+
+            <div id="fotos-slider" class="swiper-container rounded-lg overflow-hidden relative">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="https://placehold.co/1200x600/1f2937/9ca3af?text=Foto+Culto+1" alt="Foto da Igreja 1" class="w-full h-auto object-cover aspect-video"></div>
+                    <div class="swiper-slide"><img src="https://placehold.co/1200x600/374151/e5e7eb?text=Foto+Célula+2" alt="Foto da Igreja 2" class="w-full h-auto object-cover aspect-video"></div>
+                    <div class="swiper-slide"><img src="https://placehold.co/1200x600/4b5563/f3f4f6?text=Foto+Batismo+3" alt="Foto da Igreja 3" class="w-full h-auto object-cover aspect-video"></div>
+                    <div class="swiper-slide"><img src="https://placehold.co/1200x600/5E35B1/EDE7F6?text=Foto+Jovens+4" alt="Foto da Igreja 4" class="w-full h-auto object-cover aspect-video"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+
+            <div class="text-center mt-10">
+                <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform duration-200 hover:bg-blue-700 hover:scale-105">
+                    Ver Álbum Completo da <span id="fotos-unidade-nome">Sede</span>
+                </a>
+            </div>
+        </section>
+
+
+        <footer id="contato" class="py-20 px-4 bg-gray-950/50">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+                
+                <div class="h-96 md:h-full min-h-[400px] rounded-lg overflow-hidden">
+                    <iframe 
+                        id="mapa-iframe"
+                        src="" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+
+                <div class="flex flex-col justify-center gap-10">
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="pt-1">
+                            <i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-blue-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Endereço</h4>
+                            <p id="contato-endereco" class="text-lg text-gray-300">Carregando...</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="pt-1">
+                            <i data-lucide="clock" class="lucide-icon w-6 h-6 text-blue-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Horário dos Cultos</h4>
+                            <p id="contato-horarios" class="text-lg text-gray-300 whitespace-pre-line">Carregando...</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="pt-1">
+                            <i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-blue-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Siga-nos</h4>
+                            <div class="flex gap-5 mt-2">
+                                <a id="social-instagram" href="#" target="_blank" class="text-gray-400 hover:text-blue-500 transition-colors">
+                                    <i data-lucide="instagram" class="lucide-icon w-8 h-8"></i>
+                                </a>
+                                <a id="social-youtube" href="#" target="_blank" class="text-gray-400 hover:text-blue-500 transition-colors">
+                                    <i data-lucide="youtube" class="lucide-icon w-8 h-8"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- 1. BASE DE DADOS (Agora é uma variável vazia) ---
+        // Os dados serão carregados do data.json
+        let churchData = {};
+
+        // --- 2. ESTADO GLOBAL ---
+        let currentUnitId = 'sede'; // Unidade padrão
+        let swiperEventos; // Variável para guardar o slider de eventos
+        
+        // --- 3. FUNÇÕES DE ATUALIZAÇÃO ---
+
+        /**
+         * Função Principal: Atualiza toda a página com base na unidade selecionada.
+         */
+        function updatePageContent(unitId) {
+            // Guarda o ID da unidade selecionada
+            currentUnitId = unitId;
+
+            // Pega os dados da unidade selecionada
+            const unitData = churchData[unitId];
+            if (!unitData) {
+                console.error('Dados da unidade não encontrados:', unitId);
+                return;
+            }
+
+            // Atualiza o <select> (visual)
+            document.getElementById('unit-select-filter').value = unitId;
+
+            // Atualiza a Seção de Eventos
+            document.getElementById('eventos-unidade').textContent = unitData.name;
+            updateEventSlider(unitData.events); // Recria o slider de eventos
+
+            // Atualiza a Seção de Fotos (o botão)
+            document.getElementById('fotos-unidade-nome').textContent = unitData.name;
+            document.getElementById('fotos-album-link').href = unitData.albumUrl;
+
+            // Atualiza a Seção de Contato/Footer
+            document.getElementById('mapa-iframe').src = unitData.mapUrl;
+            document.getElementById('contato-endereco').textContent = unitData.address;
+            document.getElementById('contato-horarios').textContent = unitData.times;
+            document.getElementById('social-instagram').href = unitData.socials.instagram;
+            document.getElementById('social-youtube').href = unitData.socials.youtube;
+            
+            // Limpa a caixa de pesquisa
+            document.getElementById('event-search-box').value = '';
+        }
+
+        /**
+         * Cria o HTML para um card de evento.
+         */
+        function createEventCard(event) {
+            return `
+                <div class="swiper-slide event-card bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                    <img src="${event.img}" alt="${event.title}" class="w-full h-40 object-cover">
+                    <div class="p-5">
+                        <h4 class="text-xl font-bold text-white mb-2">${event.title}</h4>
+                        <p class="text-sm text-gray-400 mb-3">${event.date}</p>
+                        <p class="text-gray-300 text-sm">Participe conosco!</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        /**
+         * Atualiza o carrossel de eventos com base nos eventos filtrados.
+         */
+        function updateEventSlider(eventsToShow) {
+            const wrapper = document.getElementById('eventos-wrapper');
+            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
+
+            if (!eventsToShow || eventsToShow.length === 0) {
+                wrapper.innerHTML = ''; // Limpa o slider
+                noResultsMsg.classList.remove('hidden'); // Mostra "Nenhum resultado"
+            } else {
+                wrapper.innerHTML = eventsToShow.map(createEventCard).join('');
+                noResultsMsg.classList.add('hidden'); // Esconde "Nenhum resultado"
+            }
+
+            // Atualiza o Swiper (importante!)
+            if (swiperEventos) {
+                swiperEventos.update();
+                swiperEventos.slideTo(0); // Volta para o primeiro slide
+            }
+        }
+        
+        /**
+         * Filtra os eventos com base na caixa de pesquisa.
+         */
+        function filterEventsBySearch() {
+            const searchTerm = document.getElementById('event-search-box').value.toLowerCase();
+            
+            // Garante que os dados já foram carregados
+            if (!churchData || !churchData[currentUnitId]) return;
+
+            const allEvents = churchData[currentUnitId].events;
+            
+            if (!searchTerm) {
+                updateEventSlider(allEvents); // Se a busca está vazia, mostra todos
+                return;
+            }
+            
+            const filteredEvents = allEvents.filter(event => 
+                event.title.toLowerCase().includes(searchTerm)
+            );
+            
+            updateEventSlider(filteredEvents); // Mostra apenas os eventos filtrados
+        }
+
+        // --- 4. INICIALIZAÇÃO QUANDO A PÁGINA CARREGA ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Carrega os dados do JSON primeiro ---
+            fetch('./data.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 1. Guarda os dados carregados na nossa variável global
+                    churchData = data;
+                    
+                    // 2. Continua a inicialização do site (só depois que os dados carregaram)
+                    initializeApp();
+                })
+                .catch(error => console.error('Erro ao carregar os dados da igreja (data.json):', error));
+        });
+
+        /**
+         * Nova função para inicializar o site DEPOIS que os dados foram carregados
+         */
+        function initializeApp() {
+            // Inicializa os ícones do Lucide
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Configura o <select> de filtro global
+            const unitSelect = document.getElementById('unit-select-filter');
+            unitSelect.addEventListener('change', (event) => {
+                const unitId = event.target.value;
+                updatePageContent(unitId);
+            });
+
+            // Configura a caixa de pesquisa de eventos
+            document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
+
+            // Inicializa o Swiper de EVENTOS
+            swiperEventos = new Swiper('#eventos-slider', {
+                slidesPerView: 1, // Quantos slides por vez
+                spaceBetween: 20,  // Espaço entre eles
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                // Responsivo: mostra mais slides em telas maiores
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                    },
+                    1280: {
+                        slidesPerView: 4,
+                        spaceBetween: 30,
+                    }
+                }
+            });
+
+            // Inicializa o Swiper de FOTOS (Automático)
+            new Swiper('#fotos-slider', {
+                loop: true,
+                autoplay: {
+                    delay: 3000, // Passa a cada 3 segundos
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+            });
+
+            // Carrega o conteúdo da unidade padrão (Sede)
+            updatePageContent(currentUnitId);
+        }
+    </script>
 </body>
 </html>
+```eof
