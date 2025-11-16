@@ -323,6 +323,7 @@
                     "youtube": "https://youtube.com/iapv_cajuru"
                 },
                 "events": [
+                    { "id": 0, "title": "EVENTO PASSADO (TESTE)", "date": "15/11/2025", "time": "18h00", "location": "Unidade Cajuru", "startDate": "2025-11-15T18:00:00", "endDate": "2025-11-15T20:00:00", "img": "https://placehold.co/400x200/ef4444/fff?text=EVENTO+PASSADO" },
                     { "id": 1, "title": "Culto da Família", "date": "Todos os Domingos", "time": "18h30", "location": "Unidade Cajuru", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00", "img": "https://placehold.co/400x200/0284c7/fff?text=Culto+da+Família" },
                     { "id": 2, "title": "Célula de Jovens", "date": "Toda Sexta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-21T20:00:00", "endDate": "2025-11-21T21:30:00", "img": "https://placehold.co/400x200/c2410c/fff?text=Célula+Jovens" },
                     { "id": 3, "title": "Noite de Oração", "date": "Toda Quarta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-19T20:00:00", "endDate": "2025-11-19T21:00:00", "img": "https://placehold.co/400x200/16a34a/fff?text=Oração" },
@@ -404,8 +405,10 @@
             document.getElementById('unit-select-filter').value = unitId;
 
             // Atualiza a Seção de Eventos
+            const now = new Date();
+            const futureEvents = unitData.events.filter(event => new Date(event.endDate) >= now);
             document.getElementById('eventos-unidade').textContent = unitData.name;
-            updateEventSlider(unitData.events, unitData.name); // Recria o slider de eventos (PASSANDO O NOME DA UNIDADE)
+            updateEventSlider(futureEvents, unitData.name); // MODIFICADO: Passa apenas eventos futuros
 
             // Atualiza a Seção de Fotos (o botão)
             document.getElementById('fotos-unidade-nome').textContent = unitData.name;
@@ -488,15 +491,18 @@
             // Garante que os dados já foram carregados
             if (!churchData || !churchData[currentUnitId]) return;
 
-            const allEvents = churchData[currentUnitId].events;
+            // MODIFICADO: Filtra por eventos futuros PRIMEIRO
+            const now = new Date();
+            const allFutureEvents = churchData[currentUnitId].events.filter(event => new Date(event.endDate) >= now);
             const unitName = churchData[currentUnitId].name; // Pega o nome da unidade atual
             
             if (!searchTerm) {
-                updateEventSlider(allEvents, unitName); // Se a busca está vazia, mostra todos
+                updateEventSlider(allFutureEvents, unitName); // MODIFICADO: Se a busca está vazia, mostra todos os eventos FUTUROS
                 return;
             }
             
-            const filteredEvents = allEvents.filter(event => 
+            // MODIFICADO: Filtra a partir da lista de eventos futuros
+            const filteredEvents = allFutureEvents.filter(event => 
                 event.title.toLowerCase().includes(searchTerm)
             );
             
