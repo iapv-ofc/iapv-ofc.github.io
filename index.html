@@ -35,8 +35,12 @@
     <style>
         /* Estilo dos cards de evento */
         .event-card {
-            /* MUDADO: Tamanho aumentado em 10% */
-            width: 330px; /* 300px * 1.1 */ 
+            /* REMOVIDO: Largura fixa que quebrava o mobile */
+            /* width: 330px; */ 
+            
+            /* NOVO: O card agora ocupa 100% do slide do Swiper */
+            width: 100%; 
+            
             flex-shrink: 0;
             scroll-snap-align: start;
             /* REMOVIDO: border-color aqui, a sombra agora é mais sutil via Tailwind no JS */
@@ -178,7 +182,9 @@
             <!-- Filtro Global de Unidades (Dropdown) -->
             <div class="mt-12">
                 <label for="unit-select-filter" class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
-                <div class="relative w-72 mx-auto">
+                <!-- MUDADO: w-72 (fixo) para w-full max-w-sm (responsivo) -->
+                <!-- Adicionado px-4 para não colar nas bordas do celular, e sm:px-0 para remover em telas maiores -->
+                <div class="relative w-full max-w-sm mx-auto px-4 sm:px-0">
                     <!-- O Select -->
                     <select id="unit-select-filter" class="custom-select-filter">
                         <option value="cajuru">CAJURU</option>
@@ -234,7 +240,8 @@
 
         <!-- ===== SEÇÃO 3: EVENTOS ===== -->
         <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-4">Eventos</h2>
+            <!-- MUDADO: Título agora é responsivo (md:text-4xl) -->
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Eventos</h2>
             <p class="text-lg text-gray-600 dark:text-gray-400 text-center mb-10"> <!-- MUDADO -->
                 Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Cajuru</span> <!-- MUDADO -->
             </p>
@@ -267,7 +274,8 @@
 
         <!-- ===== SEÇÃO 4: FOTOS ===== -->
         <section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-10">Galeria de Fotos</h2>
+            <!-- MUDADO: Título agora é responsivo (md:text-4xl) -->
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">Galeria de Fotos</h2>
 
             <!-- MUDADO: Carrossel de Fotos agora é um slider de cards -->
             <div class="relative">
