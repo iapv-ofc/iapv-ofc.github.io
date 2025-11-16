@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Igreja Palavra e Verdade</title>
+    <title>TESTE - Igreja Palavra e Verdade</title>
 
+    <!-- 1. Tailwind CSS (Para o estilo) -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- 2. Swiper.js (Para os carrosséis de Eventos e Fotos) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+    <!-- 3. Lucide Icons (Para os ícones) -->
     <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.395.0/dist/lucide.min.js"></script>
     <script>
         // Configuração para o Tailwind (para o tema escuro e fontes)
@@ -25,6 +28,7 @@
         };
     </script>
 
+    <!-- Estilos personalizados -->
     <style>
         /* Força o tema escuro */
         html {
@@ -107,7 +111,9 @@
 
 <body class="bg-gray-900 text-gray-100 antialiased">
 
+    <!-- ===== SEÇÃO 1: CAPA E FILTRO GLOBAL ===== -->
     <header class="h-screen min-h-[600px] w-full flex flex-col items-center justify-center relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://placehold.co/1920x1080/1a202c/7f8c9a?text=Foto+da+Igreja');">
+        <!-- Overlay escuro para legibilidade -->
         <div class="absolute inset-0 bg-black/60 z-0"></div>
 
         <div class="relative z-10 flex flex-col items-center text-center px-4">
@@ -118,15 +124,18 @@
                 Uma igreja em célula
             </p>
 
+            <!-- Filtro Global de Unidades (Dropdown) -->
             <div class="mt-12">
                 <label for="unit-select-filter" class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
                 <div class="relative w-72 mx-auto">
+                    <!-- O Select -->
                     <select id="unit-select-filter" class="custom-select-filter">
-                        <option value="sede">SEDE</option>
-                        <option value="jdpaulista">JD. PAULISTA</option>
-                        <option value="pari">PARI</option>
-                        <option value="guarulhos">GUARULHOS</option>
+                        <option value="cajuru">CAJURU</option>
+                        <option value="ribeiraopreto">RIBEIRÃO PRETO</option>
+                        <option value="santarosa">SANTA ROSA DE VITERBO</option>
+                        <option value="santoandre">SANTO ANDRÉ</option>
                     </select>
+                    <!-- Seta customizada para o Select -->
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-300">
                         <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                     </div>
@@ -135,10 +144,13 @@
         </div>
     </header>
 
+    <!-- Conteúdo principal da página -->
     <main class="w-full">
 
+        <!-- ===== SEÇÃO 2: MISSÃO, VISÃO, VALORES ===== -->
         <section id="sobre" class="py-20 px-4 max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <!-- Missão -->
                 <div class="flex flex-col items-center">
                     <i data-lucide="compass" class="lucide-icon w-12 h-12 text-blue-500 mb-4"></i>
                     <h3 class="text-2xl font-bold mb-3">Missão</h3>
@@ -147,6 +159,7 @@
                     </p>
                 </div>
 
+                <!-- Visão -->
                 <div class="flex flex-col items-center">
                     <i data-lucide="eye" class="lucide-icon w-12 h-12 text-blue-500 mb-4"></i>
                     <h3 class="text-2xl font-bold mb-3">Visão</h3>
@@ -155,6 +168,7 @@
                     </p>
                 </div>
 
+                <!-- Valores -->
                 <div class="flex flex-col items-center">
                     <i data-lucide="gem" class="lucide-icon w-12 h-12 text-blue-500 mb-4"></i>
                     <h3 class="text-2xl font-bold mb-3">Valores</h3>
@@ -167,25 +181,31 @@
 
         <hr class="border-gray-700/50 max-w-6xl mx-auto" />
 
+        <!-- ===== SEÇÃO 3: EVENTOS ===== -->
         <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl font-bold text-center mb-4">Eventos</h2>
             <p class="text-lg text-gray-400 text-center mb-10">
-                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-blue-400">Sede</span>
+                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-blue-400">Cajuru</span>
             </p>
 
+            <!-- Caixa de Pesquisa -->
             <div class="mb-8 max-w-lg mx-auto">
                 <input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
+            <!-- Carrossel (Swiper.js) -->
             <div class="relative">
                 <div id="eventos-slider" class="swiper-container">
                     <div class="swiper-wrapper" id="eventos-wrapper">
-                        </div>
+                        <!-- Os slides serão injetados aqui pelo JavaScript -->
+                    </div>
                 </div>
+                <!-- Botões de Navegação -->
                 <div class="swiper-button-prev -left-4 md:-left-12"></div>
                 <div class="swiper-button-next -right-4 md:-right-12"></div>
             </div>
 
+            <!-- Mensagem de "Nenhum resultado" -->
             <p id="eventos-nenhum-resultado" class="text-center text-gray-500 mt-8 text-lg hidden">
                 Nenhum evento encontrado com esse nome.
             </p>
@@ -193,30 +213,37 @@
 
         <hr class="border-gray-700/50 max-w-6xl mx-auto" />
 
+        <!-- ===== SEÇÃO 4: FOTOS ===== -->
         <section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl font-bold text-center mb-10">Galeria de Fotos</h2>
 
-            <div id="fotos-slider" class="swiper-container rounded-lg overflow-hidden relative">
+            <!-- Carrossel de Fotos (Automático) -->
+            <div id="fotos-slider" class.swiper-container rounded-lg overflow-hidden relative">
                 <div class="swiper-wrapper">
+                    <!-- Slides de Fotos -->
                     <div class="swiper-slide"><img src="https://placehold.co/1200x600/1f2937/9ca3af?text=Foto+Culto+1" alt="Foto da Igreja 1" class="w-full h-auto object-cover aspect-video"></div>
                     <div class="swiper-slide"><img src="https://placehold.co/1200x600/374151/e5e7eb?text=Foto+Célula+2" alt="Foto da Igreja 2" class="w-full h-auto object-cover aspect-video"></div>
                     <div class="swiper-slide"><img src="https://placehold.co/1200x600/4b5563/f3f4f6?text=Foto+Batismo+3" alt="Foto da Igreja 3" class="w-full h-auto object-cover aspect-video"></div>
                     <div class="swiper-slide"><img src="https://placehold.co/1200x600/5E35B1/EDE7F6?text=Foto+Jovens+4" alt="Foto da Igreja 4" class="w-full h-auto object-cover aspect-video"></div>
                 </div>
+                <!-- Paginação (bolinhas) -->
                 <div class="swiper-pagination"></div>
             </div>
 
+            <!-- Botão do Álbum (Link dinâmico) -->
             <div class="text-center mt-10">
                 <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform duration-200 hover:bg-blue-700 hover:scale-105">
-                    Ver Álbum Completo da <span id="fotos-unidade-nome">Sede</span>
+                    Ver Álbum Completo da <span id="fotos-unidade-nome">Cajuru</span>
                 </a>
             </div>
         </section>
 
 
+        <!-- ===== SEÇÃO 5: CONTATO E MAPA ===== -->
         <footer id="contato" class="py-20 px-4 bg-gray-950/50">
             <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
                 
+                <!-- Coluna Esquerda: Mapa -->
                 <div class="h-96 md:h-full min-h-[400px] rounded-lg overflow-hidden">
                     <iframe 
                         id="mapa-iframe"
@@ -230,8 +257,10 @@
                     </iframe>
                 </div>
 
+                <!-- Coluna Direita: Informações -->
                 <div class="flex flex-col justify-center gap-10">
                     
+                    <!-- Parte 1: Endereço -->
                     <div class="flex items-start gap-4">
                         <div class="pt-1">
                             <i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-blue-500"></i>
@@ -242,6 +271,7 @@
                         </div>
                     </div>
 
+                    <!-- Parte 2: Horários -->
                     <div class="flex items-start gap-4">
                         <div class="pt-1">
                             <i data-lucide="clock" class="lucide-icon w-6 h-6 text-blue-500"></i>
@@ -252,6 +282,7 @@
                         </div>
                     </div>
 
+                    <!-- Parte 3: Redes Sociais -->
                     <div class="flex items-start gap-4">
                         <div class="pt-1">
                             <i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-blue-500"></i>
@@ -275,13 +306,82 @@
 
     </main>
 
+    <!-- ===== JAVASCRIPT PRINCIPAL ===== -->
     <script>
-        // --- 1. BASE DE DADOS (Agora é uma variável vazia) ---
-        // Os dados serão carregados do data.json
-        let churchData = {};
+        // --- 1. BASE DE DADOS (Embutida para Teste) ---
+        // ATUALIZADO: Adicionei "time", "location", "startDate" e "endDate"
+        const churchData = {
+            "cajuru": {
+                "id": "cajuru",
+                "name": "Cajuru",
+                "address": "Av. Principal, 123 - Centro, Cajuru - SP",
+                "times": "Domingo: 10h e 18h\nQuarta-feira: 20h\nSexta-feira: 20h",
+                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.447548509893!2d-46.63424608440698!3d-23.55225018468759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59a714850cff%3A0x92f33b5a19e8b693!2sCatedral%20da%20S%C3%A9!5e0!3m2!1spt-BR!2sbr!4v1678886504825!5m2!1spt-BR!2sbr",
+                "albumUrl": "https://photos.app.goo.gl/exemploAlbumCajuru",
+                "socials": {
+                    "instagram": "https://instagram.com/iapv_cajuru",
+                    "youtube": "https://youtube.com/iapv_cajuru"
+                },
+                "events": [
+                    { "id": 1, "title": "Culto da Família", "date": "Todos os Domingos", "time": "18h00", "location": "Unidade Cajuru", "startDate": "2025-11-16T18:00:00", "endDate": "2025-11-16T20:00:00", "img": "https://placehold.co/400x200/0284c7/fff?text=Culto+da+Família" },
+                    { "id": 2, "title": "Célula de Jovens", "date": "Toda Sexta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-21T20:00:00", "endDate": "2025-11-21T21:30:00", "img": "https://placehold.co/400x200/c2410c/fff?text=Célula+Jovens" },
+                    { "id": 3, "title": "Noite de Oração", "date": "Toda Quarta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-19T20:00:00", "endDate": "2025-11-19T21:00:00", "img": "https://placehold.co/400x200/16a34a/fff?text=Oração" },
+                    { "id": 4, "title": "Batismo", "date": "25/12/2025", "time": "10h00", "location": "Unidade Cajuru", "startDate": "2025-12-25T10:00:00", "endDate": "2025-12-25T12:00:00", "img": "https://placehold.co/400x200/6d28d9/fff?text=Batismo" }
+                ]
+            },
+            "ribeiraopreto": {
+                "id": "ribeiraopreto",
+                "name": "Ribeirão Preto",
+                "address": "Rua das Flores, 456 - Jd. Paulista, Ribeirão Preto - SP",
+                "times": "Domingo: 10h30\nQuinta-feira: 20h",
+                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.938740523175!2d-46.65706428440662!3d-23.570093184678204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8f070119b%3A0x6291a8e576f308f2!2sParque%20Ibirapuera!5e0!3m2!1spt-BR!2sbr!4v1678886612715!5m2!1spt-BR!2sbr",
+                "albumUrl": "https://photos.app.goo.gl/exemploAlbumRibeirao",
+                "socials": {
+                    "instagram": "https://instagram.com/iapv_ribeirao",
+                    "youtube": "https://youtube.com/iapv_geral"
+                },
+                "events": [
+                    { "id": 5, "title": "Culto de Celebração", "date": "Todo Domingo", "time": "10h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-16T10:30:00", "endDate": "2025-11-16T12:00:00", "img": "https://placehold.co/400x200/059669/fff?text=Celebração" },
+                    { "id": 6, "title": "Célula Mista", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00", "img": "https://placehold.co/400x200/b45309/fff?text=Célula+Mista" },
+                    { "id": 7, "title": "Café com Pastores", "date": "15/12/2025", "time": "09h00", "location": "Unidade Ribeirão Preto", "startDate": "2025-12-15T09:00:00", "endDate": "2025-12-15T10:30:00", "img": "https://placehold.co/400x200/be185d/fff?text=Café" }
+                ]
+            },
+            "santarosa": {
+                "id": "santarosa",
+                "name": "Santa Rosa de Viterbo",
+                "address": "Rua dos Comerciantes, 789 - Centro, Santa Rosa de Viterbo - SP",
+                "times": "Domingo: 09h\nTerça-feira: 19h30",
+                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.859669352934!2d-46.61633658440718!3d-23.5372331846947!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce58e1eb28850b%3A0x973a6a4329a1bde1!2sTemplo%20de%2Sbr!4v1678886653066!5m2!1spt-BR!2sbr",
+                "albumUrl": "https://photos.app.goo.gl/exemploAlbumSantaRosa",
+                "socials": {
+                    "instagram": "https://instagram.com/iapv_santarosa",
+                    "youtube": "https://youtube.com/iapv_geral"
+                },
+                "events": [
+                    { "id": 8, "title": "Culto (Santa Rosa)", "date": "Todo Domingo", "time": "09h00", "location": "Unidade Santa Rosa", "startDate": "2025-11-16T09:00:00", "endDate": "2025-11-16T10:30:00", "img": "https://placehold.co/400x200/1d4ed8/fff?text=Culto+Santa+Rosa" },
+                    { "id": 9, "title": "Estudo Bíblico", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Santa Rosa", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00", "img": "https://placehold.co/400x200/9d174d/fff?text=Estudo" }
+                ]
+            },
+            "santoandre": {
+                "id": "santoandre",
+                "name": "Santo André",
+                "address": "Av. Brasil, 1000 - Vila, Santo André - SP",
+                "times": "Sábado: 19h\nQuinta-feira: 20h",
+                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3660.088654877395!2d-46.5323205844086!3d-23.45722748473523!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cef4f0a0683e6b%3A0x863b1a8d0f1b3f7!2sBosque%2sbr!4v1678886690417!5m2!1spt-BR!2sbr",
+                "albumUrl": "https://photos.app.goo.gl/exemploAlbumSantoAndre",
+                "socials": {
+                    "instagram": "https://instagram.com/iapv_santoandre",
+                    "youtube": "https://youtube.com/iapv_geral"
+                },
+                "events": [
+                    { "id": 10, "title": "Culto de Fim de Semana", "date": "Todo Sábado", "time": "19h00", "location": "Unidade Santo André", "startDate": "2025-11-22T19:00:00", "endDate": "2025-11-22T20:30:00", "img": "https://placehold.co/400x200/86198f/fff?text=Culto+Sábado" },
+                    { "id": 11, "title": "Vigília", "date": "Toda última Sexta do mês", "time": "22h00", "location": "Unidade Santo André", "startDate": "2025-11-28T22:00:00", "endDate": "2025-11-29T05:00:00", "img": "https://placehold.co/400x200/1e3a8a/fff?text=Vigília" }
+                ]
+            }
+        };
 
         // --- 2. ESTADO GLOBAL ---
-        let currentUnitId = 'sede'; // Unidade padrão
+        let currentUnitId = 'cajuru'; // Unidade padrão
         let swiperEventos; // Variável para guardar o slider de eventos
         
         // --- 3. FUNÇÕES DE ATUALIZAÇÃO ---
@@ -305,7 +405,7 @@
 
             // Atualiza a Seção de Eventos
             document.getElementById('eventos-unidade').textContent = unitData.name;
-            updateEventSlider(unitData.events); // Recria o slider de eventos
+            updateEventSlider(unitData.events, unitData.name); // Recria o slider de eventos (PASSANDO O NOME DA UNIDADE)
 
             // Atualiza a Seção de Fotos (o botão)
             document.getElementById('fotos-unidade-nome').textContent = unitData.name;
@@ -325,15 +425,33 @@
         /**
          * Cria o HTML para um card de evento.
          */
-        function createEventCard(event) {
+        function createEventCard(event, unitName) {
+            // Define o local: usa o local do evento se existir, senão usa o nome da unidade
+            const location = event.location || unitName;
+            
+            // Gera o link do Google Agenda
+            const calendarLink = createGoogleCalendarLink(event, location);
+
+            // Define os SVGs dos ícones para usar com segurança dentro do JS
+            const calendarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
+            const mapPinIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
+
             return `
-                <div class="swiper-slide event-card bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-                    <img src="${event.img}" alt="${event.title}" class="w-full h-40 object-cover">
-                    <div class="p-5">
-                        <h4 class="text-xl font-bold text-white mb-2">${event.title}</h4>
-                        <p class="text-sm text-gray-400 mb-3">${event.date}</p>
-                        <p class="text-gray-300 text-sm">Participe conosco!</p>
-                    </div>
+                <div class="swiper-slide h-auto">
+                    <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" class="event-card bg-gray-800 rounded-lg overflow-hidden shadow-lg block h-full hover:bg-gray-700 transition-colors duration-200">
+                        <img src="${event.img}" alt="${event.title}" class="w-full h-40 object-cover">
+                        <div class="p-5 flex flex-col">
+                            <h4 class="text-xl font-bold text-white mb-2">${event.title}</h4>
+                            <div class="text-sm text-gray-400 mb-2 flex items-center">
+                                ${calendarIcon}
+                                <span class="ml-1.5">${event.date}${event.time ? ` • ${event.time}` : ''}</span>
+                            </div>
+                            <div class="text-sm text-gray-300 flex items-center">
+                                ${mapPinIcon}
+                                <span class="ml-1.5">${location}</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             `;
         }
@@ -341,7 +459,7 @@
         /**
          * Atualiza o carrossel de eventos com base nos eventos filtrados.
          */
-        function updateEventSlider(eventsToShow) {
+        function updateEventSlider(eventsToShow, unitName) { // RECEBE O NOME DA UNIDADE
             const wrapper = document.getElementById('eventos-wrapper');
             const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
 
@@ -349,7 +467,8 @@
                 wrapper.innerHTML = ''; // Limpa o slider
                 noResultsMsg.classList.remove('hidden'); // Mostra "Nenhum resultado"
             } else {
-                wrapper.innerHTML = eventsToShow.map(createEventCard).join('');
+                // Passa o unitName para o createEventCard
+                wrapper.innerHTML = eventsToShow.map(event => createEventCard(event, unitName)).join('');
                 noResultsMsg.classList.add('hidden'); // Esconde "Nenhum resultado"
             }
 
@@ -361,8 +480,8 @@
         }
         
         /**
-         * Filtra os eventos com base na caixa de pesquisa.
-         */
+        * Filtra os eventos com base na caixa de pesquisa.
+        */
         function filterEventsBySearch() {
             const searchTerm = document.getElementById('event-search-box').value.toLowerCase();
             
@@ -370,9 +489,10 @@
             if (!churchData || !churchData[currentUnitId]) return;
 
             const allEvents = churchData[currentUnitId].events;
+            const unitName = churchData[currentUnitId].name; // Pega o nome da unidade atual
             
             if (!searchTerm) {
-                updateEventSlider(allEvents); // Se a busca está vazia, mostra todos
+                updateEventSlider(allEvents, unitName); // Se a busca está vazia, mostra todos
                 return;
             }
             
@@ -380,31 +500,39 @@
                 event.title.toLowerCase().includes(searchTerm)
             );
             
-            updateEventSlider(filteredEvents); // Mostra apenas os eventos filtrados
+            updateEventSlider(filteredEvents, unitName); // Mostra apenas os eventos filtrados
+        }
+
+        /**
+         * NOVO: Cria um link do Google Agenda para um evento.
+         */
+        function createGoogleCalendarLink(event, location) {
+            const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
+
+            // Formata a data para o padrão do Google (YYYYMMDDTHHMMSS)
+            // Remove hífens, dois-pontos e milissegundos
+            const formatISODate = (isoStr) => isoStr.replace(/-|:|\.\d+/g, '');
+
+            // Garante que as datas existem antes de formatar
+            const dates = event.startDate && event.endDate 
+                ? `${formatISODate(event.startDate)}/${formatISODate(event.endDate)}`
+                : '';
+
+            const text = encodeURIComponent(event.title);
+            const details = encodeURIComponent(`Participe conosco do evento "${event.title}" na ${location}.`);
+            const loc = encodeURIComponent(location);
+
+            return `${baseUrl}&text=${text}&dates=${dates}&details=${details}&location=${loc}`;
         }
 
         // --- 4. INICIALIZAÇÃO QUANDO A PÁGINA CARREGA ---
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Carrega os dados do JSON primeiro ---
-            fetch('./data.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // 1. Guarda os dados carregados na nossa variável global
-                    churchData = data;
-                    
-                    // 2. Continua a inicialização do site (só depois que os dados carregaram)
-                    initializeApp();
-                })
-                .catch(error => console.error('Erro ao carregar os dados da igreja (data.json):', error));
+            // Esta função inicializa o site
+            initializeApp();
         });
 
         /**
-         * Nova função para inicializar o site DEPOIS que os dados foram carregados
+         * Função que inicializa o site
          */
         function initializeApp() {
             // Inicializa os ícones do Lucide
@@ -466,4 +594,3 @@
     </script>
 </body>
 </html>
-```eof
