@@ -254,7 +254,8 @@
 
             <!-- Carrossel (Swiper.js) -->
             <div class="relative">
-                <div id="eventos-slider" class="swiper-container">
+                <!-- MUDADO: Adicionado overflow-hidden para garantir que não vaze -->
+                <div id="eventos-slider" class="swiper-container overflow-hidden">
                     <div class="swiper-wrapper" id="eventos-wrapper">
                         <!-- Os slides serão injetados aqui pelo JavaScript -->
                     </div>
@@ -279,8 +280,8 @@
 
             <!-- MUDADO: Carrossel de Fotos agora é um slider de cards -->
             <div class="relative">
-                <!-- MUDADO: overflow-hidden no mobile (para corrigir o "vazamento") e md:overflow-visible no desktop (para as sombras) -->
-                <div id="fotos-slider" class="swiper-container overflow-hidden md:overflow-visible"> <!-- !overflow-visible é bom para as sombras -->
+                <!-- MUDADO: Agora é APENAS overflow-hidden. Remove o md:overflow-visible -->
+                <div id="fotos-slider" class="swiper-container overflow-hidden"> <!-- !overflow-visible é bom para as sombras -->
                     <div class="swiper-wrapper">
                         
                         <!-- 
