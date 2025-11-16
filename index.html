@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TESTE - Igreja Palavra e Verdade</title>
 
-    <!-- 1. Tailwind CSS (Para o estilo) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 1. Tailwind CSS (Para o estilo) --><script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- 2. Swiper.js (Para os carrosséis de Eventos e Fotos) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- 2. Swiper.js (Para os carrosséis de Eventos e Fotos) --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <!-- 3. Lucide Icons (Para os ícones) -->
-    <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.395.0/dist/lucide.min.js"></script>
+    <!-- 3. Lucide Icons (Para os ícones) --><script src="https://cdn.jsdelivr.net/npm/lucide-react@0.395.0/dist/lucide.min.js"></script>
     <script>
         // Configuração para o Tailwind (para o tema escuro e fontes)
         tailwind.config = {
@@ -31,11 +28,10 @@
         };
     </script>
 
-    <!-- Estilos personalizados -->
-    <style>
-        /* Estilo dos cards de evento */
+    <!-- Estilos personalizados --><style>
+        /* Estilo dos cards de evento - MUDADO: Largura aumentada em 10% */
         .event-card {
-            width: 300px;
+            width: 330px; /* Era 300px */
             flex-shrink: 0;
             scroll-snap-align: start;
         }
@@ -101,7 +97,7 @@
             color: #e0e0e0;
         }
 
-        /* NOVO: Estilo para as bolinhas do Swiper (Galeria) */
+        /* Estilo para as bolinhas do Swiper (Galeria) - Mantido, mas não usado diretamente agora */
         .swiper-pagination-bullet {
             background-color: #aaa; /* Cor da bolinha inativa */
             opacity: 0.7;
@@ -110,16 +106,40 @@
             background-color: #005DCC; /* MUDADO: Cor de destaque */
             opacity: 1;
         }
+
+        /* Estilo da galeria de fotos (do Uiverse) - MUDADO: Tamanho, borda e sombra */
+        .photo-gallery-card-frame {
+            width: 220px;   /* Era 200px, aumentado em 10% */
+            height: 275px;  /* Era 250px, aumentado em 10% */
+            
+            /* Estilos do Uiverse */
+            border: none; /* REMOVIDO: 'border: none;' explicitamente */
+            border-radius: 10px;
+            background: radial-gradient(ellipse farthest-side at 76% 77%, rgba(245, 228, 212, 0.25) 4%, rgba(255, 255, 255, 0) calc(4% + 1px)), radial-gradient(circle at 76% 40%, #fef6ec 4%, rgba(255, 255, 255, 0) 4.18%), linear-gradient(135deg, #ff0000 0%, #000036 100%), radial-gradient(ellipse at 28% 0%, #ffcfac 0%, rgba(98, 149, 144, 0.5) 100%), linear-gradient(180deg, #cd6e8a 0%, #f5eab0 69%, #d6c8a2 70%, #a2758d 100%);
+            background-blend-mode: normal, normal, screen, overlay, normal;
+            box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3); /* MUDADO: Sombra mais suave */
+            
+            /* Adiciona padding para criar a "moldura" */
+            padding: 8px;
+            
+            /* Classes de tema (para a sombra) */
+            @apply shadow-lg dark:shadow-black/50;
+        }
+
+        .photo-gallery-card-frame img {
+            /* Imagem interna */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px; /* Borda interna levemente arredondada */
+        }
     </style>
 </head>
 
-<!-- MUDADO: Classes do body para tema light/dark -->
-<body class="bg-gray-50 dark:bg-[#161616] text-gray-900 dark:text-gray-100 antialiased">
+<!-- MUDADO: Classes do body para tema light/dark --><body class="bg-gray-50 dark:bg-[#161616] text-gray-900 dark:text-gray-100 antialiased">
 
-    <!-- ===== SEÇÃO 1: CAPA E FILTRO GLOBAL ===== -->
-    <header class="h-screen min-h-[600px] w-full flex flex-col items-center justify-center relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://placehold.co/1920x1080/1a202c/7f8c9a?text=Foto+da+Igreja');">
-        <!-- Overlay escuro para legibilidade -->
-        <div class="absolute inset-0 bg-black/60 z-0"></div>
+    <!-- ===== SEÇÃO 1: CAPA E FILTRO GLOBAL ===== --><header class="h-screen min-h-[600px] w-full flex flex-col items-center justify-center relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://placehold.co/1920x1080/1a202c/7f8c9a?text=Foto+da+Igreja');">
+        <!-- Overlay escuro para legibilidade --><div class="absolute inset-0 bg-black/60 z-0"></div>
 
         <div class="relative z-10 flex flex-col items-center text-center px-4">
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white shadow-lg">
@@ -129,19 +149,16 @@
                 Uma igreja em célula
             </p>
 
-            <!-- Filtro Global de Unidades (Dropdown) -->
-            <div class="mt-12">
+            <!-- Filtro Global de Unidades (Dropdown) --><div class="mt-12">
                 <label for="unit-select-filter" class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
                 <div class="relative w-72 mx-auto">
-                    <!-- O Select -->
-                    <select id="unit-select-filter" class="custom-select-filter">
+                    <!-- O Select --><select id="unit-select-filter" class="custom-select-filter">
                         <option value="cajuru">CAJURU</option>
                         <option value="ribeiraopreto">RIBEIRÃO PRETO</option>
                         <option value="santarosa">SANTA ROSA DE VITERBO</option>
                         <option value="santoandre">SANTO ANDRÉ</option>
                     </select>
-                    <!-- Seta customizada para o Select -->
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-300">
+                    <!-- Seta customizada para o Select --><div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-300">
                         <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                     </div>
                 </div>
@@ -149,110 +166,100 @@
         </div>
     </header>
 
-    <!-- Conteúdo principal da página -->
-    <main class="w-full">
+    <!-- Conteúdo principal da página --><main class="w-full">
 
-        <!-- ===== SEÇÃO 2: MISSÃO, VISÃO, VALORES ===== -->
-        <section id="sobre" class="py-20 px-4 max-w-6xl mx-auto">
+        <!-- ===== SEÇÃO 2: MISSÃO, VISÃO, VALORES ===== --><section id="sobre" class="py-20 px-4 max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-                <!-- Missão -->
-                <div class="flex flex-col items-center">
-                    <i data-lucide="compass" class="lucide-icon w-12 h-12 text-accent mb-4"></i> <!-- MUDADO -->
-                    <h3 class="text-2xl font-bold mb-3">Missão</h3>
-                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> <!-- MUDADO -->
-                        Levar a palavra de Deus a todos, vivendo o amor de Cristo e servindo ao próximo com alegria e dedicação.
+                <!-- Missão --><div class="flex flex-col items-center">
+                    <i data-lucide="compass" class="lucide-icon w-12 h-12 text-accent mb-4"></i> <!-- MUDADO --><h3 class="text-2xl font-bold mb-3">Missão</h3>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> <!-- MUDADO -->Levar a palavra de Deus a todos, vivendo o amor de Cristo e servindo ao próximo com alegria e dedicação.
                     </p>
                 </div>
 
-                <!-- Visão -->
-                <div class="flex flex-col items-center">
-                    <i data-lucide="eye" class="lucide-icon w-12 h-12 text-accent mb-4"></i> <!-- MUDADO -->
-                    <h3 class="text-2xl font-bold mb-3">Visão</h3>
-                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> <!-- MUDADO -->
-                        Ser uma igreja relevante e transformadora, que impacta a sociedade através de células que multiplicam discípulos.
+                <!-- Visão --><div class="flex flex-col items-center">
+                    <i data-lucide="eye" class="lucide-icon w-12 h-12 text-accent mb-4"></i> <!-- MUDADO --><h3 class="text-2xl font-bold mb-3">Visão</h3>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> <!-- MUDADO -->Ser uma igreja relevante e transformadora, que impacta a sociedade através de células que multiplicam discípulos.
                     </p>
                 </div>
 
-                <!-- Valores -->
-                <div class="flex flex-col items-center">
-                    <i data-lucide="gem" class="lucide-icon w-12 h-12 text-accent mb-4"></i> <!-- MUDADO -->
-                    <h3 class="text-2xl font-bold mb-3">Valores</h3>
-                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> <!-- MUDADO -->
-                        Comunhão, Adoração, Serviço, Evangelismo e Discipulado. Pilares que sustentam nossa fé e nossas ações.
+                <!-- Valores --><div class="flex flex-col items-center">
+                    <i data-lucide="gem" class="lucide-icon w-12 h-12 text-accent mb-4"></i> <!-- MUDADO --><h3 class="text-2xl font-bold mb-3">Valores</h3>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> <!-- MUDADO -->Comunhão, Adoração, Serviço, Evangelismo e Discipulado. Pilares que sustentam nossa fé e nossas ações.
                     </p>
                 </div>
             </div>
         </section>
 
-        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" /> <!-- MUDADO -->
-
-        <!-- ===== SEÇÃO 3: EVENTOS ===== -->
-        <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
+        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" /> <!-- MUDADO --><!-- ===== SEÇÃO 3: EVENTOS ===== --><section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl font-bold text-center mb-4">Eventos</h2>
-            <p class="text-lg text-gray-600 dark:text-gray-400 text-center mb-10"> <!-- MUDADO -->
-                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Cajuru</span> <!-- MUDADO -->
-            </p>
+            <p class="text-lg text-gray-600 dark:text-gray-400 text-center mb-10"> <!-- MUDADO -->Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Cajuru</span> <!-- MUDADO --></p>
 
-            <!-- Caixa de Pesquisa -->
-            <div class="mb-8 max-w-lg mx-auto">
-                <!-- MUDADO: Classes de light/dark para o input -->
-                <input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent">
+            <!-- Caixa de Pesquisa --><div class="mb-8 max-w-lg mx-auto">
+                <!-- MUDADO: Classes de light/dark para o input --><input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent">
             </div>
 
-            <!-- Carrossel (Swiper.js) -->
-            <div class="relative">
+            <!-- Carrossel (Swiper.js) --><div class="relative">
                 <div id="eventos-slider" class="swiper-container">
                     <div class="swiper-wrapper" id="eventos-wrapper">
-                        <!-- Os slides serão injetados aqui pelo JavaScript -->
-                    </div>
+                        <!-- Os slides serão injetados aqui pelo JavaScript --></div>
                 </div>
-                <!-- Botões de Navegação -->
-                <div class="swiper-button-prev -left-4 md:-left-12"></div>
+                <!-- Botões de Navegação --><div class="swiper-button-prev -left-4 md:-left-12"></div>
                 <div class="swiper-button-next -right-4 md:-right-12"></div>
             </div>
 
-            <!-- Mensagem de "Nenhum resultado" -->
-            <p id="eventos-nenhum-resultado" class="text-center text-gray-500 dark:text-gray-400 mt-8 text-lg hidden"> <!-- MUDADO -->
-                Nenhum evento encontrado com esse nome.
+            <!-- Mensagem de "Nenhum resultado" --><p id="eventos-nenhum-resultado" class="text-center text-gray-500 dark:text-gray-400 mt-8 text-lg hidden"> <!-- MUDADO -->Nenhum evento encontrado com esse nome.
             </p>
         </section>
 
-        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" /> <!-- MUDADO -->
-
-        <!-- ===== SEÇÃO 4: FOTOS ===== -->
-        <section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
+        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" /> <!-- MUDADO --><!-- ===== SEÇÃO 4: FOTOS ===== --><section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl font-bold text-center mb-10">Galeria de Fotos</h2>
 
-            <!-- Carrossel de Fotos (Automático) -->
-            <div id="fotos-slider" class="swiper-container rounded-lg overflow-hidden relative">
-                <div class="swiper-wrapper">
-                    <!-- Slides de Fotos -->
-                    <div class="swiper-slide"><img src="https://placehold.co/1200x600/1f2937/9ca3af?text=Foto+Culto+1" alt="Foto da Igreja 1" class="w-full h-auto object-cover aspect-video"></div>
-                    <div class="swiper-slide"><img src="https://placehold.co/1200x600/374151/e5e7eb?text=Foto+Célula+2" alt="Foto da Igreja 2" class="w-full h-auto object-cover aspect-video"></div>
-                    <div class="swiper-slide"><img src="https://placehold.co/1200x600/4b5563/f3f4f6?text=Foto+Batismo+3" alt="Foto da Igreja 3" class="w-full h-auto object-cover aspect-video"></div>
-                    <div class="swiper-slide"><img src="https://placehold.co/1200x600/5E35B1/EDE7F6?text=Foto+Jovens+4" alt="Foto da Igreja 4" class="w-full h-auto object-cover aspect-video"></div>
-                </div>
-                <!-- Paginação (bolinhas) -->
-                <div class="swiper-pagination"></div>
+            <!-- MUDADO: Carrossel de Fotos agora é um slider de cards --><div class="relative">
+                <div id="fotos-slider" class="swiper-container !overflow-visible"> <!-- !overflow-visible é bom para as sombras --><div class="swiper-wrapper">
+                        
+                        <!-- MUDADO: Estrutura do Card --><div class="swiper-slide !w-auto"> <!-- !w-auto para o Swiper respeitar o CSS do card --><div class="photo-gallery-card-frame">
+                                <img src="https://placehold.co/400x500/1f2937/9ca3af?text=Foto+1" alt="Foto da Igreja 1">
+                            </div>
+                        </div>
+                        <div class="swiper-slide !w-auto">
+                            <div class="photo-gallery-card-frame">
+                                <img src="https://placehold.co/400x500/374151/e5e7eb?text=Foto+2" alt="Foto da Igreja 2">
+                            </div>
+                        </div>
+                        <div class="swiper-slide !w-auto">
+                            <div class="photo-gallery-card-frame">
+                                <img src="https://placehold.co/400x500/4b5563/f3f4f6?text=Foto+3" alt="Foto da Igreja 3">
+                            </div>
+                        </div>
+                        <div class="swiper-slide !w-auto">
+                            <div class="photo-gallery-card-frame">
+                                <img src="https://placehold.co/400x500/5E35B1/EDE7F6?text=Foto+4" alt="Foto da Igreja 4">
+                            </div>
+                        </div>
+                        <div class="swiper-slide !w-auto">
+                            <div class="photo-gallery-card-frame">
+                                <img src="https://placehold.co/400x500/1f2937/9ca3af?text=Foto+5" alt="Foto da Igreja 5">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- REMOVIDO: Paginação (bolinhas) --></div>
+                <!-- ADICIONADO: Botões de Navegação --><div class="swiper-button-prev -left-4 md:-left-12"></div>
+                <div class="swiper-button-next -right-4 md:-right-12"></div>
             </div>
 
-            <!-- Botão do Álbum (Link dinâmico) -->
-            <div class="text-center mt-10">
-                <!-- MUDADO: Classes do botão para usar a cor de destaque -->
-                <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-accent text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform duration-200 hover:bg-accent/90 hover:scale-105">
+            <!-- Botão do Álbum (Link dinâmico) --><div class="text-center mt-10">
+                <!-- MUDADO: Classes do botão para usar a cor de destaque --><a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-accent text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform duration-200 hover:bg-accent/90 hover:scale-105">
                     Ver Álbum Completo da <span id="fotos-unidade-nome">Cajuru</span>
                 </a>
             </div>
         </section>
 
 
-        <!-- ===== SEÇÃO 5: CONTATO E MAPA ===== -->
-        <!-- MUDADO: Fundo do rodapé para light/dark -->
-        <footer id="contato" class="py-20 px-4 bg-gray-100 dark:bg-gray-900/50">
+        <!-- ===== SEÇÃO 5: CONTATO E MAPA ===== --><!-- MUDADO: Fundo do rodapé para light/dark --><footer id="contato" class="py-20 px-4 bg-gray-100 dark:bg-gray-900/50">
             <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
                 
-                <!-- Coluna Esquerda: Mapa -->
-                <div class="h-96 md:h-full min-h-[400px] rounded-lg overflow-hidden">
+                <!-- Coluna Esquerda: Mapa --><div class="h-96 md:h-full min-h-[400px] rounded-lg overflow-hidden">
                     <iframe 
                         id="mapa-iframe"
                         src="" 
@@ -265,41 +272,31 @@
                     </iframe>
                 </div>
 
-                <!-- Coluna Direita: Informações -->
-                <div class="flex flex-col justify-center gap-10">
+                <!-- Coluna Direita: Informações --><div class="flex flex-col justify-center gap-10">
                     
-                    <!-- Parte 1: Endereço -->
-                    <div class="flex items-start gap-4">
+                    <!-- Parte 1: Endereço --><div class="flex items-start gap-4">
                         <div class="pt-1">
-                            <i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO -->
-                        </div>
+                            <i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO --></div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Endereço</h4>
-                            <p id="contato-endereco" class="text-lg text-gray-700 dark:text-gray-300">Carregando...</p> <!-- MUDADO -->
-                        </div>
+                            <p id="contato-endereco" class="text-lg text-gray-700 dark:text-gray-300">Carregando...</p> <!-- MUDADO --></div>
                     </div>
 
-                    <!-- Parte 2: Horários -->
-                    <div class="flex items-start gap-4">
+                    <!-- Parte 2: Horários --><div class="flex items-start gap-4">
                         <div class="pt-1">
-                            <i data-lucide="clock" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO -->
-                        </div>
+                            <i data-lucide="clock" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO --></div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Horário dos Cultos</h4>
-                            <p id="contato-horarios" class="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line">Carregando...</p> <!-- MUDADO -->
-                        </div>
+                            <p id="contato-horarios" class="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line">Carregando...</p> <!-- MUDADO --></div>
                     </div>
 
-                    <!-- Parte 3: Redes Sociais -->
-                    <div class="flex items-start gap-4">
+                    <!-- Parte 3: Redes Sociais --><div class="flex items-start gap-4">
                         <div class="pt-1">
-                            <i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO -->
-                        </div>
+                            <i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO --></div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Siga-nos</h4>
                             <div class="flex gap-5 mt-2">
-                                <!-- MUDADO: Classes de hover dos ícones -->
-                                <a id="social-instagram" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
+                                <!-- MUDADO: Classes de hover dos ícones --><a id="social-instagram" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
                                     <i data-lucide="instagram" class="lucide-icon w-8 h-8"></i>
                                 </a>
                                 <a id="social-youtube" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
@@ -315,8 +312,7 @@
 
     </main>
 
-    <!-- ===== JAVASCRIPT PRINCIPAL ===== -->
-    <script>
+    <!-- ===== JAVASCRIPT PRINCIPAL ===== --><script>
         // --- 1. BASE DE DADOS (Embutida para Teste) ---
         const churchData = {
             "cajuru": {
@@ -392,6 +388,7 @@
         // --- 2. ESTADO GLOBAL ---
         let currentUnitId = 'cajuru'; // Unidade padrão
         let swiperEventos; // Variável para guardar o slider de eventos
+        let swiperFotos; // Variável para guardar o slider de fotos
         
         // --- 3. FUNÇÕES DE ATUALIZAÇÃO ---
 
@@ -565,10 +562,15 @@
             // Configura a caixa de pesquisa de eventos
             document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
 
-            // Inicializa o Swiper de EVENTOS
+            // Inicializa o Swiper de EVENTOS - MUDADO: Adicionado autoplay e loop
             swiperEventos = new Swiper('#eventos-slider', {
                 slidesPerView: 1, // Quantos slides por vez
                 spaceBetween: 20,  // Espaço entre eles
+                loop: true, // NOVO: Loop infinito
+                autoplay: { // NOVO: Passa automaticamente
+                    delay: 3000, // 3 segundos
+                    disableOnInteraction: false, // Continua passando mesmo se o usuário interagir
+                },
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
@@ -590,16 +592,18 @@
                 }
             });
 
-            // Inicializa o Swiper de FOTOS (Automático)
-            new Swiper('#fotos-slider', {
-                loop: true,
-                autoplay: {
-                    delay: 3000, // Passa a cada 3 segundos
-                    disableOnInteraction: false,
+            // MUDADO: Inicializa o Swiper de FOTOS (agora como carrossel de cards, com autoplay e loop)
+            swiperFotos = new Swiper('#fotos-slider', {
+                slidesPerView: 'auto', // Permite que os cards definam sua própria largura
+                spaceBetween: 30,  // Espaço entre os cards
+                loop: true, // NOVO: Loop infinito
+                autoplay: { // NOVO: Passa automaticamente
+                    delay: 3000, // 3 segundos
+                    disableOnInteraction: false, // Continua passando mesmo se o usuário interagir
                 },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
+                navigation: {
+                    nextEl: '#fotos .swiper-button-next', // Escopo para a seção #fotos
+                    prevEl: '#fotos .swiper-button-prev',
                 },
             });
 
