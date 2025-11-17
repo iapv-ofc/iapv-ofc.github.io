@@ -3,27 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IAPV - Igreja Apostólica Palavra e Verdade</title>
-    <link rel="icon" href="images/simbolo-iapv.svg?v=1" type="image/svg+xml">
-    
-    <!-- 1. Tailwind CSS (Para o estilo) -->
+    <title>Admin - IAPV</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- 2. Swiper.js (Para os carrosséis de Eventos e Fotos) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-    <!-- 3. Lucide Icons (Para os ícones) -->
-    <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.395.0/dist/lucide.min.js"></script>
     <script>
-        // Configuração para o Tailwind (para o tema escuro e fontes)
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
                     colors: {
                         'accent': '#005DCC',
                     }
@@ -31,408 +16,114 @@
             },
         };
     </script>
-
-    <!-- Estilos personalizados -->
-    <style>
-        /* Estilo dos botões do Swiper (para combinar com a referência) */
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: #fff;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            transition: all 0.2s ease-in-out;
-        }
-        .swiper-button-next:after,
-        .swiper-button-prev:after {
-            font-size: 20px;
-            font-weight: 900;
-        }
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-            background-color: rgba(0, 0, 0, 0.6);
-        }
-
-        /* Garante que os ícones do Lucide sejam criados */
-        .lucide-icon {
-            display: inline-block;
-            width: 1em;
-            height: 1em;
-            stroke-width: 2;
-            stroke: currentColor;
-            fill: none;
-        }
-
-        /* Estilo para o Select (Dropdown) - Fica na capa, mantém o visual */
-        .custom-select-filter {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            padding: 12px 48px 12px 24px; 
-            font-size: 16px;
-            font-weight: 600;
-            color: #e0e0e0;
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-            transition: all 0.2s ease-in-out;
-            cursor: pointer;
-            width: 100%;
-            background-image: none;
-        }
-        .custom-select-filter:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        .custom-select-filter:focus {
-            outline: none;
-            ring: 2px;
-            ring-color: #005DCC;
-        }
-        .custom-select-filter option {
-            background-color: #1f2937;
-            color: #e0e0e0;
-        }
-
-        /* Estilo para as bolinhas do Swiper (Galeria - se fosse usada) */
-        .swiper-pagination-bullet {
-            background-color: #aaa;
-            opacity: 0.7;
-        }
-        .swiper-pagination-bullet-active {
-            background-color: #005DCC;
-            opacity: 1;
-        }
-
-        .photo-gallery-card-frame {
-            width: 100%; 
-            aspect-ratio: 4 / 5; 
-            background: none;
-            border: none;
-            border-radius: 30px;
-            box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
-            padding: 0; 
-            @apply dark:shadow-black/30;
-        }
-
-        .photo-gallery-card-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 30px;
-        }
-
-        /* Estilo do botão do álbum (baseado no CSS fornecido) */
-        .btn-album-animado {
-            /* Variáveis adaptadas para a cor 'accent' (#005DCC) */
-            --btn-bg-1: hsla(211, 100%, 70% / 1); /* Azul claro (derivado do accent) */
-            --btn-bg-2: hsla(211, 100%, 40% / 1); /* Azul accent (#005DCC) */
-            --btn-bg-color: hsla(0, 0%, 100% / 1); /* Branco */
-            --radii: 0.5em; /* 8px */
-
-            cursor: pointer;
-            padding: 0.9em 1.4em;
-            min-width: 120px;
-            min-height: 44px;
-            font-size: 1.125rem; /* 18px, (era text-lg) */
-            font-weight: 700; /* (era font-bold) */
-            transition: 0.8s;
-            background-size: 280% auto;
-            background-image: linear-gradient(
-                325deg,
-                var(--btn-bg-2) 0%,
-                var(--btn-bg-1) 55%,
-                var(--btn-bg-2) 90%
-            );
-            border: none;
-            border-radius: var(--radii);
-            color: var(--btn-bg-color);
-            /* Sombra adaptada do CSS fornecido */
-            box-shadow:
-                0px 0px 20px rgba(0, 93, 204, 0.5), /* Sombra externa com cor accent */
-                0px 5px 5px -1px rgba(0, 93, 204, 0.25), /* Sombra direcional com cor accent */
-                inset 4px 4px 8px rgba(0, 123, 255, 0.5), /* Sombra interna clara */
-                inset -4px -4px 8px rgba(0, 68, 153, 0.35); /* Sombra interna escura */
-        }
-
-        .btn-album-animado:hover {
-            background-position: right top; /* Ativa a animação do gradiente */
-        }
-
-        .btn-album-animado:is(:focus, :focus-visible, :active) {
-            outline: none;
-            box-shadow:
-                0 0 0 3px var(--btn-bg-color),
-                0 0 0 6px var(--btn-bg-2);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .btn-album-animado {
-                transition: linear;
-            }
-        }
-    </style>
 </head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
-<body class="bg-gray-100 text-gray-900 antialiased">
+    <!-- ===== TELA DE LOGIN ===== -->
+    <div id="login-container" class="w-full max-w-md">
+        <form id="login-form" class="bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Painel de Admin - IAPV</h2>
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="login-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
+            </div>
+            <div class="mb-6">
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <input type="password" id="login-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
+            </div>
+            <p id="login-error" class="text-sm text-red-600 mb-4 hidden"></p>
+            <button type="submit" class="w-full bg-accent text-white py-2 px-4 rounded-md font-semibold hover:bg-accent/90 transition-colors">
+                Entrar
+            </button>
+        </form>
+    </div>
 
-    <!-- ===== SEÇÃO 1: CAPA E FILTRO GLOBAL ===== -->
-    <header class="h-screen min-h-[600px] w-full flex flex-col items-center justify-center relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://i.ibb.co/kg5D1brF/IMG-7186.jpg');">
-        <div class="absolute inset-0 bg-black/60 z-0"></div>
+    <!-- ===== PAINEL PRINCIPAL (Oculto por padrão) ===== -->
+    <div id="admin-panel" class="hidden w-full max-w-4xl">
+        <div class="bg-white p-8 rounded-lg shadow-md">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">Gerenciador de Eventos</h1>
+                <button id="logout-button" class="text-sm font-medium text-red-600 hover:text-red-800">Sair</button>
+            </div>
 
-        <div class="relative z-10 flex flex-col items-center text-center px-4">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white shadow-lg">
-                Bem vindo(a) á Igreja Palavra e Verdade
-            </h1>
-            <p class="mt-4 text-xl sm:text-2xl md:text-3xl text-gray-200 font-light shadow-md">
-                Uma igreja em célula
-            </p>
+            <!-- Seletor de Unidade -->
+            <div class="mb-4">
+                <label for="admin-unit-select" class="block text-sm font-medium text-gray-700 mb-1">Selecione a Unidade para Gerenciar:</label>
+                <select id="admin-unit-select" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
+                    <option value="">Carregando unidades...</option>
+                </select>
+            </div>
 
-            <div class="mt-12">
-                <label for="unit-select-filter" class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
-                <div class="relative w-full max-w-sm mx-auto px-4 sm:px-0">
-                    <select id="unit-select-filter" class="custom-select-filter">
-                        <!-- Opções carregadas dinamicamente pelo Firebase -->
-                        <option value="">Carregando unidades...</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-300">
-                        <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            <hr class="my-6">
+
+            <!-- Formulário (Adicionar/Editar) -->
+            <div id="form-container" class="mb-6">
+                <h3 id="form-title" class="text-xl font-semibold mb-4">Adicionar Novo Evento</h3>
+                <form id="event-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="hidden" id="event-id"> <!-- Usado para edição -->
+                    <div>
+                        <label for="event-title" class="block text-sm font-medium text-gray-700">Título</label>
+                        <input type="text" id="event-title" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
                     </div>
+                    <div>
+                        <label for="event-date-text" class="block text-sm font-medium text-gray-700">Texto da Data (ex: "Todo Domingo")</label>
+                        <input type="text" id="event-date-text" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="event-time" class="block text-sm font-medium text-gray-700">Horário (ex: "18h30")</label>
+                        <input type="text" id="event-time" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="event-location" class="block text-sm font-medium text-gray-700">Local (Opcional)</label>
+                        <input type="text" id="event-location" placeholder="Deixe em branco para usar o nome da unidade" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div class="md:col-span-1">
+                        <label for="event-start-date" class="block text-sm font-medium text-gray-700">Data/Hora de Início (ISO)</label>
+                        <input type="datetime-local" id="event-start-date" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                        <small class="text-xs text-gray-500">Para o "Adicionar à Agenda".</small>
+                    </div>
+                    <div class="md:col-span-1">
+                        <label for="event-end-date" class="block text-sm font-medium text-gray-700">Data/Hora de Fim (ISO)</label>
+                        <input type="datetime-local" id="event-end-date" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                        <small class="text-xs text-gray-500">Eventos passados são ocultos.</small>
+                    </div>
+
+                    <div class="md:col-span-2 flex items-center gap-4 mt-4">
+                        <button type="submit" id="save-event-button" class="bg-accent text-white py-2 px-6 rounded-md font-semibold hover:bg-accent/90 transition-colors">
+                            Salvar Evento
+                        </button>
+                        <button type="button" id="cancel-edit-button" class="hidden text-sm font-medium text-gray-600 hover:text-gray-800">
+                            Cancelar Edição
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Lista de Eventos -->
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Eventos Cadastrados</h3>
+                <div id="events-list" class="space-y-3">
+                    <p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>
                 </div>
             </div>
+
         </div>
-    </header>
-
-    <main class="w-full">
-
-        <!-- ===== SEÇÃO 2: MISSÃO, VISÃO, VALORES ===== -->
-        <section id="sobre" class="py-20 px-4 max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <!-- Missão -->
-                <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                    <div class="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    
-                    <div class="relative flex flex-col items-center">
-                        <div class="w-20 h-20 bg-gradient-to-br from-accent to-blue-600 rounded-2xl flex items-center justify-center mb-6 transform group-hover:rotate-6 transition-transform duration-300 shadow-lg">
-                            <i data-lucide="compass" class="lucide-icon w-10 h-10 text-white"></i>
-                        </div>
-                        
-                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                            Missão
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                            Levar a palavra de Deus a todos, vivendo o amor de Cristo e servindo ao próximo com alegria e dedicação.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Visão -->
-                <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                    <div class="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    
-                    <div class="relative flex flex-col items-center">
-                        <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center mb-6 transform group-hover:rotate-6 transition-transform duration-300 shadow-lg">
-                            <i data-lucide="eye" class="lucide-icon w-10 h-10 text-white"></i>
-                        </div>
-                        
-                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                            Visão
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                            Ser uma igreja relevante e transformadora, que impacta a sociedade através de células que multiplicam discípulos.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Valores -->
-                <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                    <div class="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    
-                    <div class="relative flex flex-col items-center">
-                        <div class="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center mb-6 transform group-hover:rotate-6 transition-transform duration-300 shadow-lg">
-                            <i data-lucide="gem" class="lucide-icon w-10 h-10 text-white"></i>
-                        </div>
-                        
-                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                            Valores
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                            Comunhão, Adoração, Serviço, Evangelismo e Discipulado. Pilares que sustentam nossa fé e nossas ações.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" />
-
-        <!-- ===== SEÇÃO 3: EVENTOS ===== -->
-        <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Eventos</h2>
-            <p class="text-lg text-gray-600 dark:text-gray-400 text-center mb-10">
-                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Carregando...</span>
-            </p>
-
-            <!-- Caixa de Pesquisa -->
-            <div class="mb-8 max-w-lg mx-auto">
-                <input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent">
-            </div>
-
-            <!-- Carrossel (Swiper.js) -->
-            <div class="relative">
-                <div id="eventos-slider" class="swiper-container overflow-hidden">
-                    <div class="swiper-wrapper" id="eventos-wrapper">
-                        <!-- Os slides serão injetados aqui pelo JavaScript -->
-                        <p classclass="text-center text-gray-500">Carregando eventos...</p>
-                    </div>
-                </div>
-                <!-- Botões de Navegação -->
-                <div class="swiper-button-prev -left-4 md:-left-12"></div>
-                <div class="swiper-button-next -right-4 md:-right-12"></div>
-            </div>
-
-            <!-- Mensagem de "Nenhum resultado" -->
-            <p id="eventos-nenhum-resultado" class="text-center text-gray-500 dark:text-gray-400 mt-8 text-lg hidden">
-                Nenhum evento encontrado.
-            </p>
-        </section>
-
-        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" />
-
-        <!-- ===== SEÇÃO 4: FOTOS ===== -->
-        <section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">Galeria de Fotos</h2>
-            
-            <div class="relative">
-                <div id="fotos-slider" class="swiper-container overflow-hidden">
-                    <div class="swiper-wrapper">
-                        
-                        <div class="swiper-slide p-2">
-                            <div class="photo-gallery-card-frame">
-                                <img src="https://i.ibb.co/qMGGTywr/IMG-8079.jpg" alt="Foto da galeria 1">
-                            </div>
-                        </div>
-                        <div class="swiper-slide p-2">
-                            <div class="photo-gallery-card-frame">
-                                <img src="https://i.ibb.co/gLgBVJ8W/IMG-1839.jpg" alt="Foto da galeria 2">
-                            </div>
-                        </div>
-                        <div class="swiper-slide p-2">
-                            <div class="photo-gallery-card-frame">
-                                <img src="https://i.ibb.co/BKCn1r03/IMG-4173.jpg" alt="Foto da galeria 3">
-                            </div>
-                        </div>
-                        <div class="swiper-slide p-2">
-                            <div class="photo-gallery-card-frame">
-                                <img src="https://placehold.co/400x500/5E35B1/EDE7F6?text=Foto+4" alt="Foto placeholder 4">
-                            </div>
-                        </div>
-                        <div class="swiper-slide p-2">
-                            <div class="photo-gallery-card-frame">
-                                <img src="https://placehold.co/400x500/1f2937/9ca3af?text=Foto+5" alt="Foto placeholder 5">
-                            </div>
-                        </div>
-                        <div class="swiper-slide p-2">
-                            <div class="photo-gallery-card-frame">
-                                <img src="https://i.ibb.co/hFxtcRX5/IMG-2089.jpg" alt="Foto da galeria 6">
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="swiper-button-prev -left-4 md:-left-12"></div>
-                <div class="swiper-button-next -right-4 md:-right-12"></div>
-            </div>
-
-            <!-- Botão do Álbum (Link dinâmico) -->
-            <div class="text-center mt-10">
-                <a id="fotos-album-link" href="#" target="_blank" class="inline-block btn-album-animado">
-                    Ver álbum completo de <span id="fotos-unidade-nome">Carregando...</span>
-                </a>
-            </div>
-        </section>
+    </div>
 
 
-        <!-- ===== SEÇÃO 5: CONTATO E MAPA ===== -->
-        <footer id="contato" class="py-20 px-4 bg-gray-100 dark:bg-gray-900/50">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-                
-                <!-- Coluna Esquerda: Mapa -->
-                <div class="h-96 md:h-full min-h-[400px] rounded-lg overflow-hidden">
-                    <iframe 
-                        id="mapa-iframe"
-                        src="" 
-                        width="100%" 
-                        height="100%" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
-
-                <!-- Coluna Direita: Informações -->
-                <div class="flex flex-col justify-center gap-10">
-                    
-                    <!-- Parte 1: Endereço -->
-                    <div class="flex items-start gap-4">
-                        <div class="pt-1">
-                            <i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-accent"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold mb-1">Endereço</h4>
-                            <p id="contato-endereco" class="text-lg text-gray-700 dark:text-gray-300">Carregando...</p>
-                        </div>
-                    </div>
-
-                    <!-- Parte 2: Horários -->
-                    <div class="flex items-start gap-4">
-                        <div class="pt-1">
-                            <i data-lucide="clock" class="lucide-icon w-6 h-6 text-accent"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold mb-1">Horário dos Cultos</h4>
-                            <p id="contato-horarios" class="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line">Carregando...</p>
-                        </div>
-                    </div>
-
-                    <!-- Parte 3: Redes Sociais -->
-                    <div class="flex items-start gap-4">
-                        <div class="pt-1">
-                            <i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-accent"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold mb-1">Siga-nos</h4>
-                            <div class="flex gap-5 mt-2">
-                                <a id="social-instagram" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
-                                    <svg aria-hidden="true" focusable="false" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                                </a>
-                                <a id="social-youtube" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
-                                    <svg aria-hidden="true" focusable="false" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </footer>
-
-    </main>
-
-    <!-- ===== JAVASCRIPT PRINCIPAL ===== -->
+    <!-- ===== JAVASCRIPT DO ADMIN ===== -->
     
-    <!-- 4. Firebase SDKs -->
+    <!-- Firebase SDKs -->
     <script type="module">
         // Importe as funções que você precisa
         // **** ERRO CORRIGIDO AQUI (https://) ****
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy, setLogLevel } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy, addDoc, updateDoc, deleteDoc, writeBatch, setLogLevel } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
         // =================================================================================
-        // SUA CONFIGURAÇÃO DO FIREBASE
+        // SUA CONFIGURAÇÃO DO FIREBASE (Projeto: site-iapv-9fdd1)
         // =================================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyB1-NkxI4ZxBqsHIK6dzq3c365HLl_DZFs",
@@ -445,314 +136,338 @@
         };
         // =================================================================================
 
-        // Variáveis globais
-        let db;
-        let swiperEventos;
-        let currentUnitId = null;
-        let allUnitsData = {}; // Cache para guardar os dados de todas as unidades
+        // --- Variáveis Globais ---
+        let auth, db;
+        let currentAdminUnitId = null; // ID da unidade selecionada no admin
+        let unscribeEventsListener = null; // Para desligar o listener onSnapshot
 
-        // Inicializa o Firebase
+        // --- Elementos do DOM ---
+        const loginContainer = document.getElementById('login-container');
+        const adminPanel = document.getElementById('admin-panel');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const logoutButton = document.getElementById('logout-button');
+        const adminUnitSelect = document.getElementById('admin-unit-select');
+        const eventForm = document.getElementById('event-form');
+        const formTitle = document.getElementById('form-title');
+        const eventList = document.getElementById('events-list');
+        const eventIdField = document.getElementById('event-id');
+        const cancelEditButton = document.getElementById('cancel-edit-button');
+
+        // --- Inicialização ---
         try {
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app); // Inicializa o Analytics
+            auth = getAuth(app);
             db = getFirestore(app);
-            // setLogLevel('debug'); // Descomente para ver logs detalhados do Firestore
-            console.log("Firebase inicializado com sucesso!");
+            // setLogLevel('debug');
+            console.log("Painel de Admin: Firebase inicializado.");
         } catch (error) {
             console.error("Erro ao inicializar o Firebase: ", error);
-            // Mostra um erro amigável para o usuário
-            document.getElementById('eventos-unidade').textContent = "Erro de conexão";
-            document.getElementById('eventos-wrapper').innerHTML = '<p class="text-center text-red-500">Não foi possível conectar ao banco de dados.</p>';
+            loginError.textContent = "Erro fatal ao conectar. Verifique o firebaseConfig.";
+            loginError.classList.remove('hidden');
         }
 
+        // --- 1. Autenticação ---
 
-        // --- Funções de Inicialização ---
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if(db) { // Só inicializa o app se o DB conectou
-                initializeAppLogic();
+        // Monitora o estado do login
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário está logado
+                loginContainer.classList.add('hidden');
+                adminPanel.classList.remove('hidden');
+                loadAdminUnitsDropdown(); // Carrega as unidades no painel
+            } else {
+                // Usuário está deslogado
+                loginContainer.classList.remove('hidden');
+                adminPanel.classList.add('hidden');
+                
+                // Limpa o painel se o usuário deslogar
+                if (unscribeEventsListener) unscribeEventsListener();
+                adminUnitSelect.innerHTML = '<option value="">Carregando...</option>';
+                eventList.innerHTML = '<p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>';
             }
         });
 
-        async function initializeAppLogic() {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-
-            // Inicializa os sliders (mesmo vazios)
-            initializeSwipers();
-
-            // Carrega os dados das unidades e preenche o dropdown
-            await loadUnitsDropdown();
-
-            // Adiciona o listener ao dropdown
-            const unitSelect = document.getElementById('unit-select-filter');
-            unitSelect.addEventListener('change', (event) => {
-                const unitId = event.target.value;
-                if(unitId) {
-                    updatePageContent(unitId);
-                }
-            });
-
-            // Adiciona o listener à caixa de busca
-            document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
-        }
-
-        function initializeSwipers() {
-            swiperEventos = new Swiper('#eventos-slider', {
-                slidesPerView: 1,
-                spaceBetween: 20,
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                breakpoints: {
-                    640: { slidesPerView: 2, spaceBetween: 20 },
-                    1024: { slidesPerView: 3, spaceBetween: 30 },
-                    1280: { slidesPerView: 4, spaceBetween: 30 }
-                }
-            });
-
-            new Swiper('#fotos-slider', {
-                loop: true,
-                autoplay: { delay: 3000, disableOnInteraction: false },
-                spaceBetween: 30,
-                slidesPerView: 1,
-                breakpoints: {
-                    768: { slidesPerView: 2, spaceBetween: 30 },
-                    1024: { slidesPerView: 3, spaceBetween: 30 }
-                },
-                navigation: {
-                    nextEl: '#fotos .swiper-button-next',
-                    prevEl: '#fotos .swiper-button-prev',
-                },
-            });
-        }
-
-        // --- Funções de Carregamento de Dados (Firestore) ---
-
-        async function loadUnitsDropdown() {
-            const unitsCollection = collection(db, "units");
-            const unitSelect = document.getElementById('unit-select-filter');
+        // Evento de Login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            loginError.classList.add('hidden');
 
             try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // O onAuthStateChanged vai lidar com a mudança de tela
+            } catch (error) {
+                console.error("Erro de login:", error.code, error.message);
+                loginError.textContent = "Email ou senha inválidos.";
+                loginError.classList.remove('hidden');
+            }
+        });
+
+        // Evento de Logout
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                // O onAuthStateChanged vai lidar com a mudança de tela
+            } catch (error) {
+                console.error("Erro ao sair:", error);
+            }
+        });
+
+        // --- 2. Lógica do Painel de Admin ---
+
+        // Carrega as unidades no dropdown do admin
+        async function loadAdminUnitsDropdown() {
+            const unitsCollection = collection(db, "units");
+            try {
                 const querySnapshot = await getDocs(query(unitsCollection));
-                
                 if (querySnapshot.empty) {
-                    console.warn("Nenhuma unidade encontrada no Firestore.");
-                    unitSelect.innerHTML = '<option value="">Nenhuma unidade cadastrada</option>';
+                    adminUnitSelect.innerHTML = '<option value="">Nenhuma unidade cadastrada</option>';
                     return;
                 }
 
-                let optionsHtml = '';
-                let firstUnitId = null;
-
+                let optionsHtml = '<option value="">-- Selecione uma unidade --</option>';
                 querySnapshot.forEach((doc) => {
-                    const unit = doc.data();
-                    unit.id = doc.id; // Armazena o ID do documento
-                    allUnitsData[doc.id] = unit; // Salva no cache
-                    
-                    if (!firstUnitId) firstUnitId = doc.id; // Pega a primeira unidade como padrão
-                    
-                    optionsHtml += `<option value="${doc.id}">${unit.name.toUpperCase()}</option>`;
+                    optionsHtml += `<option value="${doc.id}">${doc.data().name.toUpperCase()}</option>`;
                 });
-
-                unitSelect.innerHTML = optionsHtml;
-                
-                // Seleciona e carrega a primeira unidade da lista
-                if (firstUnitId) {
-                    currentUnitId = firstUnitId;
-                    unitSelect.value = firstUnitId;
-                    updatePageContent(firstUnitId);
-                }
+                adminUnitSelect.innerHTML = optionsHtml;
 
             } catch (error) {
-                console.error("Erro ao carregar unidades: ", error);
-                unitSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+                console.error("Erro ao carregar unidades no admin: ", error);
+                adminUnitSelect.innerHTML = '<option value="">Erro ao carregar</option>';
             }
         }
 
-        // --- Funções de Atualização de Conteúdo ---
-
-        function updatePageContent(unitId) {
-            currentUnitId = unitId;
-            const unitData = allUnitsData[unitId];
+        // Evento de seleção de unidade no admin
+        adminUnitSelect.addEventListener('change', () => {
+            currentAdminUnitId = adminUnitSelect.value;
             
-            if (!unitData) {
-                console.error('Dados da unidade não encontrados no cache:', unitId);
+            // Cancela o listener anterior antes de criar um novo
+            if (unscribeEventsListener) {
+                unscribeEventsListener();
+            }
+
+            if (currentAdminUnitId) {
+                // Escuta por mudanças em tempo real nos eventos
+                listenForEvents(currentAdminUnitId);
+            } else {
+                eventList.innerHTML = '<p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>';
+            }
+        });
+
+        // "Ouve" os eventos da unidade selecionada em tempo real
+        function listenForEvents(unitId) {
+            const eventsCollection = collection(db, `units/${unitId}/events`);
+            const q = query(eventsCollection, orderBy("startDate", "desc")); // Mostra os mais novos primeiro
+
+            unscribeEventsListener = onSnapshot(q, (querySnapshot) => {
+                if (querySnapshot.empty) {
+                    eventList.innerHTML = '<p class="text-gray-500">Nenhum evento cadastrado para esta unidade.</p>';
+                    return;
+                }
+
+                let eventsHtml = '';
+                querySnapshot.forEach((doc) => {
+                    const event = doc.data();
+                    const eventId = doc.id;
+                    const isPast = new Date(event.endDate) < new Date();
+
+                    eventsHtml += `
+                        <div class="flex justify-between items-center p-3 rounded-md ${isPast ? 'bg-gray-100 opacity-60' : 'bg-gray-50'}">
+                            <div>
+                                <p class="font-semibold ${isPast ? 'line-through' : ''}">${event.title}</p>
+                                <p class="text-sm text-gray-600">${event.date} • ${event.time} ${isPast ? '(Encerrado)' : ''}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button data-id="${eventId}" class="edit-btn text-sm font-medium text-accent hover:text-accent/80">Editar</button>
+                                <button data-id="${eventId}" class="delete-btn text-sm font-medium text-red-600 hover:text-red-800">Excluir</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                eventList.innerHTML = eventsHtml;
+
+            }, (error) => {
+                console.error("Erro ao escutar eventos: ", error);
+                eventList.innerHTML = '<p class="text-red-500">Erro ao carregar eventos.</p>';
+            });
+        }
+
+
+        // --- 3. CRUD (Create, Read, Update, Delete) de Eventos ---
+
+        // Evento de Submit do Formulário (Criação e Edição)
+        eventForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentAdminUnitId) {
+                alert("Por favor, selecione uma unidade primeiro.");
                 return;
             }
 
-            // Atualiza o filtro de dropdown (caso a chamada venha de outro lugar)
-            document.getElementById('unit-select-filter').value = unitId;
+            // Pega os dados do formulário
+            const eventData = {
+                title: document.getElementById('event-title').value,
+                date: document.getElementById('event-date-text').value,
+                time: document.getElementById('event-time').value,
+                location: document.getElementById('event-location').value || '', // Salva vazio se não preenchido
+                startDate: document.getElementById('event-start-date').value, // Vem como "2025-11-16T18:30"
+                endDate: document.getElementById('event-end-date').value,
+            };
 
-            // Atualiza a seção de Eventos
-            document.getElementById('eventos-unidade').textContent = unitData.name;
-            loadEventsForUnit(unitId, unitData.name); // Busca os eventos para esta unidade
-
-            // Atualiza a seção de Fotos
-            document.getElementById('fotos-unidade-nome').textContent = unitData.name;
-            document.getElementById('fotos-album-link').href = unitData.albumUrl || '#';
-
-            // Atualiza a seção de Contato/Footer
-            document.getElementById('mapa-iframe').src = unitData.mapUrl || '';
-            document.getElementById('contato-endereco').textContent = unitData.address || 'Endereço não informado';
-            document.getElementById('contato-horarios').textContent = unitData.times || 'Horários não informados';
-            document.getElementById('social-instagram').href = unitData.socials?.instagram || '#';
-            document.getElementById('social-youtube').href = unitData.socials?.youtube || '#';
+            const editingId = eventIdField.value; // Pega o ID do campo oculto
             
-            // Limpa a busca
-            document.getElementById('event-search-box').value = '';
+            try {
+                const eventsCollection = collection(db, `units/${currentAdminUnitId}/events`);
+                
+                if (editingId) {
+                    // --- ATUALIZANDO (Update) ---
+                    const eventDoc = doc(db, `units/${currentAdminUnitId}/events`, editingId);
+                    await updateDoc(eventDoc, eventData);
+                    console.log("Evento atualizado com ID: ", editingId);
+                } else {
+                    // --- CRIANDO (Create) ---
+                    const docRef = await addDoc(eventsCollection, eventData);
+                    console.log("Evento adicionado com ID: ", docRef.id);
+                }
+                
+                resetForm();
+
+            } catch (error) {
+                console.error("Erro ao salvar evento: ", error);
+                alert("Erro ao salvar evento. Verifique o console.");
+            }
+        });
+
+        // Eventos de clique na lista (para Editar e Excluir)
+        eventList.addEventListener('click', async (e) => {
+            const target = e.target;
+            const eventId = target.dataset.id;
+
+            if (!eventId || !currentAdminUnitId) return;
+
+            const eventDocRef = doc(db, `units/${currentAdminUnitId}/events`, eventId);
+
+            // --- EXCLUIR (Delete) ---
+            if (target.classList.contains('delete-btn')) {
+                if (confirm("Tem certeza que deseja excluir este evento?")) {
+                    try {
+                        await deleteDoc(eventDocRef);
+                        console.log("Evento excluído.");
+                        resetForm(); // Caso o evento excluído estivesse em edição
+                    } catch (error) {
+                        console.error("Erro ao excluir evento: ", error);
+                        alert("Erro ao excluir evento.");
+                    }
+                }
+            }
+
+            // --- EDITAR (Preencher formulário) ---
+            if (target.classList.contains('edit-btn')) {
+                try {
+                    const docSnap = await getDoc(eventDocRef);
+                    if (docSnap.exists()) {
+                        const event = docSnap.data();
+                        
+                        // Preenche o formulário
+                        formTitle.textContent = "Editar Evento";
+                        eventIdField.value = eventId; // Seta o ID no campo oculto
+                        document.getElementById('event-title').value = event.title;
+                        document.getElementById('event-date-text').value = event.date;
+                        document.getElementById('event-time').value = event.time;
+                        document.getElementById('event-location').value = event.location || '';
+                        document.getElementById('event-start-date').value = event.startDate;
+                        document.getElementById('event-end-date').value = event.endDate;
+
+                        cancelEditButton.classList.remove('hidden');
+                        window.scrollTo(0, 0); // Rola para o topo
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar evento para edição: ", error);
+                }
+            }
+        });
+
+        // Botão de Cancelar Edição
+        cancelEditButton.addEventListener('click', resetForm);
+
+        function resetForm() {
+            formTitle.textContent = "Adicionar Novo Evento";
+            eventForm.reset();
+            eventIdField.value = ''; // Limpa o ID oculto
+            cancelEditButton.classList.add('hidden');
         }
 
-        async function loadEventsForUnit(unitId, unitName) {
-            const wrapper = document.getElementById('eventos-wrapper');
-            wrapper.innerHTML = '<p class="text-center text-gray-500">Carregando eventos...</p>';
-            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
-            noResultsMsg.classList.add('hidden');
 
-            const now = new Date();
-            const eventsCollection = collection(db, `units/${unitId}/events`);
-            
-            // Query para buscar eventos que terminam hoje ou no futuro,
-            // ordenados pela data de início
-            const q = query(eventsCollection, 
-                where("endDate", ">=", now.toISOString().split('T')[0]), // Compara como string YYYY-MM-DD
-                orderBy("endDate"), // Ordena pela data de término
-                orderBy("startDate") // Depois pela de início
-            );
+        // --- 4. FUNÇÃO DE MIGRAÇÃO (USO ÚNICO) ---
+        // Cole os dados antigos aqui
+        const dadosAntigos = {
+            "cajuru": { "name": "Cajuru", "address": "R. Dr. Mata, 1230 - Jardim Santa Maria Goretti, Cajuru - SP", "times": "Domingo: 18h30\nQuinta-feira: 20h00", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3717.9188596146923!2d-47.3137659!3d-21.274679199999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b7786d1d2bbda5%3A0x5db85ec94f106d39!2sR.%20Dr.% 20Mata%2C%201230%20-%20Jardim%20Santa%20Maria%20Goretti%2C%20Cajuru%20-%20SP%2C%2014240-000!5e0!3m2!1spt-BR!2sbr!4v1763307958832!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/exemploAlbumCajuru", "socials": { "instagram": "https://www.instagram.com/iapv.cajuru?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 0, "title": "EVENTO PASSADO (TESTE)", "date": "15/11/2025", "time": "18h00", "location": "Unidade Cajuru", "startDate": "2025-11-15T18:00:00", "endDate": "2025-11-15T20:00:00" }, { "id": 1, "title": "Culto da Família", "date": "Todos os Domingos", "time": "18h30", "location": "Unidade Cajuru", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00" }, { "id": 2, "title": "Célula de Jovens", "date": "Toda Sexta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-21T20:00:00", "endDate": "2025-11-21T21:30:00" }, { "id": 3, "title": "Noite de Oração", "date": "Toda Quarta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-19T20:00:00", "endDate": "2025-11-19T21:00:00" }, { "id": 4, "title": "Batismo", "date": "25/12/2025", "time": "10h00", "location": "Unidade Cajuru", "startDate": "2025-12-25T10:00:00", "endDate": "2025-12-25T12:00:00" } ] },
+            "ribeiraopreto": { "name": "Ribeirão Preto", "address": "R. Monte Santo, 455 - Sumarezinho, Ribeirão Preto - SP", "times": "Domingo: 18h30\nQuinta-feira: 20h00", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3720.8037817045547!2d-47.84004278877633!3d-21.160205680440967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b9be735151d6f3%3A0x232ecb692c950ec0!2sR.%20Monte%20Santo%2C%20455%20-%20Sumarezinho%2C%20Ribeir%C3%A3o%20Preto%20-%20SP%2C%2014051-270!5e0!3m2!1spt-BR!2sbr!4v1763308022469!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/foaSEW2m3V44mFQj6", "socials": { "instagram": "https://www.instagram.com/iapv.ribeiraopreto?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 5, "title": "Culto de Celebração", "date": "Todo Domingo", "time": "18h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00" }, { "id": 6, "title": "Célula Mista", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00" }, { "id": 7, "title": "Café com Pastores", "date": "15/12/2025", "time": "09h00", "location": "Unidade Ribeirão Preto", "startDate": "2025-12-15T09:00:00", "endDate": "2025-12-15T10:30:00" } ] },
+            "santarosa": { "name": "Santa Rosa de Viterbo", "address": "R. Ângelo Sordi, 505 - Santa Rosa de Viterbo, SP", "times": "Domingo: 19h00\nQuarta-feira: 19h30", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3712.3876752940737!2d-47.37881828876797!3d-21.492529880193267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b788d14e37fb6b%3A0x815c01291b99bd48!2sR.%20%C3%82ngelo%20Sordi%2C%20505%2C%20Santa%20Rosa%20de%20Viterbo%20-%20SP%2C%2014270-000!5e0!3m2!1spt-BR!2sbr!4v1763307988606!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/TVtHSetEbgANVNCt8", "socials": { "instagram": "https://www.instagram.com/iapv.srv/?utm_source=ig_web_button_share_sheet", "youtube": "https(link_para_o_youtube_de_santa_rosa)", "events": [ { "id": 8, "title": "Culto (Santa Rosa)", "date": "Todo Domingo", "time": "19h00", "location": "Unidade Santa Rosa", "startDate": "2025-11-16T19:00:00", "endDate": "2025-11-16T20:30:00" }, { "id": 9, "title": "Estudo Bíblico", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Santa Rosa", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00" } ] },
+            "santoandre": { "name": "Santo André", "address": "Av. da Paz, 974 - Utinga, Santo André - SP", "times": "Domingo: 10h00\nQuarta-feira: 20h00", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.486085089794!2d-46.541219288711204!3d-23.622757078669128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5d36ef90bdd3%3A0x837ee62116e35569!2sAv.%20da%20Paz%2C%20974%20-%20Utinga%2C%20Santo%20Andr%C3%A9%20-%20SP%2C%2009220-310!5e0!3m2!1spt-BR!2sbr!4v1763308041456!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/Ns7QAGbsaR2FJ7Td8", "socials": { "instagram": "https://www.instagram.com/iapv.santoandre?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 10, "title": "Culto de Fim de Semana", "date": "Todo Sábado", "time": "19h00", "location": "Unidade Santo André", "startDate": "2025-11-22T19:00:00", "endDate": "2025-11-22T20:30:00" }, { "id": 11, "title": "Vigília", "date": "Toda última Sexta do mês", "time": "22h00", "location": "Unidade Santo André", "startDate": "2025-11-28T22:00:00", "endDate": "2025-11-29T05:00:00" } ] }
+        };
+
+        // Expõe a função de migração no objeto window para ser chamada pelo console
+        window.migrarDadosIniciais = async function() {
+            if (!db) {
+                console.error("DB não inicializado.");
+                return;
+            }
+
+            if (!confirm("Isso irá apagar e reescrever todos os dados. Tem certeza?")) {
+                return;
+            }
+
+            console.log("Iniciando migração...");
+            const batch = writeBatch(db);
+
+            for (const unitId in dadosAntigos) {
+                const unitData = dadosAntigos[unitId];
+                const events = unitData.events; // Salva os eventos
+                
+                // Cria um novo objeto de unidade sem os eventos
+                const unitDocData = { ...unitData };
+                delete unitDocData.events;
+                delete unitDocData.id; // Remove o id antigo se existir
+
+                // 1. Adiciona o documento da unidade ao batch
+                const unitDocRef = doc(db, "units", unitId);
+                batch.set(unitDocRef, unitDocData);
+                console.log(`Preparando unidade: ${unitId}`);
+
+                // 2. Adiciona os eventos da unidade como uma subcoleção
+                if (events && events.length > 0) {
+                    for (const event of events) {
+                        // Remove o 'id' antigo, o firestore vai gerar um novo
+                        const eventData = { ...event };
+                        delete eventData.id; 
+                        
+                        // Cria uma referência para um NOVO documento na subcoleção 'events'
+                        const eventDocRef = doc(collection(db, `units/${unitId}/events`));
+                        batch.set(eventDocRef, eventData);
+                    }
+                    console.log(`...preparando ${events.length} eventos para ${unitId}`);
+                }
+            }
 
             try {
-                const querySnapshot = await getDocs(q);
-                let eventsToShow = [];
-                
-                querySnapshot.forEach((doc) => {
-                    eventsToShow.push(doc.data());
-                });
-
-                // Armazena os eventos no cache da unidade
-                allUnitsData[unitId].events = eventsToShow;
-                
-                updateEventSlider(eventsToShow, unitName);
+                // 3. Executa o batch (todas as operações de uma vez)
+                await batch.commit();
+                console.log("SUCESSO! Migração concluída.");
+                alert("Dados migrados com sucesso!");
+                // Recarrega os dados no painel
+                loadAdminUnitsDropdown();
 
             } catch (error) {
-                console.error("Erro ao buscar eventos: ", error);
-                wrapper.innerHTML = `<p class="text-center text-red-500">Erro ao carregar eventos. (${error.message})</p>`;
+                console.error("Erro fatal durante a migração: ", error);
+                alert("Erro ao migrar dados. Verifique o console.");
             }
         }
-
-        // --- Funções Auxiliares (Eventos) ---
-
-        function createEventCard(event, unitName) {
-            const location = event.location || unitName;
-            const calendarLink = createGoogleCalendarLink(event, location);
-
-            const calendarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
-            const mapPinIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
-
-            return `
-                <div class="swiper-slide h-auto p-4">
-                    <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" 
-                       class="group relative block w-full h-64 min-h-[250px] bg-white rounded-[30px] shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-200"
-                       style="box-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgba(0, 93, 204, 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgba(0, 93, 204, 0.1));">
-                        
-                        <div class="relative z-[1] flex flex-col justify-center items-center h-full p-5 text-center">
-                            
-                            <!-- Informações do Evento -->
-                            <div>
-                                <h4 class="text-xl font-bold text-gray-800 mb-3">${event.title}</h4>
-                                
-                                <div class="text-sm text-gray-600 mb-2 flex items-center justify-center">
-                                    ${calendarIcon}
-                                    <span class="ml-1.5">${event.date}${event.time ? ` • ${event.time}` : ''}</span>
-                                </div>
-                                
-                                <div class="text-sm text-gray-600 flex items-center justify-center">
-                                    ${mapPinIcon}
-                                    <span class="ml-1.5">${location}</span>
-                                </div>
-                            </div>
-
-                            <!-- Botão (Call-to-Action) -->
-                            <span class="mt-6 inline-block bg-accent text-white font-bold py-2 px-4 rounded-lg text-xs transition-transform duration-200 group-hover:scale-105 shadow-md">
-                                Adicionar à Agenda
-                            </span>
-                        </div>
-                    </a>
-                </div>
-            `;
-        }
+        console.log("Pronto para migrar. Chame 'migrarDadosIniciais()' no console.");
         
-        function updateEventSlider(eventsToShow, unitName) {
-            const wrapper = document.getElementById('eventos-wrapper');
-            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
-
-            if (!eventsToShow || eventsToShow.length === 0) {
-                wrapper.innerHTML = '';
-                noResultsMsg.classList.remove('hidden');
-                noResultsMsg.textContent = "Nenhum evento futuro encontrado para esta unidade.";
-            } else {
-                wrapper.innerHTML = eventsToShow.map(event => createEventCard(event, unitName)).join('');
-                noResultsMsg.classList.add('hidden');
-            }
-
-            if (swiperEventos) {
-                swiperEventos.update();
-                swiperEventos.slideTo(0);
-            }
-        }
-        
-        function filterEventsBySearch() {
-            const searchTerm = document.getElementById('event-search-box').value.toLowerCase();
-            
-            if (!currentUnitId || !allUnitsData[currentUnitId] || !allUnitsData[currentUnitId].events) {
-                // Se os eventos ainda não foram carregados, não faz nada
-                return;
-            }
-
-            const allFutureEvents = allUnitsData[currentUnitId].events;
-            const unitName = allUnitsData[currentUnitId].name;
-            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
-            
-            if (!searchTerm) {
-                updateEventSlider(allFutureEvents, unitName);
-                noResultsMsg.textContent = "Nenhum evento futuro encontrado para esta unidade.";
-                return;
-            }
-            
-            const filteredEvents = allFutureEvents.filter(event => 
-                event.title.toLowerCase().includes(searchTerm)
-            );
-            
-            updateEventSlider(filteredEvents, unitName);
-            
-            if (filteredEvents.length === 0) {
-                noResultsMsg.textContent = "Nenhum evento encontrado com esse nome.";
-            }
-        }
-
-        function createGoogleCalendarLink(event, location) {
-            const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
-            
-            // Tenta formatar as datas ISO. Ex: "2025-11-16T18:30:00"
-            const formatISODate = (isoStr) => isoStr.replace(/-|:|\.\d+/g, '');
-            
-            let dates = '';
-            if (event.startDate && event.endDate) {
-                try {
-                     dates = `${formatISODate(event.startDate)}/${formatISODate(event.endDate)}`;
-                } catch(e) {
-                    console.warn("Não foi possível formatar data do evento para Google Calendar", e);
-                }
-            }
-
-            const text = encodeURIComponent(event.title);
-            const details = encodeURIComponent(`Participe conosco do evento "${event.title}" na ${location}.`);
-            const loc = encodeURIComponent(location);
-
-            return `${baseUrl}&text=${text}&dates=${dates}&details=${details}&location=${loc}`;
-        }
-
     </script>
 </body>
 </html>
