@@ -2,10 +2,16 @@
 <svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112.03 99.06">
   <defs>
     <style>
-      .cls-1 {
-        fill: #fafafa;
+    .icon-shape {
+      fill: #000000;
+    }
+      
+    @media (prefers-color-scheme: dark) {
+      .icon-shape {
+        fill: #FFFFFF;
       }
-    </style>
+    }
+  </style>
   </defs>
   <g id="prancheta2">
     <g id="simbolo">
