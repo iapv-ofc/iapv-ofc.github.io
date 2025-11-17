@@ -616,10 +616,11 @@
             
             // Query para buscar eventos que terminam hoje ou no futuro,
             // ordenados pela data de início
+            // MODIFICADO AQUI: Simplificamos a query para usar apenas um orderBy,
+            // o que evita a necessidade de um índice composto no Firebase.
             const q = query(eventsCollection, 
                 where("endDate", ">=", now.toISOString().split('T')[0]), // Compara como string YYYY-MM-DD
-                orderBy("endDate"), // Ordena pela data de término
-                orderBy("startDate") // Depois pela de início
+                orderBy("endDate", "asc") // Ordena SÓ pela data de término (mais simples e não requer índice)
             );
 
             try {
