@@ -3,12 +3,12 @@
   <defs>
     <style>
     .icon-shape {
-      fill: #000000;
+      fill: #FFFFFF;
     }
       
     @media (prefers-color-scheme: dark) {
       .icon-shape {
-        fill: #FFFFFF;
+        fill: #000000;
       }
     }
   </style>
