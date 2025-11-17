@@ -547,6 +547,9 @@
                 let firstUnitId = null;
 
                 querySnapshot.forEach((doc) => {
+                    // ADICIONADO: Filtra a unidade 'global' da lista pública
+                    if (doc.id === 'global') return; 
+
                     const unit = doc.data();
                     unit.id = doc.id; // Armazena o ID do documento
                     allUnitsData[doc.id] = unit; // Salva no cache
@@ -611,32 +614,61 @@
             noResultsMsg.classList.add('hidden');
 
             const now = new Date();
-            const eventsCollection = collection(db, `units/${unitId}/events`);
-            
-            // Query para buscar eventos que terminam hoje ou no futuro,
-            // ordenados pela data de início
-            // MODIFICADO AQUI: Simplificamos a query para usar apenas um orderBy,
-            // o que evita a necessidade de um índice composto no Firebase.
-            const q = query(eventsCollection, 
-                where("endDate", ">=", now.toISOString().split('T')[0]), // Compara como string YYYY-MM-DD
-                orderBy("endDate", "asc") // Ordena SÓ pela data de término (mais simples e não requer índice)
+            const todayString = now.toISOString().split('T')[0];
+
+            // --- INÍCIO DA MODIFICAÇÃO PARA EVENTOS GLOBAIS ---
+
+            // Query 1: Eventos específicos da unidade
+            const unitEventsCollection = collection(db, `units/${unitId}/events`);
+            const qUnit = query(unitEventsCollection, 
+                where("endDate", ">=", todayString),
+                orderBy("endDate", "asc")
+            );
+
+            // Query 2: Eventos globais (da unidade 'global')
+            const globalEventsCollection = collection(db, `units/global/events`);
+            const qGlobal = query(globalEventsCollection,
+                where("endDate", ">=", todayString),
+                orderBy("endDate", "asc")
             );
 
             try {
-                const querySnapshot = await getDocs(q);
-                let eventsToShow = [];
+                // Roda as duas consultas em paralelo
+                const [unitSnapshot, globalSnapshot] = await Promise.all([
+                    getDocs(qUnit),
+                    getDocs(qGlobal)
+                ]);
+
+                let allEvents = [];
                 
-                querySnapshot.forEach((doc) => {
-                    eventsToShow.push(doc.data());
+                // Adiciona eventos da unidade
+                unitSnapshot.forEach((doc) => {
+                    allEvents.push(doc.data());
                 });
 
-                // Armazena os eventos no cache da unidade
+                // Adiciona eventos globais
+                globalSnapshot.forEach((doc) => {
+                    allEvents.push(doc.data());
+                });
+
+                // Remove duplicatas (improvável, mas bom ter)
+                // (Nota: JSON.stringify/parse é um truque para 'deep unique')
+                const uniqueEvents = allEvents.map(e => JSON.stringify(e));
+                const uniqueSet = new Set(uniqueEvents);
+                const eventsToShow = Array.from(uniqueSet).map(s => JSON.parse(s));
+
+                // Re-ordena a lista combinada pela data de início (para que apareçam em ordem cronológica)
+                eventsToShow.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+                
+                // --- FIM DA MODIFICAÇÃO ---
+
+                // Armazena os eventos no cache da unidade (agora inclui globais)
                 allUnitsData[unitId].events = eventsToShow;
                 
                 updateEventSlider(eventsToShow, unitName);
 
             } catch (error) {
-                console.error("Erro ao buscar eventos: ", error);
+                console.error("Erro ao buscar eventos (unidade ou globais): ", error);
                 wrapper.innerHTML = `<p class="text-center text-red-500">Erro ao carregar eventos. (${error.message})</p>`;
             }
         }
