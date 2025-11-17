@@ -357,11 +357,15 @@
             const currentSelectedValue = adminUnitSelect.value; // Salva o valor atual
             try {
                 const querySnapshot = await getDocs(query(unitsCollection));
-                if (querySnapshot.empty) {
-                    adminUnitSelect.innerHTML = '<option value="">Nenhuma unidade cadastrada</option>';
-                    return;
-                }
+                
                 let optionsHtml = '<option value="">-- Selecione uma unidade --</option>';
+                // ADICIONADO: Opção especial para eventos globais
+                optionsHtml += '<option value="global" class="font-bold text-accent">-- EVENTOS GLOBAIS --</option>';
+
+                if (querySnapshot.empty) {
+                    console.log("Nenhuma unidade personalizada encontrada, carregando apenas 'global'.");
+                }
+                
                 querySnapshot.forEach((doc) => {
                     optionsHtml += `<option value="${doc.id}">${doc.data().name.toUpperCase()}</option>`;
                 });
@@ -382,9 +386,14 @@
             }
 
             if (currentAdminUnitId) {
-                // Habilita botões de gerenciamento de unidade
-                editUnitButton.disabled = false;
-                deleteUnitButton.disabled = false;
+                // Habilita botões de gerenciamento de unidade, exceto para 'global'
+                if (currentAdminUnitId === 'global') {
+                    editUnitButton.disabled = true;
+                    deleteUnitButton.disabled = true;
+                } else {
+                    editUnitButton.disabled = false;
+                    deleteUnitButton.disabled = false;
+                }
                 // Mostra o gerenciador de eventos
                 eventManager.classList.remove('hidden');
                 listenForEvents(currentAdminUnitId);
@@ -488,6 +497,12 @@
 
             if (!slug) {
                 alert("O 'ID da Unidade (slug)' é obrigatório e não pode conter espaços.");
+                return;
+            }
+            
+            // ADICIONADO: Validação para não usar o ID 'global'
+            if (slug === 'global') {
+                alert("O ID 'global' é reservado para eventos globais. Por favor, escolha outro.");
                 return;
             }
 
