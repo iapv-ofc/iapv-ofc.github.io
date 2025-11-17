@@ -16,6 +16,16 @@
             },
         };
     </script>
+    <style>
+        /* Estilo para o Modal */
+        #unit-modal {
+            transition: opacity 0.3s ease;
+        }
+        #unit-modal-content {
+            transition: transform 0.3s ease;
+            max-height: 90vh;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
@@ -56,74 +66,165 @@
     </div>
 
     <!-- ===== PAINEL PRINCIPAL (Oculto por padrão) ===== -->
-    <div id="admin-panel" class="hidden w-full max-w-4xl">
+    <div id="admin-panel" class="hidden w-full max-w-6xl">
         <div class="bg-white p-8 rounded-lg shadow-md">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">Gerenciador de Eventos</h1>
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h1 class="text-2xl font-bold text-gray-800">Painel de Administração</h1>
                 <button id="logout-button" class="text-sm font-medium text-red-600 hover:text-red-800">Sair</button>
             </div>
 
-            <!-- Seletor de Unidade -->
-            <div class="mb-4">
-                <label for="admin-unit-select" class="block text-sm font-medium text-gray-700 mb-1">Selecione a Unidade para Gerenciar:</label>
-                <select id="admin-unit-select" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
-                    <option value="">Carregando unidades...</option>
-                </select>
+            <!-- ===== SEÇÃO 1: GERENCIADOR DE UNIDADES ===== -->
+            <div id="unit-manager" class="mb-6">
+                <h2 class="text-xl font-semibold mb-4">Gerenciar Unidades</h2>
+                
+                <!-- Seletor de Unidade -->
+                <div class="mb-4">
+                    <label for="admin-unit-select" class="block text-sm font-medium text-gray-700 mb-1">Selecione uma Unidade:</label>
+                    <select id="admin-unit-select" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
+                        <option value="">Carregando unidades...</option>
+                    </select>
+                </div>
+
+                <!-- Botões de Ação da Unidade -->
+                <div class="flex flex-wrap gap-3">
+                    <button id="add-unit-button" class="bg-green-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition-colors">
+                        Adicionar Nova Unidade
+                    </button>
+                    <button id="edit-unit-button" disabled class="disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-blue-700 transition-colors">
+                        Editar Unidade Selecionada
+                    </button>
+                    <button id="delete-unit-button" disabled class="disabled:opacity-50 disabled:cursor-not-allowed bg-red-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-red-700 transition-colors">
+                        Remover Unidade Selecionada
+                    </button>
+                </div>
             </div>
 
             <hr class="my-6">
 
-            <!-- Formulário (Adicionar/Editar) -->
-            <div id="form-container" class="mb-6">
-                <h3 id="form-title" class="text-xl font-semibold mb-4">Adicionar Novo Evento</h3>
-                <form id="event-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="hidden" id="event-id"> <!-- Usado para edição -->
-                    <div>
-                        <label for="event-title" class="block text-sm font-medium text-gray-700">Título</label>
-                        <input type="text" id="event-title" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
-                    </div>
-                    <div>
-                        <label for="event-date-text" class="block text-sm font-medium text-gray-700">Texto da Data (ex: "Todo Domingo")</label>
-                        <input type="text" id="event-date-text" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
-                    </div>
-                    <div>
-                        <label for="event-time" class="block text-sm font-medium text-gray-700">Horário (ex: "18h30")</label>
-                        <input type="text" id="event-time" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
-                    </div>
-                    <div>
-                        <label for="event-location" class="block text-sm font-medium text-gray-700">Local (Opcional)</label>
-                        <input type="text" id="event-location" placeholder="Deixe em branco para usar o nome da unidade" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
-                    </div>
-                    <div class="md:col-span-1">
-                        <label for="event-start-date" class="block text-sm font-medium text-gray-700">Data/Hora de Início (ISO)</label>
-                        <input type="datetime-local" id="event-start-date" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
-                        <small class="text-xs text-gray-500">Para o "Adicionar à Agenda".</small>
-                    </div>
-                    <div class="md:col-span-1">
-                        <label for="event-end-date" class="block text-sm font-medium text-gray-700">Data/Hora de Fim (ISO)</label>
-                        <input type="datetime-local" id="event-end-date" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
-                        <small class="text-xs text-gray-500">Eventos passados são ocultos.</small>
-                    </div>
+            <!-- ===== SEÇÃO 2: GERENCIADOR DE EVENTOS (Oculto até selecionar unidade) ===== -->
+            <div id="event-manager" class="hidden">
+                <h2 class="text-xl font-semibold mb-4">Gerenciar Eventos da Unidade</h2>
 
-                    <div class="md:col-span-2 flex items-center gap-4 mt-4">
-                        <button type="submit" id="save-event-button" class="bg-accent text-white py-2 px-6 rounded-md font-semibold hover:bg-accent/90 transition-colors">
-                            Salvar Evento
-                        </button>
-                        <button type="button" id="cancel-edit-button" class="hidden text-sm font-medium text-gray-600 hover:text-gray-800">
-                            Cancelar Edição
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <!-- Formulário (Adicionar/Editar) -->
+                <div id="form-container" class="mb-6">
+                    <h3 id="form-title" class="text-lg font-semibold mb-4">Adicionar Novo Evento</h3>
+                    <form id="event-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="hidden" id="event-id"> <!-- Usado para edição -->
+                        <div>
+                            <label for="event-title" class="block text-sm font-medium text-gray-700">Título</label>
+                            <input type="text" id="event-title" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="event-date-text" class="block text-sm font-medium text-gray-700">Texto da Data (ex: "Todo Domingo")</label>
+                            <input type="text" id="event-date-text" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="event-time" class="block text-sm font-medium text-gray-700">Horário (ex: "18h30")</label>
+                            <input type="text" id="event-time" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="event-location" class="block text-sm font-medium text-gray-700">Local (Opcional)</label>
+                            <input type="text" id="event-location" placeholder="Deixe em branco para usar o nome da unidade" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div class="md:col-span-1">
+                            <label for="event-start-date" class="block text-sm font-medium text-gray-700">Data/Hora de Início (ISO)</label>
+                            <input type="datetime-local" id="event-start-date" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                            <small class="text-xs text-gray-500">Para o "Adicionar à Agenda".</small>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label for="event-end-date" class="block text-sm font-medium text-gray-700">Data/Hora de Fim (ISO)</label>
+                            <input type="datetime-local" id="event-end-date" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                            <small class="text-xs text-gray-500">Eventos passados são ocultos.</small>
+                        </div>
 
-            <!-- Lista de Eventos -->
-            <div>
-                <h3 class="text-xl font-semibold mb-4">Eventos Cadastrados</h3>
-                <div id="events-list" class="space-y-3">
-                    <p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>
+                        <div class="md:col-span-2 flex items-center gap-4 mt-4">
+                            <button type="submit" id="save-event-button" class="bg-accent text-white py-2 px-6 rounded-md font-semibold hover:bg-accent/90 transition-colors">
+                                Salvar Evento
+                            </button>
+                            <button type="button" id="cancel-edit-button" class="hidden text-sm font-medium text-gray-600 hover:text-gray-800">
+                                Cancelar Edição
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Lista de Eventos -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Eventos Cadastrados</h3>
+                    <div id="events-list" class="space-y-3">
+                        <p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
+    <!-- ===== MODAL DE ADICIONAR/EDITAR UNIDADE (Oculto por padrão) ===== -->
+    <div id="unit-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 opacity-0">
+        <div id="unit-modal-content" class="bg-white p-8 rounded-lg shadow-xl w-full max-w-3xl transform -translate-y-10 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="unit-modal-title" class="text-2xl font-bold text-gray-800">Adicionar Nova Unidade</h2>
+                <button id="close-unit-modal-button" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            
+            <form id="unit-form" class="space-y-4">
+                <input type="hidden" id="unit-id-hidden"> <!-- Usado apenas para saber se é edição -->
+                
+                <!-- Slug (ID) e Nome -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="unit-slug" class="block text-sm font-medium text-gray-700">ID da Unidade (slug)</label>
+                        <input type="text" id="unit-slug" required placeholder="ex: cajuru (sem espaços ou acentos)" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                        <small class="text-xs text-gray-500">Usado na URL. Não pode ser mudado depois.</small>
+                    </div>
+                    <div>
+                        <label for="unit-name" class="block text-sm font-medium text-gray-700">Nome de Exibição</label>
+                        <input type="text" id="unit-name" required placeholder="ex: Cajuru" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                </div>
+
+                <!-- Endereço e Horários -->
+                <div>
+                    <label for="unit-address" class="block text-sm font-medium text-gray-700">Endereço Completo</label>
+                    <input type="text" id="unit-address" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="unit-times" class="block text-sm font-medium text-gray-700">Horários (use "Enter" para quebrar linha)</label>
+                    <textarea id="unit-times" rows="3" required class="mt-1 w-full p-2 border border-gray-300 rounded-md"></textarea>
+                </div>
+
+                <!-- URLs -->
+                <div>
+                    <label for="unit-mapUrl" class="block text-sm font-medium text-gray-700">URL de Incorporação do Google Maps</label>
+                    <input type="url" id="unit-mapUrl" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="unit-albumUrl" class="block text-sm font-medium text-gray-700">URL do Álbum de Fotos (Google Photos, etc)</label>
+                    <input type="url" id="unit-albumUrl" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                </div>
+
+                <!-- Links Sociais -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="unit-social-instagram" class="block text-sm font-medium text-gray-700">URL do Instagram</label>
+                        <input type="url" id="unit-social-instagram" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="unit-social-youtube" class="block text-sm font-medium text-gray-700">URL do YouTube</label>
+                        <input type="url" id="unit-social-youtube" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                </div>
+
+                <!-- Botões do Formulário -->
+                <div class="flex justify-end gap-4 pt-4">
+                    <button type="button" id="cancel-unit-form-button" class="bg-gray-200 text-gray-700 py-2 px-6 rounded-md font-semibold hover:bg-gray-300 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="bg-accent text-white py-2 px-6 rounded-md font-semibold hover:bg-accent/90 transition-colors">
+                        Salvar Unidade
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -135,9 +236,9 @@
         // Importe as funções que você precisa
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-        // ATUALIZADO: Importando GoogleAuthProvider e signInWithPopup
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy, addDoc, updateDoc, deleteDoc, writeBatch, setLogLevel } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+        // ATUALIZADO: Importando setDoc
+        import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy, addDoc, updateDoc, deleteDoc, writeBatch, setLogLevel, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
         // =================================================================================
         // SUA CONFIGURAÇÃO DO FIREBASE (Projeto: site-iapv-9fdd1)
@@ -163,14 +264,33 @@
         const adminPanel = document.getElementById('admin-panel');
         const loginForm = document.getElementById('login-form');
         const loginError = document.getElementById('login-error');
-        const googleLoginButton = document.getElementById('google-login-button'); // NOVO
+        const googleLoginButton = document.getElementById('google-login-button');
         const logoutButton = document.getElementById('logout-button');
+        
+        // Elementos do Gerenciador de Unidade
         const adminUnitSelect = document.getElementById('admin-unit-select');
+        const addUnitButton = document.getElementById('add-unit-button');
+        const editUnitButton = document.getElementById('edit-unit-button');
+        const deleteUnitButton = document.getElementById('delete-unit-button');
+        
+        // Elementos do Gerenciador de Eventos
+        const eventManager = document.getElementById('event-manager');
         const eventForm = document.getElementById('event-form');
         const formTitle = document.getElementById('form-title');
         const eventList = document.getElementById('events-list');
         const eventIdField = document.getElementById('event-id');
         const cancelEditButton = document.getElementById('cancel-edit-button');
+
+        // Elementos do Modal da Unidade
+        const unitModal = document.getElementById('unit-modal');
+        const unitModalContent = document.getElementById('unit-modal-content');
+        const unitModalTitle = document.getElementById('unit-modal-title');
+        const closeUnitModalButton = document.getElementById('close-unit-modal-button');
+        const cancelUnitFormButton = document.getElementById('cancel-unit-form-button');
+        const unitForm = document.getElementById('unit-form');
+        const unitIdHiddenField = document.getElementById('unit-id-hidden');
+        const unitSlugField = document.getElementById('unit-slug');
+
 
         // --- Inicialização ---
         try {
@@ -188,85 +308,65 @@
 
         // --- 1. Autenticação ---
 
-        // Monitora o estado do login
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Usuário está logado
                 loginContainer.classList.add('hidden');
                 adminPanel.classList.remove('hidden');
-                loadAdminUnitsDropdown(); // Carrega as unidades no painel
+                loadAdminUnitsDropdown(); 
             } else {
-                // Usuário está deslogado
                 loginContainer.classList.remove('hidden');
                 adminPanel.classList.add('hidden');
-                
-                // Limpa o painel se o usuário deslogar
                 if (unscribeEventsListener) unscribeEventsListener();
                 adminUnitSelect.innerHTML = '<option value="">Carregando...</option>';
-                eventList.innerHTML = '<p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>';
+                eventManager.classList.add('hidden');
             }
         });
 
-        // Evento de Login com Email/Senha
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             loginError.classList.add('hidden');
-
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                // O onAuthStateChanged vai lidar com a mudança de tela
             } catch (error) {
-                console.error("Erro de login:", error.code, error.message);
                 loginError.textContent = "Email ou senha inválidos.";
                 loginError.classList.remove('hidden');
             }
         });
 
-        // NOVO: Evento de Login com Google
         googleLoginButton.addEventListener('click', async () => {
             const provider = new GoogleAuthProvider();
             loginError.classList.add('hidden');
-
             try {
                 await signInWithPopup(auth, provider);
-                // O onAuthStateChanged vai lidar com a mudança de tela
             } catch (error) {
-                console.error("Erro de login com Google:", error.code, error.message);
                 loginError.textContent = "Erro ao logar com Google. Tente novamente.";
                 loginError.classList.remove('hidden');
             }
         });
 
-        // Evento de Logout
         logoutButton.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                // O onAuthStateChanged vai lidar com a mudança de tela
-            } catch (error) {
-                console.error("Erro ao sair:", error);
-            }
+            await signOut(auth);
         });
 
-        // --- 2. Lógica do Painel de Admin ---
+        // --- 2. Lógica do Gerenciador de Unidades ---
 
-        // Carrega as unidades no dropdown do admin
         async function loadAdminUnitsDropdown() {
             const unitsCollection = collection(db, "units");
+            const currentSelectedValue = adminUnitSelect.value; // Salva o valor atual
             try {
                 const querySnapshot = await getDocs(query(unitsCollection));
                 if (querySnapshot.empty) {
                     adminUnitSelect.innerHTML = '<option value="">Nenhuma unidade cadastrada</option>';
                     return;
                 }
-
                 let optionsHtml = '<option value="">-- Selecione uma unidade --</option>';
                 querySnapshot.forEach((doc) => {
                     optionsHtml += `<option value="${doc.id}">${doc.data().name.toUpperCase()}</option>`;
                 });
                 adminUnitSelect.innerHTML = optionsHtml;
-
+                adminUnitSelect.value = currentSelectedValue; // Restaura o valor selecionado
             } catch (error) {
                 console.error("Erro ao carregar unidades no admin: ", error);
                 adminUnitSelect.innerHTML = '<option value="">Erro ao carregar</option>';
@@ -277,18 +377,167 @@
         adminUnitSelect.addEventListener('change', () => {
             currentAdminUnitId = adminUnitSelect.value;
             
-            // Cancela o listener anterior antes de criar um novo
             if (unscribeEventsListener) {
-                unscribeEventsListener();
+                unscribeEventsListener(); // Limpa o listener de eventos antigos
             }
 
             if (currentAdminUnitId) {
-                // Escuta por mudanças em tempo real nos eventos
+                // Habilita botões de gerenciamento de unidade
+                editUnitButton.disabled = false;
+                deleteUnitButton.disabled = false;
+                // Mostra o gerenciador de eventos
+                eventManager.classList.remove('hidden');
                 listenForEvents(currentAdminUnitId);
             } else {
+                // Desabilita botões e esconde gerenciador de eventos
+                editUnitButton.disabled = true;
+                deleteUnitButton.disabled = true;
+                eventManager.classList.add('hidden');
                 eventList.innerHTML = '<p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>';
             }
         });
+
+        // Botões de Gerenciamento de Unidade
+        addUnitButton.addEventListener('click', () => {
+            openUnitModal(); // Abre o modal em modo "Adicionar"
+        });
+
+        editUnitButton.addEventListener('click', () => {
+            if (currentAdminUnitId) {
+                openUnitModal(currentAdminUnitId); // Abre o modal em modo "Editar"
+            }
+        });
+
+        deleteUnitButton.addEventListener('click', async () => {
+            if (!currentAdminUnitId) return;
+
+            const unitName = adminUnitSelect.options[adminUnitSelect.selectedIndex].text;
+            if (confirm(`TEM CERTEZA?\n\nIsso irá apagar a unidade "${unitName}" (${currentAdminUnitId}).\n\nAVISO: Isso NÃO apaga os eventos da subcoleção. Você deve apagar todos os eventos manualmente ANTES de apagar a unidade, ou eles ficarão órfãos no banco de dados.\n\nDeseja continuar?`)) {
+                try {
+                    await deleteDoc(doc(db, "units", currentAdminUnitId));
+                    console.log("Unidade apagada.");
+                    await loadAdminUnitsDropdown(); // Recarrega o dropdown
+                    eventManager.classList.add('hidden'); // Esconde o painel de eventos
+                } catch (error) {
+                    console.error("Erro ao apagar unidade: ", error);
+                    alert("Erro ao apagar unidade.");
+                }
+            }
+        });
+
+        // --- Funções do Modal de Unidade ---
+
+        function openUnitModal(unitId = null) {
+            unitForm.reset(); // Limpa o formulário
+            if (unitId) {
+                // Modo Edição
+                unitModalTitle.textContent = "Editar Unidade";
+                unitIdHiddenField.value = unitId; // Seta o ID para o submit
+                unitSlugField.value = unitId;
+                unitSlugField.readOnly = true; // Não pode mudar o ID/slug
+                unitSlugField.classList.add("bg-gray-100");
+
+                // Busca os dados da unidade para preencher o formulário
+                const unitRef = doc(db, "units", unitId);
+                getDoc(unitRef).then(docSnap => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        document.getElementById('unit-name').value = data.name;
+                        document.getElementById('unit-address').value = data.address;
+                        document.getElementById('unit-times').value = data.times;
+                        document.getElementById('unit-mapUrl').value = data.mapUrl;
+                        document.getElementById('unit-albumUrl').value = data.albumUrl;
+                        document.getElementById('unit-social-instagram').value = data.socials?.instagram || '';
+                        document.getElementById('unit-social-youtube').value = data.socials?.youtube || '';
+                    }
+                });
+
+            } else {
+                // Modo Adição
+                unitModalTitle.textContent = "Adicionar Nova Unidade";
+                unitIdHiddenField.value = ""; // Limpa o ID de edição
+                unitSlugField.readOnly = false;
+                unitSlugField.classList.remove("bg-gray-100");
+            }
+            // Exibe o modal
+            unitModal.classList.remove('hidden');
+            setTimeout(() => {
+                unitModal.classList.remove('opacity-0');
+                unitModalContent.classList.remove('-translate-y-10');
+            }, 10);
+        }
+
+        function closeUnitModal() {
+            unitModal.classList.add('opacity-0');
+            unitModalContent.classList.add('-translate-y-10');
+            setTimeout(() => {
+                unitModal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Listeners para fechar o modal
+        closeUnitModalButton.addEventListener('click', closeUnitModal);
+        cancelUnitFormButton.addEventListener('click', closeUnitModal);
+
+        // Submit do formulário da Unidade
+        unitForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const editingId = unitIdHiddenField.value;
+            const slug = unitSlugField.value.trim().toLowerCase();
+
+            if (!slug) {
+                alert("O 'ID da Unidade (slug)' é obrigatório e não pode conter espaços.");
+                return;
+            }
+
+            // Monta o objeto de dados
+            const unitData = {
+                name: document.getElementById('unit-name').value,
+                address: document.getElementById('unit-address').value,
+                times: document.getElementById('unit-times').value,
+                mapUrl: document.getElementById('unit-mapUrl').value,
+                albumUrl: document.getElementById('unit-albumUrl').value,
+                socials: {
+                    instagram: document.getElementById('unit-social-instagram').value,
+                    youtube: document.getElementById('unit-social-youtube').value,
+                }
+            };
+
+            try {
+                let docIdToSave;
+                if (editingId) {
+                    // Modo Edição
+                    docIdToSave = editingId;
+                    const unitRef = doc(db, "units", editingId);
+                    await updateDoc(unitRef, unitData);
+                } else {
+                    // Modo Adição
+                    docIdToSave = slug;
+                    // Verifica se já existe
+                    const docCheck = await getDoc(doc(db, "units", slug));
+                    if (docCheck.exists()) {
+                        alert("Erro: Já existe uma unidade com esse ID (slug). Escolha outro.");
+                        return;
+                    }
+                    const unitRef = doc(db, "units", slug);
+                    await setDoc(unitRef, unitData); // setDoc para criar com ID customizado
+                }
+                
+                console.log("Unidade salva com ID: ", docIdToSave);
+                closeUnitModal();
+                await loadAdminUnitsDropdown(); // Recarrega o dropdown
+                adminUnitSelect.value = docIdToSave; // Seleciona a unidade que acabamos de salvar
+                adminUnitSelect.dispatchEvent(new Event('change')); // Força a atualização do painel de eventos
+
+            } catch (error) {
+                console.error("Erro ao salvar unidade: ", error);
+                alert("Erro ao salvar unidade. Verifique o console.");
+            }
+        });
+
+
+        // --- 3. Lógica do Gerenciador de Eventos ---
 
         // "Ouve" os eventos da unidade selecionada em tempo real
         function listenForEvents(unitId) {
@@ -329,8 +578,6 @@
         }
 
 
-        // --- 3. CRUD (Create, Read, Update, Delete) de Eventos ---
-
         // Evento de Submit do Formulário (Criação e Edição)
         eventForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -340,34 +587,28 @@
                 return;
             }
 
-            // Pega os dados do formulário
             const eventData = {
                 title: document.getElementById('event-title').value,
                 date: document.getElementById('event-date-text').value,
                 time: document.getElementById('event-time').value,
-                location: document.getElementById('event-location').value || '', // Salva vazio se não preenchido
-                startDate: document.getElementById('event-start-date').value, // Vem como "2025-11-16T18:30"
+                location: document.getElementById('event-location').value || '', 
+                startDate: document.getElementById('event-start-date').value, 
                 endDate: document.getElementById('event-end-date').value,
             };
 
-            const editingId = eventIdField.value; // Pega o ID do campo oculto
+            const editingId = eventIdField.value; 
             
             try {
                 const eventsCollection = collection(db, `units/${currentAdminUnitId}/events`);
                 
                 if (editingId) {
-                    // --- ATUALIZANDO (Update) ---
                     const eventDoc = doc(db, `units/${currentAdminUnitId}/events`, editingId);
                     await updateDoc(eventDoc, eventData);
-                    console.log("Evento atualizado com ID: ", editingId);
                 } else {
-                    // --- CRIANDO (Create) ---
-                    const docRef = await addDoc(eventsCollection, eventData);
-                    console.log("Evento adicionado com ID: ", docRef.id);
+                    await addDoc(eventsCollection, eventData);
                 }
                 
                 resetForm();
-
             } catch (error) {
                 console.error("Erro ao salvar evento: ", error);
                 alert("Erro ao salvar evento. Verifique o console.");
@@ -378,35 +619,29 @@
         eventList.addEventListener('click', async (e) => {
             const target = e.target;
             const eventId = target.dataset.id;
-
             if (!eventId || !currentAdminUnitId) return;
 
             const eventDocRef = doc(db, `units/${currentAdminUnitId}/events`, eventId);
 
-            // --- EXCLUIR (Delete) ---
             if (target.classList.contains('delete-btn')) {
                 if (confirm("Tem certeza que deseja excluir este evento?")) {
                     try {
                         await deleteDoc(eventDocRef);
-                        console.log("Evento excluído.");
-                        resetForm(); // Caso o evento excluído estivesse em edição
+                        resetForm(); 
                     } catch (error) {
-                        console.error("Erro ao excluir evento: ", error);
                         alert("Erro ao excluir evento.");
                     }
                 }
             }
 
-            // --- EDITAR (Preencher formulário) ---
             if (target.classList.contains('edit-btn')) {
                 try {
                     const docSnap = await getDoc(eventDocRef);
                     if (docSnap.exists()) {
                         const event = docSnap.data();
                         
-                        // Preenche o formulário
                         formTitle.textContent = "Editar Evento";
-                        eventIdField.value = eventId; // Seta o ID no campo oculto
+                        eventIdField.value = eventId;
                         document.getElementById('event-title').value = event.title;
                         document.getElementById('event-date-text').value = event.date;
                         document.getElementById('event-time').value = event.time;
@@ -415,7 +650,7 @@
                         document.getElementById('event-end-date').value = event.endDate;
 
                         cancelEditButton.classList.remove('hidden');
-                        window.scrollTo(0, 0); // Rola para o topo
+                        window.scrollTo(0, 0); 
                     }
                 } catch (error) {
                     console.error("Erro ao carregar evento para edição: ", error);
@@ -423,19 +658,18 @@
             }
         });
 
-        // Botão de Cancelar Edição
         cancelEditButton.addEventListener('click', resetForm);
 
         function resetForm() {
             formTitle.textContent = "Adicionar Novo Evento";
             eventForm.reset();
-            eventIdField.value = ''; // Limpa o ID oculto
+            eventIdField.value = ''; 
             cancelEditButton.classList.add('hidden');
         }
 
 
         // --- 4. FUNÇÃO DE MIGRAÇÃO (USO ÚNICO) ---
-        // Cole os dados antigos aqui
+        // ESTA FUNÇÃO AINDA ESTÁ AQUI CASO VOCÊ PRECISE RESETAR SEU BANCO DE DADOS
         const dadosAntigos = {
             "cajuru": { "name": "Cajuru", "address": "R. Dr. Mata, 1230 - Jardim Santa Maria Goretti, Cajuru - SP", "times": "Domingo: 18h30\nQuinta-feira: 20h00", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3717.9188596146923!2d-47.3137659!3d-21.274679199999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b7786d1d2bbda5%3A0x5db85ec94f106d39!2sR.%20Dr.% 20Mata%2C%201230%20-%20Jardim%20Santa%20Maria%20Goretti%2C%20Cajuru%20-%20SP%2C%2014240-000!5e0!3m2!1spt-BR!2sbr!4v1763307958832!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/exemploAlbumCajuru", "socials": { "instagram": "https://www.instagram.com/iapv.cajuru?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 0, "title": "EVENTO PASSADO (TESTE)", "date": "15/11/2025", "time": "18h00", "location": "Unidade Cajuru", "startDate": "2025-11-15T18:00:00", "endDate": "2025-11-15T20:00:00" }, { "id": 1, "title": "Culto da Família", "date": "Todos os Domingos", "time": "18h30", "location": "Unidade Cajuru", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00" }, { "id": 2, "title": "Célula de Jovens", "date": "Toda Sexta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-21T20:00:00", "endDate": "2025-11-21T21:30:00" }, { "id": 3, "title": "Noite de Oração", "date": "Toda Quarta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-19T20:00:00", "endDate": "2025-11-19T21:00:00" }, { "id": 4, "title": "Batismo", "date": "25/12/2025", "time": "10h00", "location": "Unidade Cajuru", "startDate": "2025-12-25T10:00:00", "endDate": "2025-12-25T12:00:00" } ] },
             "ribeiraopreto": { "name": "Ribeirão Preto", "address": "R. Monte Santo, 455 - Sumarezinho, Ribeirão Preto - SP", "times": "Domingo: 18h30\nQuinta-feira: 20h00", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3720.8037817045547!2d-47.84004278877633!3d-21.160205680440967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b9be735151d6f3%3A0x232ecb692c950ec0!2sR.%20Monte%20Santo%2C%20455%20-%20Sumarezinho%2C%20Ribeir%C3%A3o%20Preto%20-%20SP%2C%2014051-270!5e0!3m2!1spt-BR!2sbr!4v1763308022469!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/foaSEW2m3V44mFQj6", "socials": { "instagram": "https://www.instagram.com/iapv.ribeiraopreto?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 5, "title": "Culto de Celebração", "date": "Todo Domingo", "time": "18h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00" }, { "id": 6, "title": "Célula Mista", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00" }, { "id": 7, "title": "Café com Pastores", "date": "15/12/2025", "time": "09h00", "location": "Unidade Ribeirão Preto", "startDate": "2025-12-15T09:00:00", "endDate": "2025-12-15T10:30:00" } ] },
@@ -445,57 +679,39 @@
             "santoandre": { "name": "Santo André", "address": "Av. da Paz, 974 - Utinga, Santo André - SP", "times": "Domingo: 10h00\nQuarta-feira: 20h00", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.486085089794!2d-46.541219288711204!3d-23.622757078669128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5d36ef90bdd3%3A0x837ee62116e35569!2sAv.%20da%20Paz%2C%20974%20-%20Utinga%2C%20Santo%20Andr%C3%A9%20-%20SP%2C%2009220-310!5e0!3m2!1spt-BR!2sbr!4v1763308041456!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/Ns7QAGbsaR2FJ7Td8", "socials": { "instagram": "https://www.instagram.com/iapv.santoandre?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 10, "title": "Culto de Fim de Semana", "date": "Todo Sábado", "time": "19h00", "location": "Unidade Santo André", "startDate": "2025-11-22T19:00:00", "endDate": "2025-11-22T20:30:00" }, { "id": 11, "title": "Vigília", "date": "Toda última Sexta do mês", "time": "22h00", "location": "Unidade Santo André", "startDate": "2025-11-28T22:00:00", "endDate": "2025-11-29T05:00:00" } ] }
         };
 
-        // Expõe a função de migração no objeto window para ser chamada pelo console
         window.migrarDadosIniciais = async function() {
-            if (!db) {
-                console.error("DB não inicializado.");
-                return;
-            }
-
-            if (!confirm("Isso irá apagar e reescrever todos os dados. Tem certeza?")) {
-                return;
-            }
+            if (!db) { console.error("DB não inicializado."); return; }
+            if (!confirm("Isso irá apagar e reescrever todos os dados. Tem certeza?")) { return; }
 
             console.log("Iniciando migração...");
             const batch = writeBatch(db);
 
             for (const unitId in dadosAntigos) {
                 const unitData = dadosAntigos[unitId];
-                const events = unitData.events; // Salva os eventos
-                
-                // Cria um novo objeto de unidade sem os eventos
+                const events = unitData.events; 
                 const unitDocData = { ...unitData };
                 delete unitDocData.events;
-                delete unitDocData.id; // Remove o id antigo se existir
+                delete unitDocData.id; 
 
-                // 1. Adiciona o documento da unidade ao batch
                 const unitDocRef = doc(db, "units", unitId);
                 batch.set(unitDocRef, unitDocData);
                 console.log(`Preparando unidade: ${unitId}`);
 
-                // 2. Adiciona os eventos da unidade como uma subcoleção
                 if (events && events.length > 0) {
                     for (const event of events) {
-                        // Remove o 'id' antigo, o firestore vai gerar um novo
                         const eventData = { ...event };
                         delete eventData.id; 
-                        
-                        // Cria uma referência para um NOVO documento na subcoleção 'events'
                         const eventDocRef = doc(collection(db, `units/${unitId}/events`));
                         batch.set(eventDocRef, eventData);
                     }
                     console.log(`...preparando ${events.length} eventos para ${unitId}`);
                 }
             }
-
             try {
-                // 3. Executa o batch (todas as operações de uma vez)
                 await batch.commit();
                 console.log("SUCESSO! Migração concluída.");
                 alert("Dados migrados com sucesso!");
-                // Recarrega os dados no painel
                 loadAdminUnitsDropdown();
-
             } catch (error) {
                 console.error("Erro fatal durante a migração: ", error);
                 alert("Erro ao migrar dados. Verifique o console.");
