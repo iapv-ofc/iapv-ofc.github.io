@@ -123,55 +123,11 @@
             border-radius: 30px;
         }
 
-        /* Estilo do botão do álbum (baseado no CSS fornecido) */
+        /* Estilo do botão do álbum (baseado no CSS fornecido) - REMOVIDO
         .btn-album-animado {
-            /* Variáveis adaptadas para a cor 'accent' (#005DCC) */
-            --btn-bg-1: hsla(211, 100%, 70% / 1); /* Azul claro (derivado do accent) */
-            --btn-bg-2: hsla(211, 100%, 40% / 1); /* Azul accent (#005DCC) */
-            --btn-bg-color: hsla(0, 0%, 100% / 1); /* Branco */
-            --radii: 0.5em; /* 8px */
-
-            cursor: pointer;
-            padding: 0.9em 1.4em;
-            min-width: 120px;
-            min-height: 44px;
-            font-size: 1.125rem; /* 18px, (era text-lg) */
-            font-weight: 700; /* (era font-bold) */
-            transition: 0.8s;
-            background-size: 280% auto;
-            background-image: linear-gradient(
-                325deg,
-                var(--btn-bg-2) 0%,
-                var(--btn-bg-1) 55%,
-                var(--btn-bg-2) 90%
-            );
-            border: none;
-            border-radius: var(--radii);
-            color: var(--btn-bg-color);
-            /* Sombra adaptada do CSS fornecido */
-            box-shadow:
-                0px 0px 20px rgba(0, 93, 204, 0.5), /* Sombra externa com cor accent */
-                0px 5px 5px -1px rgba(0, 93, 204, 0.25), /* Sombra direcional com cor accent */
-                inset 4px 4px 8px rgba(0, 123, 255, 0.5), /* Sombra interna clara */
-                inset -4px -4px 8px rgba(0, 68, 153, 0.35); /* Sombra interna escura */
+           ...
         }
-
-        .btn-album-animado:hover {
-            background-position: right top; /* Ativa a animação do gradiente */
-        }
-
-        .btn-album-animado:is(:focus, :focus-visible, :active) {
-            outline: none;
-            box-shadow:
-                0 0 0 3px var(--btn-bg-color),
-                0 0 0 6px var(--btn-bg-2);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .btn-album-animado {
-                transition: linear;
-            }
-        }
+        */
     </style>
 </head>
 
@@ -346,7 +302,7 @@
 
             <!-- Botão do Álbum (Link dinâmico) -->
             <div class="text-center mt-10">
-                <a id="fotos-album-link" href="#" target="_blank" class="inline-block btn-album-animado">
+                <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-accent text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-200 hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2">
                     Ver álbum completo de <span id="fotos-unidade-nome">Carregando...</span>
                 </a>
             </div>
