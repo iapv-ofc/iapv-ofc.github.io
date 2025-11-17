@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - IAPV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#005DCC',
+                    }
+                },
+            },
+        };
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <!-- ===== TELA DE LOGIN ===== -->
+    <div id="login-container" class="w-full max-w-md">
+        <form id="login-form" class="bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Painel de Admin - IAPV</h2>
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="login-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
+            </div>
+            <div class="mb-6">
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <input type="password" id="login-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
+            </div>
+            <p id="login-error" class="text-sm text-red-600 mb-4 hidden"></p>
+            <button type="submit" class="w-full bg-accent text-white py-2 px-4 rounded-md font-semibold hover:bg-accent/90 transition-colors">
+                Entrar
+            </button>
+        </form>
+    </div>
+
+    <!-- ===== PAINEL PRINCIPAL (Oculto por padrão) ===== -->
+    <div id="admin-panel" class="hidden w-full max-w-4xl">
+        <div class="bg-white p-8 rounded-lg shadow-md">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">Gerenciador de Eventos</h1>
+                <button id="logout-button" class="text-sm font-medium text-red-600 hover:text-red-800">Sair</button>
+            </div>
+
+            <!-- Seletor de Unidade -->
+            <div class="mb-4">
+                <label for="admin-unit-select" class="block text-sm font-medium text-gray-700 mb-1">Selecione a Unidade para Gerenciar:</label>
+                <select id="admin-unit-select" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
+                    <option value="">Carregando unidades...</option>
+                </select>
+            </div>
+
+            <hr class="my-6">
+
+            <!-- Formulário (Adicionar/Editar) -->
+            <div id="form-container" class="mb-6">
+                <h3 id="form-title" class="text-xl font-semibold mb-4">Adicionar Novo Evento</h3>
+                <form id="event-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="hidden" id="event-id"> <!-- Usado para edição -->
+                    <div>
+                        <label for="event-title" class="block text-sm font-medium text-gray-700">Título</label>
+                        <input type="text" id="event-title" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="event-date-text" class="block text-sm font-medium text-gray-700">Texto da Data (ex: "Todo Domingo")</label>
+                        <input type="text" id="event-date-text" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="event-time" class="block text-sm font-medium text-gray-700">Horário (ex: "18h30")</label>
+                        <input type="text" id="event-time" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="event-location" class="block text-sm font-medium text-gray-700">Local (Opcional)</label>
+                        <input type="text" id="event-location" placeholder="Deixe em branco para usar o nome da unidade" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div class="md:col-span-1">
+                        <label for="event-start-date" class="block text-sm font-medium text-gray-700">Data/Hora de Início (ISO)</label>
+                        <input type="datetime-local" id="event-start-date" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                        <small class="text-xs text-gray-500">Para o "Adicionar à Agenda".</small>
+                    </div>
+                    <div class="md:col-span-1">
+                        <label for="event-end-date" class="block text-sm font-medium text-gray-700">Data/Hora de Fim (ISO)</label>
+                        <input type="datetime-local" id="event-end-date" required class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                        <small class="text-xs text-gray-500">Eventos passados são ocultos.</small>
+                    </div>
+
+                    <div class="md:col-span-2 flex items-center gap-4 mt-4">
+                        <button type="submit" id="save-event-button" class="bg-accent text-white py-2 px-6 rounded-md font-semibold hover:bg-accent/90 transition-colors">
+                            Salvar Evento
+                        </button>
+                        <button type="button" id="cancel-edit-button" class="hidden text-sm font-medium text-gray-600 hover:text-gray-800">
+                            Cancelar Edição
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Lista de Eventos -->
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Eventos Cadastrados</h3>
+                <div id="events-list" class="space-y-3">
+                    <p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===== JAVASCRIPT DO ADMIN ===== -->
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // Importe as funções que você precisa
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy, addDoc, updateDoc, deleteDoc, writeBatch, setLogLevel } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+        // =================================================================================
+        // SUA CONFIGURAÇÃO DO FIREBASE
+        // =================================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-RJiVJEBgfL1mlYed_EZwAhpv3HmjMJA",
+            authDomain: "site-iapv.firebaseapp.com",
+            projectId: "site-iapv",
+            storageBucket: "site-iapv.firebasestorage.app",
+            messagingSenderId: "549303210560",
+            appId: "1:549303210560:web:dd107e1aaa9168576845a5",
+            measurementId: "G-D8Q7LWGD3N"
+        };
+        // =================================================================================
+
+        // --- Variáveis Globais ---
+        let auth, db;
+        let currentAdminUnitId = null; // ID da unidade selecionada no admin
+        let unscribeEventsListener = null; // Para desligar o listener onSnapshot
+
+        // --- Elementos do DOM ---
+        const loginContainer = document.getElementById('login-container');
+        const adminPanel = document.getElementById('admin-panel');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const logoutButton = document.getElementById('logout-button');
+        const adminUnitSelect = document.getElementById('admin-unit-select');
+        const eventForm = document.getElementById('event-form');
+        const formTitle = document.getElementById('form-title');
+        const eventList = document.getElementById('events-list');
+        const eventIdField = document.getElementById('event-id');
+        const cancelEditButton = document.getElementById('cancel-edit-button');
+
+        // --- Inicialização ---
+        try {
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app); // Inicializa o Analytics
+            auth = getAuth(app);
+            db = getFirestore(app);
+            // setLogLevel('debug');
+            console.log("Painel de Admin: Firebase inicializado.");
+        } catch (error) {
+            console.error("Erro ao inicializar o Firebase: ", error);
+            loginError.textContent = "Erro fatal ao conectar. Verifique o firebaseConfig.";
+            loginError.classList.remove('hidden');
+        }
+
+        // --- 1. Autenticação ---
+
+        // Monitora o estado do login
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário está logado
+                loginContainer.classList.add('hidden');
+                adminPanel.classList.remove('hidden');
+                loadAdminUnitsDropdown(); // Carrega as unidades no painel
+            } else {
+                // Usuário está deslogado
+                loginContainer.classList.remove('hidden');
+                adminPanel.classList.add('hidden');
+                
+                // Limpa o painel se o usuário deslogar
+                if (unscribeEventsListener) unscribeEventsListener();
+                adminUnitSelect.innerHTML = '<option value="">Carregando...</option>';
+                eventList.innerHTML = '<p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>';
+            }
+        });
+
+        // Evento de Login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            loginError.classList.add('hidden');
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // O onAuthStateChanged vai lidar com a mudança de tela
+            } catch (error) {
+                console.error("Erro de login:", error.code, error.message);
+                loginError.textContent = "Email ou senha inválidos.";
+                loginError.classList.remove('hidden');
+            }
+        });
+
+        // Evento de Logout
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                // O onAuthStateChanged vai lidar com a mudança de tela
+            } catch (error) {
+                console.error("Erro ao sair:", error);
+            }
+        });
+
+        // --- 2. Lógica do Painel de Admin ---
+
+        // Carrega as unidades no dropdown do admin
+        async function loadAdminUnitsDropdown() {
+            const unitsCollection = collection(db, "units");
+            try {
+                const querySnapshot = await getDocs(query(unitsCollection));
+                if (querySnapshot.empty) {
+                    adminUnitSelect.innerHTML = '<option value="">Nenhuma unidade cadastrada</option>';
+                    return;
+                }
+
+                let optionsHtml = '<option value="">-- Selecione uma unidade --</option>';
+                querySnapshot.forEach((doc) => {
+                    optionsHtml += `<option value="${doc.id}">${doc.data().name.toUpperCase()}</option>`;
+                });
+                adminUnitSelect.innerHTML = optionsHtml;
+
+            } catch (error) {
+                console.error("Erro ao carregar unidades no admin: ", error);
+                adminUnitSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+            }
+        }
+
+        // Evento de seleção de unidade no admin
+        adminUnitSelect.addEventListener('change', () => {
+            currentAdminUnitId = adminUnitSelect.value;
+            
+            // Cancela o listener anterior antes de criar um novo
+            if (unscribeEventsListener) {
+                unscribeEventsListener();
+            }
+
+            if (currentAdminUnitId) {
+                // Escuta por mudanças em tempo real nos eventos
+                listenForEvents(currentAdminUnitId);
+            } else {
+                eventList.innerHTML = '<p class="text-gray-500">Selecione uma unidade para ver os eventos.</p>';
+            }
+        });
+
+        // "Ouve" os eventos da unidade selecionada em tempo real
+        function listenForEvents(unitId) {
+            const eventsCollection = collection(db, `units/${unitId}/events`);
+            const q = query(eventsCollection, orderBy("startDate", "desc")); // Mostra os mais novos primeiro
+
+            unscribeEventsListener = onSnapshot(q, (querySnapshot) => {
+                if (querySnapshot.empty) {
+                    eventList.innerHTML = '<p class="text-gray-500">Nenhum evento cadastrado para esta unidade.</p>';
+                    return;
+                }
+
+                let eventsHtml = '';
+                querySnapshot.forEach((doc) => {
+                    const event = doc.data();
+                    const eventId = doc.id;
+                    const isPast = new Date(event.endDate) < new Date();
+
+                    eventsHtml += `
+                        <div class="flex justify-between items-center p-3 rounded-md ${isPast ? 'bg-gray-100 opacity-60' : 'bg-gray-50'}">
+                            <div>
+                                <p class="font-semibold ${isPast ? 'line-through' : ''}">${event.title}</p>
+                                <p class="text-sm text-gray-600">${event.date} • ${event.time} ${isPast ? '(Encerrado)' : ''}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button data-id="${eventId}" class="edit-btn text-sm font-medium text-accent hover:text-accent/80">Editar</button>
+                                <button data-id="${eventId}" class="delete-btn text-sm font-medium text-red-600 hover:text-red-800">Excluir</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                eventList.innerHTML = eventsHtml;
+
+            }, (error) => {
+                console.error("Erro ao escutar eventos: ", error);
+                eventList.innerHTML = '<p class="text-red-500">Erro ao carregar eventos.</p>';
+            });
+        }
+
+
+        // --- 3. CRUD (Create, Read, Update, Delete) de Eventos ---
+
+        // Evento de Submit do Formulário (Criação e Edição)
+        eventForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentAdminUnitId) {
+                alert("Por favor, selecione uma unidade primeiro.");
+                return;
+            }
+
+            // Pega os dados do formulário
+            const eventData = {
+                title: document.getElementById('event-title').value,
+                date: document.getElementById('event-date-text').value,
+                time: document.getElementById('event-time').value,
+                location: document.getElementById('event-location').value || '', // Salva vazio se não preenchido
+                startDate: document.getElementById('event-start-date').value, // Vem como "2025-11-16T18:30"
+                endDate: document.getElementById('event-end-date').value,
+            };
+
+            const editingId = eventIdField.value; // Pega o ID do campo oculto
+            
+            try {
+                const eventsCollection = collection(db, `units/${currentAdminUnitId}/events`);
+                
+                if (editingId) {
+                    // --- ATUALIZANDO (Update) ---
+                    const eventDoc = doc(db, `units/${currentAdminUnitId}/events`, editingId);
+                    await updateDoc(eventDoc, eventData);
+                    console.log("Evento atualizado com ID: ", editingId);
+                } else {
+                    // --- CRIANDO (Create) ---
+                    const docRef = await addDoc(eventsCollection, eventData);
+                    console.log("Evento adicionado com ID: ", docRef.id);
+                }
+                
+                resetForm();
+
+            } catch (error) {
+                console.error("Erro ao salvar evento: ", error);
+                alert("Erro ao salvar evento. Verifique o console.");
+            }
+        });
+
+        // Eventos de clique na lista (para Editar e Excluir)
+        eventList.addEventListener('click', async (e) => {
+            const target = e.target;
+            const eventId = target.dataset.id;
+
+            if (!eventId || !currentAdminUnitId) return;
+
+            const eventDocRef = doc(db, `units/${currentAdminUnitId}/events`, eventId);
+
+            // --- EXCLUIR (Delete) ---
+            if (target.classList.contains('delete-btn')) {
+                if (confirm("Tem certeza que deseja excluir este evento?")) {
+                    try {
+                        await deleteDoc(eventDocRef);
+                        console.log("Evento excluído.");
+                        resetForm(); // Caso o evento excluído estivesse em edição
+                    } catch (error) {
+                        console.error("Erro ao excluir evento: ", error);
+                        alert("Erro ao excluir evento.");
+                    }
+                }
+            }
+
+            // --- EDITAR (Preencher formulário) ---
+            if (target.classList.contains('edit-btn')) {
+                try {
+                    const docSnap = await getDoc(eventDocRef);
+                    if (docSnap.exists()) {
+                        const event = docSnap.data();
+                        
+                        // Preenche o formulário
+                        formTitle.textContent = "Editar Evento";
+                        eventIdField.value = eventId; // Seta o ID no campo oculto
+                        document.getElementById('event-title').value = event.title;
+                        document.getElementById('event-date-text').value = event.date;
+                        document.getElementById('event-time').value = event.time;
+                        document.getElementById('event-location').value = event.location || '';
+                        document.getElementById('event-start-date').value = event.startDate;
+                        document.getElementById('event-end-date').value = event.endDate;
+
+                        cancelEditButton.classList.remove('hidden');
+                        window.scrollTo(0, 0); // Rola para o topo
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar evento para edição: ", error);
+                }
+            }
+        });
+
+        // Botão de Cancelar Edição
+        cancelEditButton.addEventListener('click', resetForm);
+
+        function resetForm() {
+            formTitle.textContent = "Adicionar Novo Evento";
+            eventForm.reset();
+            eventIdField.value = ''; // Limpa o ID oculto
+            cancelEditButton.classList.add('hidden');
+        }
+
+
+        // --- 4. FUNÇÃO DE MIGRAÇÃO (USO ÚNICO) ---
+        // Cole os dados antigos aqui
+        const dadosAntigos = {
+            "cajuru": { "name": "Cajuru", "address": "R. Dr. Mata, 1230 - Jardim Santa Maria Goretti, Cajuru - SP", "times": "Domingo: 18h30\nQuinta-feira: 20h00", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3717.9188596146923!2d-47.3137659!3d-21.274679199999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b7786d1d2bbda5%3A0x5db85ec94f106d39!2sR.%20Dr.%20Mata%2C%201230%20-%20Jardim%20Santa%20Maria%20Goretti%2C%20Cajuru%20-%20SP%2C%2014240-000!5e0!3m2!1spt-BR!2sbr!4v1763307958832!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/exemploAlbumCajuru", "socials": { "instagram": "https://www.instagram.com/iapv.cajuru?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 0, "title": "EVENTO PASSADO (TESTE)", "date": "15/11/2025", "time": "18h00", "location": "Unidade Cajuru", "startDate": "2025-11-15T18:00:00", "endDate": "2025-11-15T20:00:00" }, { "id": 1, "title": "Culto da Família", "date": "Todos os Domingos", "time": "18h30", "location": "Unidade Cajuru", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00" }, { "id": 2, "title": "Célula de Jovens", "date": "Toda Sexta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-21T20:00:00", "endDate": "2025-11-21T21:30:00" }, { "id": 3, "title": "Noite de Oração", "date": "Toda Quarta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-19T20:00:00", "endDate": "2025-11-19T21:00:00" }, { "id": 4, "title": "Batismo", "date": "25/12/2025", "time": "10h00", "location": "Unidade Cajuru", "startDate": "2025-12-25T10:00:00", "endDate": "2025-12-25T12:00:00" } ] },
+            "ribeiraopreto": { "name": "Ribeirão Preto", "address": "R. Monte Santo, 455 - Sumarezinho, Ribeirão Preto - SP", "times": "Domingo: 18h30\nQuinta-feira: 20h00", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3720.8037817045547!2d-47.84004278877633!3d-21.160205680440967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b9be735151d6f3%3A0x232ecb692c950ec0!2sR.%20Monte%20Santo%2C%20455%20-%20Sumarezinho%2C%20Ribeir%C3%A3o%20Preto%20-%20SP%2C%2014051-270!5e0!3m2!1spt-BR!2sbr!4v1763308022469!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/foaSEW2m3V44mFQj6", "socials": { "instagram": "https://www.instagram.com/iapv.ribeiraopreto?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 5, "title": "Culto de Celebração", "date": "Todo Domingo", "time": "18h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00" }, { "id": 6, "title": "Célula Mista", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00" }, { "id": 7, "title": "Café com Pastores", "date": "15/12/2025", "time": "09h00", "location": "Unidade Ribeirão Preto", "startDate": "2025-12-15T09:00:00", "endDate": "2025-12-15T10:30:00" } ] },
+            "santarosa": { "name": "Santa Rosa de Viterbo", "address": "R. Ângelo Sordi, 505 - Santa Rosa de Viterbo, SP", "times": "Domingo: 19h00\nQuarta-feira: 19h30", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3712.3876752940737!2d-47.37881828876797!3d-21.492529880193267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b788d14e37fb6b%3A0x815c01291b99bd48!2sR.%20%C3%82ngelo%20Sordi%2C%20505%2C%20Santa%20Rosa%20de%20Viterbo%20-%20SP%2C%2014270-000!5e0!3m2!1spt-BR!2sbr!4v1763307988606!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/TVtHSetEbgANVNCt8", "socials": { "instagram": "https://www.instagram.com/iapv.srv/?utm_source=ig_web_button_share_sheet", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 8, "title": "Culto (Santa Rosa)", "date": "Todo Domingo", "time": "19h00", "location": "Unidade Santa Rosa", "startDate": "2025-11-16T19:00:00", "endDate": "2025-11-16T20:30:00" }, { "id": 9, "title": "Estudo Bíblico", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Santa Rosa", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00" } ] },
+            "santoandre": { "name": "Santo André", "address": "Av. da Paz, 974 - Utinga, Santo André - SP", "times": "Domingo: 10h00\nQuarta-feira: 20h00", "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.486085089794!2d-46.541219288711204!3d-23.622757078669128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5d36ef90bdd3%3A0x837ee62116e35569!2sAv.%20da%20Paz%2C%20974%20-%20Utinga%2C%20Santo%20Andr%C3%A9%20-%20SP%2C%2009220-310!5e0!3m2!1spt-BR!2sbr!4v1763308041456!5m2!1spt-BR!2sbr", "albumUrl": "https://photos.app.goo.gl/Ns7QAGbsaR2FJ7Td8", "socials": { "instagram": "https://www.instagram.com/iapv.santoandre?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2" }, "events": [ { "id": 10, "title": "Culto de Fim de Semana", "date": "Todo Sábado", "time": "19h00", "location": "Unidade Santo André", "startDate": "2025-11-22T19:00:00", "endDate": "2025-11-22T20:30:00" }, { "id": 11, "title": "Vigília", "date": "Toda última Sexta do mês", "time": "22h00", "location": "Unidade Santo André", "startDate": "2025-11-28T22:00:00", "endDate": "2025-11-29T05:00:00" } ] }
+        };
+
+        // Expõe a função de migração no objeto window para ser chamada pelo console
+        window.migrarDadosIniciais = async function() {
+            if (!db) {
+                console.error("DB não inicializado.");
+                return;
+            }
+
+            if (!confirm("Isso irá apagar e reescrever todos os dados. Tem certeza?")) {
+                return;
+            }
+
+            console.log("Iniciando migração...");
+            const batch = writeBatch(db);
+
+            for (const unitId in dadosAntigos) {
+                const unitData = dadosAntigos[unitId];
+                const events = unitData.events; // Salva os eventos
+                
+                // Cria um novo objeto de unidade sem os eventos
+                const unitDocData = { ...unitData };
+                delete unitDocData.events;
+                delete unitDocData.id; // Remove o id antigo se existir
+
+                // 1. Adiciona o documento da unidade ao batch
+                const unitDocRef = doc(db, "units", unitId);
+                batch.set(unitDocRef, unitDocData);
+                console.log(`Preparando unidade: ${unitId}`);
+
+                // 2. Adiciona os eventos da unidade como uma subcoleção
+                if (events && events.length > 0) {
+                    for (const event of events) {
+                        // Remove o 'id' antigo, o firestore vai gerar um novo
+                        const eventData = { ...event };
+                        delete eventData.id; 
+                        
+                        // Cria uma referência para um NOVO documento na subcoleção 'events'
+                        const eventDocRef = doc(collection(db, `units/${unitId}/events`));
+                        batch.set(eventDocRef, eventData);
+                    }
+                    console.log(`...preparando ${events.length} eventos para ${unitId}`);
+                }
+            }
+
+            try {
+                // 3. Executa o batch (todas as operações de uma vez)
+                await batch.commit();
+                console.log("SUCESSO! Migração concluída.");
+                alert("Dados migrados com sucesso!");
+                // Recarrega os dados no painel
+                loadAdminUnitsDropdown();
+
+            } catch (error) {
+                console.error("Erro fatal durante a migração: ", error);
+                alert("Erro ao migrar dados. Verifique o console.");
+            }
+        }
+        console.log("Pronto para migrar. Chame 'migrarDadosIniciais()' no console.");
+        
+    </script>
+</body>
+</html>
