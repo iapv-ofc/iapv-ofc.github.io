@@ -18,14 +18,14 @@
     <script>
         // Configuração para o Tailwind (para o tema escuro e fontes)
         tailwind.config = {
-            darkMode: 'class', // MUDADO: De 'class' para 'media' (automático)
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'], // Fonte bonita, similar à referência
+                        sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        'accent': '#005DCC', // NOVA: Cor de destaque
+                        'accent': '#005DCC',
                     }
                 },
             },
@@ -34,11 +34,6 @@
 
     <!-- Estilos personalizados -->
     <style>
-        /* REMOVIDO: Estilo antigo dos cards de evento */
-        /* .event-card { ... } */
-        /* .event-card img { ... } */
-
-
         /* Estilo dos botões do Swiper (para combinar com a referência) */
         .swiper-button-next,
         .swiper-button-prev {
@@ -93,7 +88,7 @@
         .custom-select-filter:focus {
             outline: none;
             ring: 2px;
-            ring-color: #005DCC; /* MUDADO: Cor de destaque */
+            ring-color: #005DCC;
         }
         .custom-select-filter option {
             background-color: #1f2937;
@@ -102,60 +97,38 @@
 
         /* Estilo para as bolinhas do Swiper (Galeria - se fosse usada) */
         .swiper-pagination-bullet {
-            background-color: #aaa; /* Cor da bolinha inativa */
+            background-color: #aaa;
             opacity: 0.7;
         }
         .swiper-pagination-bullet-active {
-            background-color: #005DCC; /* MUDADO: Cor de destaque */
+            background-color: #005DCC;
             opacity: 1;
         }
 
-        /* * =========== ATUALIZAÇÃO DA GALERIA (AQUI!) ===========
-         */
         .photo-gallery-card-frame {
-            /* REMOVIDO: Largura fixa que quebrava o mobile */
-            /* width: 220px; */ 
-            /* height: 275px; */
-
-            /* NOVO: Faz o card ocupar 100% do slide */
             width: 100%; 
-            
-            /* NOVO: Define uma proporção (4:5) para manter o visual de "retrato" */
             aspect-ratio: 4 / 5; 
-            
-            /* REMOVIDO: background complexo do Uiverse */
-            background: none; /* Remove o gradiente colorido */
-            border: none; /* Garante que não há borda */
-            border-radius: 10px; /* Mantém o arredondamento */
-            
-            /* MUDADO: Sombra mais suave */
-            box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2); /* Sombra mais sutil */
-            
-            /* REMOVIDO: Padding, pois não há mais "moldura" */
+            background: none;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
             padding: 0; 
-            
-            /* Classes de tema (para a sombra - Tailwind) */
-            @apply dark:shadow-black/30; /* Sombra um pouco mais forte no dark mode para contraste */
+            @apply dark:shadow-black/30;
         }
 
         .photo-gallery-card-frame img {
-            /* Imagem interna */
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* MUDADO: Borda interna levemente arredondada (agora segue o card) */
-            border-radius: 30px; /* Arredondamento igual ao do card pai */
-            /* REMOVIDO: borda da imagem */
+            border-radius: 10px;
         }
     </style>
 </head>
 
-<!-- MUDADO: Classes do body para tema light/dark -->
 <body class="bg-gray-100 text-gray-900 antialiased">
 
     <!-- ===== SEÇÃO 1: CAPA E FILTRO GLOBAL ===== -->
     <header class="h-screen min-h-[600px] w-full flex flex-col items-center justify-center relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://i.ibb.co/kg5D1brF/IMG-7186.jpg');">
-        <!-- Overlay escuro para legibilidade -->
         <div class="absolute inset-0 bg-black/60 z-0"></div>
 
         <div class="relative z-10 flex flex-col items-center text-center px-4">
@@ -166,20 +139,15 @@
                 Uma igreja em célula
             </p>
 
-            <!-- Filtro Global de Unidades (Dropdown) -->
             <div class="mt-12">
                 <label for="unit-select-filter" class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
-                <!-- MUDADO: w-72 (fixo) para w-full max-w-sm (responsivo) -->
-                <!-- Adicionado px-4 para não colar nas bordas do celular, e sm:px-0 para remover em telas maiores -->
                 <div class="relative w-full max-w-sm mx-auto px-4 sm:px-0">
-                    <!-- O Select -->
                     <select id="unit-select-filter" class="custom-select-filter">
                         <option value="cajuru">CAJURU</option>
                         <option value="ribeiraopreto">RIBEIRÃO PRETO</option>
                         <option value="santarosa">SANTA ROSA DE VITERBO</option>
                         <option value="santoandre">SANTO ANDRÉ</option>
                     </select>
-                    <!-- Seta customizada para o Select -->
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-300">
                         <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                     </div>
@@ -188,7 +156,6 @@
         </div>
     </header>
 
-    <!-- Conteúdo principal da página -->
     <main class="w-full">
 
         <!-- ===== SEÇÃO 2: MISSÃO, VISÃO, VALORES ===== -->
@@ -196,11 +163,9 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <!-- Missão -->
                 <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                    <!-- Fundo decorativo -->
                     <div class="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
                     <div class="relative flex flex-col items-center">
-                        <!-- Ícone com fundo -->
                         <div class="w-20 h-20 bg-gradient-to-br from-accent to-blue-600 rounded-2xl flex items-center justify-center mb-6 transform group-hover:rotate-6 transition-transform duration-300 shadow-lg">
                             <i data-lucide="compass" class="lucide-icon w-10 h-10 text-white"></i>
                         </div>
@@ -216,11 +181,9 @@
 
                 <!-- Visão -->
                 <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                    <!-- Fundo decorativo -->
                     <div class="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
                     <div class="relative flex flex-col items-center">
-                        <!-- Ícone com fundo -->
                         <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center mb-6 transform group-hover:rotate-6 transition-transform duration-300 shadow-lg">
                             <i data-lucide="eye" class="lucide-icon w-10 h-10 text-white"></i>
                         </div>
@@ -236,11 +199,9 @@
 
                 <!-- Valores -->
                 <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                    <!-- Fundo decorativo -->
                     <div class="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
                     <div class="relative flex flex-col items-center">
-                        <!-- Ícone com fundo -->
                         <div class="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center mb-6 transform group-hover:rotate-6 transition-transform duration-300 shadow-lg">
                             <i data-lucide="gem" class="lucide-icon w-10 h-10 text-white"></i>
                         </div>
@@ -255,25 +216,23 @@
                 </div>
             </div>
         </section>
-        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" /> <!-- MUDADO -->
+        
+        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" />
 
         <!-- ===== SEÇÃO 3: EVENTOS ===== -->
         <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
-            <!-- MUDADO: Título agora é responsivo (md:text-4xl) -->
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Eventos</h2>
-            <p class="text-lg text-gray-600 dark:text-gray-400 text-center mb-10"> <!-- MUDADO -->
-                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Cajuru</span> <!-- MUDADO -->
+            <p class="text-lg text-gray-600 dark:text-gray-400 text-center mb-10">
+                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Cajuru</span>
             </p>
 
             <!-- Caixa de Pesquisa -->
             <div class="mb-8 max-w-lg mx-auto">
-                <!-- MUDADO: Classes de light/dark para o input -->
                 <input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent">
             </div>
 
             <!-- Carrossel (Swiper.js) -->
             <div class="relative">
-                <!-- MUDADO: Adicionado overflow-hidden para garantir que não vaze -->
                 <div id="eventos-slider" class="swiper-container overflow-hidden">
                     <div class="swiper-wrapper" id="eventos-wrapper">
                         <!-- Os slides serão injetados aqui pelo JavaScript -->
@@ -285,72 +244,60 @@
             </div>
 
             <!-- Mensagem de "Nenhum resultado" -->
-            <p id="eventos-nenhum-resultado" class="text-center text-gray-500 dark:text-gray-400 mt-8 text-lg hidden"> <!-- MUDADO -->
+            <p id="eventos-nenhum-resultado" class="text-center text-gray-500 dark:text-gray-400 mt-8 text-lg hidden">
                 Nenhum evento encontrado com esse nome.
             </p>
         </section>
 
-        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" /> <!-- MUDADO -->
+        <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" />
 
         <!-- ===== SEÇÃO 4: FOTOS ===== -->
         <section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
-            <!-- MUDADO: Título agora é responsivo (md:text-4xl) -->
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">Galeria de Fotos</h2>
             
-
-            <!-- MUDADO: Carrossel de Fotos agora é um slider de cards -->
             <div class="relative">
-                <!-- MUDADO: Agora é APENAS overflow-hidden. Remove o md:overflow-visible -->
-                <div id="fotos-slider" class="swiper-container overflow-hidden"> <!-- !overflow-visible é bom para as sombras -->
+                <div id="fotos-slider" class="swiper-container overflow-hidden">
                     <div class="swiper-wrapper">
                         
-                        <!-- 
-                         * =========== ATUALIZAÇÃO DO HTML (AQUI!) ===========
-                         * Removida a classe "!w-auto" de todos os slides
-                         * CORREÇÃO OVERFLOW: Adicionado p-2 para conter a sombra
-                         -->
-                        <div class="swiper-slide p-2"> <!-- !w-auto REMOVIDO -->
+                        <div class="swiper-slide p-2">
                             <div class="photo-gallery-card-frame">
                                 <img src="https://i.ibb.co/qMGGTywr/IMG-8079.jpg">
                             </div>
                         </div>
-                        <div class="swiper-slide p-2"> <!-- !w-auto REMOVIDO -->
+                        <div class="swiper-slide p-2">
                             <div class="photo-gallery-card-frame">
                                 <img src="https://i.ibb.co/gLgBVJ8W/IMG-1839.jpg">
                             </div>
                         </div>
-                        <div class="swiper-slide p-2"> <!-- !w-auto REMOVIDO -->
+                        <div class="swiper-slide p-2">
                             <div class="photo-gallery-card-frame">
                                 <img src="https://i.ibb.co/BKCn1r03/IMG-4173.jpg">
                             </div>
                         </div>
-                        <div class="swiper-slide p-2"> <!-- !w-auto REMOVIDO -->
+                        <div class="swiper-slide p-2">
                             <div class="photo-gallery-card-frame">
                                 <img src="https://placehold.co/400x500/5E35B1/EDE7F6?text=Foto+4">
                             </div>
                         </div>
-                        <div class="swiper-slide p-2"> <!-- !w-auto REMOVIDO -->
+                        <div class="swiper-slide p-2">
                             <div class="photo-gallery-card-frame">
-                                <img src="httpsD://placehold.co/400x500/1f2937/9ca3af?text=Foto+5">
+                                <img src="https://placehold.co/400x500/1f2937/9ca3af?text=Foto+5">
                             </div>
                         </div>
-                        <div class="swiper-slide p-2"> <!-- !w-auto REMOVIDO -->
+                        <div class="swiper-slide p-2">
                             <div class="photo-gallery-card-frame">
                                 <img src="https://i.ibb.co/hFxtcRX5/IMG-2089.jpg">
                             </div>
                         </div>
 
                     </div>
-                    <!-- REMOVIDO: Paginação (bolinhas) -->
                 </div>
-                <!-- ADICIONADO: Botões de Navegação -->
                 <div class="swiper-button-prev -left-4 md:-left-12"></div>
                 <div class="swiper-button-next -right-4 md:-right-12"></div>
             </div>
 
             <!-- Botão do Álbum (Link dinâmico) -->
             <div class="text-center mt-10">
-                <!-- MUDADO: Classes do botão para usar a cor de destaque -->
                 <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-accent text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform duration-200 hover:bg-accent/90 hover:scale-105">
                     Ver álbum completo de <span id="fotos-unidade-nome">Cajuru</span>
                 </a>
@@ -359,7 +306,6 @@
 
 
         <!-- ===== SEÇÃO 5: CONTATO E MAPA ===== -->
-        <!-- MUDADO: Fundo do rodapé para light/dark -->
         <footer id="contato" class="py-20 px-4 bg-gray-100 dark:bg-gray-900/50">
             <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
                 
@@ -383,41 +329,38 @@
                     <!-- Parte 1: Endereço -->
                     <div class="flex items-start gap-4">
                         <div class="pt-1">
-                            <i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO -->
+                            <i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-accent"></i>
                         </div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Endereço</h4>
-                            <p id="contato-endereco" class="text-lg text-gray-700 dark:text-gray-300">Carregando...</p> <!-- MUDADO -->
+                            <p id="contato-endereco" class="text-lg text-gray-700 dark:text-gray-300">Carregando...</p>
                         </div>
                     </div>
 
                     <!-- Parte 2: Horários -->
                     <div class="flex items-start gap-4">
                         <div class="pt-1">
-                            <i data-lucide="clock" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO -->
+                            <i data-lucide="clock" class="lucide-icon w-6 h-6 text-accent"></i>
                         </div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Horário dos Cultos</h4>
-                            <p id="contato-horarios" class="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line">Carregando...</p> <!-- MUDADO -->
+                            <p id="contato-horarios" class="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line">Carregando...</p>
                         </div>
                     </div>
 
                     <!-- Parte 3: Redes Sociais -->
                     <div class="flex items-start gap-4">
                         <div class="pt-1">
-                            <i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-accent"></i> <!-- MUDADO -->
+                            <i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-accent"></i>
                         </div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Siga-nos</h4>
                             <div class="flex gap-5 mt-2">
-                                <!-- MUDADO: Classes de hover dos ícones -->
                                 <a id="social-instagram" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
-                                   <svg aria-hidden="true" focusable="false" class="icon" xmlns="https://www.svgrepo.com/show/512399/instagram-167.svg" viewBox="0 0 512 512" width="1em" height="1em"><!-- Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/></svg>
-
+                                   <svg aria-hidden="true" focusable="false" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                                 </a>
                                 <a id="social-youtube" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
-                                    <svg aria-hidden="true" focusable="false" class="icon" xmlns="https://www.svgrepo.com/show/521051/youtube.svg" viewBox="0 0 512 512" width="1em" height="1em"><!-- Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/></svg>
-
+                                    <svg aria-hidden="true" focusable="false" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                                 </a>
                             </div>
                         </div>
@@ -447,7 +390,7 @@
                 "events": [
                     { "id": 0, "title": "EVENTO PASSADO (TESTE)", "date": "15/11/2025", "time": "18h00", "location": "Unidade Cajuru", "startDate": "2025-11-15T18:00:00", "endDate": "2025-11-15T20:00:00", "img": "https://placehold.co/400x200/ef4444/fff?text=EVENTO+PASSADO" },
                     { "id": 1, "title": "Culto da Família", "date": "Todos os Domingos", "time": "18h30", "location": "Unidade Cajuru", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00", "img": "https://placehold.co/400x200/0284c7/fff?text=Culto+da+Família" },
-                    { "id": 2, "title": "Célula de Jovens", "date": "Toda Sexta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-21T20:00:00", "endDate": "2025-11-21T21:30:00", "img": "httpsG://placehold.co/400x200/c2410c/fff?text=Célula+Jovens" },
+                    { "id": 2, "title": "Célula de Jovens", "date": "Toda Sexta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-21T20:00:00", "endDate": "2025-11-21T21:30:00", "img": "https://placehold.co/400x200/c2410c/fff?text=Célula+Jovens" },
                     { "id": 3, "title": "Noite de Oração", "date": "Toda Quarta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-19T20:00:00", "endDate": "2025-11-19T21:00:00", "img": "https://placehold.co/400x200/16a34a/fff?text=Oração" },
                     { "id": 4, "title": "Batismo", "date": "25/12/2025", "time": "10h00", "location": "Unidade Cajuru", "startDate": "2025-12-25T10:00:00", "endDate": "2025-12-25T12:00:00", "img": "https://placehold.co/400x200/6d28d9/fff?text=Batismo" }
                 ]
@@ -482,7 +425,7 @@
                 },
                 "events": [
                     { "id": 8, "title": "Culto (Santa Rosa)", "date": "Todo Domingo", "time": "19h00", "location": "Unidade Santa Rosa", "startDate": "2025-11-16T19:00:00", "endDate": "2025-11-16T20:30:00", "img": "https://placehold.co/400x200/1d4ed8/fff?text=Culto+Santa+Rosa" },
-                    { "id": 9, "title": "Estudo Bíblico", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Santa Rosa", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00", "img": "httpsClick://placehold.co/400x200/9d174d/fff?text=Estudo" }
+                    { "id": 9, "title": "Estudo Bíblico", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Santa Rosa", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00", "img": "https://placehold.co/400x200/9d174d/fff?text=Estudo" }
                 ]
             },
             "santoandre": {
@@ -490,7 +433,7 @@
                 "name": "Santo André",
                 "address": "Av. da Paz, 974 - Utinga, Santo André - SP",
                 "times": "Domingo: 10h00\nQuarta-feira: 20h00",
-                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.486085089794!2d-46.541219288711204!3d-23.622757078669128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5d36ef90bdd3%3A0x837ee62116e35569!2sAv.%20da%20Paz%2C%20974%20-%20Utinga%2C%2o%20Andr%C3%A9%20-%20SP%2C%2009220-310!5e0!3m2!1spt-BR!2sbr!4v1763308041456!5m2!1spt-BR!2sbr",
+                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.486085089794!2d-46.541219288711204!3d-23.622757078669128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5d36ef90bdd3%3A0x837ee62116e35569!2sAv.%20da%20Paz%2C%20974%20-%20Utinga%2C%20Santo%20Andr%C3%A9%20-%20SP%2C%2009220-310!5e0!3m2!1spt-BR!2sbr!4v1763308041456!5m2!1spt-BR!2sbr",
                 "albumUrl": "https://photos.app.goo.gl/Ns7QAGbsaR2FJ7Td8",
                 "socials": {
                     "instagram": "https://www.instagram.com/iapv.santoandre?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
@@ -503,164 +446,118 @@
             }
         };
 
-        // --- 2. ESTADO GLOBAL ---
-        let currentUnitId = 'cajuru'; // Unidade padrão
-        let swiperEventos; // Variável para guardar o slider de eventos
+        let currentUnitId = 'cajuru';
+        let swiperEventos;
         
-        // --- 3. FUNÇÕES DE ATUALIZAÇÃO ---
-
-        /**
-         * Função Principal: Atualiza toda a página com base na unidade selecionada.
-         */
         function updatePageContent(unitId) {
-            // Guarda o ID da unidade selecionada
             currentUnitId = unitId;
-
-            // Pega os dados da unidade selecionada
             const unitData = churchData[unitId];
             if (!unitData) {
                 console.error('Dados da unidade não encontrados:', unitId);
                 return;
             }
 
-            // Atualiza o <select> (visual)
             document.getElementById('unit-select-filter').value = unitId;
 
-            // Atualiza a Seção de Eventos
             const now = new Date();
             const futureEvents = unitData.events.filter(event => new Date(event.endDate) >= now);
             document.getElementById('eventos-unidade').textContent = unitData.name;
-            updateEventSlider(futureEvents, unitData.name); // MODIFICADO: Passa apenas eventos futuros
+            updateEventSlider(futureEvents, unitData.name);
 
-            // Atualiza a Seção de Fotos (o botão)
             document.getElementById('fotos-unidade-nome').textContent = unitData.name;
             document.getElementById('fotos-album-link').href = unitData.albumUrl;
 
-            // Atualiza a Seção de Contato/Footer
             document.getElementById('mapa-iframe').src = unitData.mapUrl;
             document.getElementById('contato-endereco').textContent = unitData.address;
             document.getElementById('contato-horarios').textContent = unitData.times;
             document.getElementById('social-instagram').href = unitData.socials.instagram;
             document.getElementById('social-youtube').href = unitData.socials.youtube;
             
-            // Limpa a caixa de pesquisa
             document.getElementById('event-search-box').value = '';
         }
 
-        /**
-         * Cria o HTML para um card de evento.
-         */
         function createEventCard(event, unitName) {
-            // Define o local: usa o local do evento se existir, senão usa o nome da unidade
             const location = event.location || unitName;
-            
-            // Gera o link do Google Agenda
             const calendarLink = createGoogleCalendarLink(event, location);
 
-            // Define os SVGs dos ícones para usar com segurança dentro do JS
             const calendarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
             const mapPinIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
 
-            // MUDADO: Aplicando o novo estilo Uiverse
             return `
-                <div class="swiper-slide h-auto p-4"> <!-- CORREÇÃO OVERFLOW: Adicionado p-4 para conter sombra/blur -->
+                <div class="swiper-slide h-auto p-4">
                     <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" 
-                       class="relative drop-shadow-xl w-full h-64 overflow-hidden rounded-xl bg-[#3d3c3d] block group"> 
+                       class="relative drop-shadow-xl w-full h-64 overflow-hidden rounded-xl bg-accent block group border-2 border-accent"> 
                         
-                        <!-- Conteúdo Interno -->
-                        <!-- CORREÇÃO BOTÃO: Trocado justify-center por justify-between -->
-                        <div class="absolute flex flex-col justify-between items-center text-white z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-5 text-center transition-all duration-300 group-hover:opacity-100 group-hover:bg-[#2a292a]">
+                        <div class="absolute flex flex-col justify-between items-center text-gray-800 z-[1] opacity-90 rounded-xl inset-0.5 bg-[#f5f5f5] p-5 text-center transition-all duration-300 group-hover:opacity-100 group-hover:bg-white">
                             
-                            <!-- Wrapper para o conteúdo do topo -->
                             <div>
-                                <h4 class="text-xl font-bold text-white mb-3">${event.title}</h4>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3">${event.title}</h4>
                                 
-                                <div class="text-sm text-gray-300 mb-2 flex items-center justify-center">
+                                <div class="text-sm text-gray-600 mb-2 flex items-center justify-center">
                                     ${calendarIcon}
                                     <span class="ml-1.5">${event.date}${event.time ? ` • ${event.time}` : ''}</span>
                                 </div>
                                 
-                                <div class="text-sm text-gray-300 flex items-center justify-center">
+                                <div class="text-sm text-gray-600 flex items-center justify-center">
                                     ${mapPinIcon}
                                     <span class="ml-1.5">${location}</span>
                                 </div>
                             </div>
 
-                            <!-- CORREÇÃO BOTÃO: Botão estilizado na parte de baixo -->
-                            <span class="mt-4 inline-block bg-accent text-white font-bold py-2 px-4 rounded-lg text-xs transition-transform duration-200 group-hover:scale-105">
+                            <span class="mt-4 inline-block bg-accent text-white font-bold py-2 px-4 rounded-lg text-xs transition-transform duration-200 group-hover:scale-105 shadow-md">
                                 Adicionar à Agenda
                             </span>
                         </div>
                         
-                        <!-- Efeito de Brilho -->
-                        <!-- CORREÇÃO COR: Trocado bg-white por bg-accent -->
                         <div class="absolute w-56 h-48 bg-accent blur-[50px] -left-1/4 -top-1/4 transition-all duration-500 group-hover:blur-[60px] group-hover:w-72 group-hover:h-56"></div>
                     </a>
                 </div>
             `;
         }
         
-        /**
-         * Atualiza o carrossel de eventos com base nos eventos filtrados.
-         */
-        function updateEventSlider(eventsToShow, unitName) { // RECEBE O NOME DA UNIDADE
+        function updateEventSlider(eventsToShow, unitName) {
             const wrapper = document.getElementById('eventos-wrapper');
             const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
 
             if (!eventsToShow || eventsToShow.length === 0) {
-                wrapper.innerHTML = ''; // Limpa o slider
-                noResultsMsg.classList.remove('hidden'); // Mostra "Nenhum resultado"
+                wrapper.innerHTML = '';
+                noResultsMsg.classList.remove('hidden');
             } else {
-                // Passa o unitName para o createEventCard
                 wrapper.innerHTML = eventsToShow.map(event => createEventCard(event, unitName)).join('');
-                noResultsMsg.classList.add('hidden'); // Esconde "Nenhum resultado"
+                noResultsMsg.classList.add('hidden');
             }
 
-            // Atualiza o Swiper (importante!)
             if (swiperEventos) {
                 swiperEventos.update();
-                swiperEventos.slideTo(0); // Volta para o primeiro slide
+                swiperEventos.slideTo(0);
             }
         }
         
-        /**
-         * Filtra os eventos com base na caixa de pesquisa.
-         */
         function filterEventsBySearch() {
             const searchTerm = document.getElementById('event-search-box').value.toLowerCase();
             
-            // Garante que os dados já foram carregados
             if (!churchData || !churchData[currentUnitId]) return;
 
-            // MODIFICADO: Filtra por eventos futuros PRIMEIRO
             const now = new Date();
             const allFutureEvents = churchData[currentUnitId].events.filter(event => new Date(event.endDate) >= now);
-            const unitName = churchData[currentUnitId].name; // Pega o nome da unidade atual
+            const unitName = churchData[currentUnitId].name;
             
             if (!searchTerm) {
-                updateEventSlider(allFutureEvents, unitName); // MODIFICADO: Se a busca está vazia, mostra todos os eventos FUTUROS
+                updateEventSlider(allFutureEvents, unitName);
                 return;
             }
             
-            // MODIFICADO: Filtra a partir da lista de eventos futuros
             const filteredEvents = allFutureEvents.filter(event => 
                 event.title.toLowerCase().includes(searchTerm)
             );
             
-            updateEventSlider(filteredEvents, unitName); // Mostra apenas os eventos filtrados
+            updateEventSlider(filteredEvents, unitName);
         }
 
-        /**
-         * NOVO: Cria um link do Google Agenda para um evento.
-         */
         function createGoogleCalendarLink(event, location) {
             const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
-
-            // Formata a data para o padrão do Google (YYYYMMDDTHHMMSS)
-            // Remove hífens, dois-pontos e milissegundos
             const formatISODate = (isoStr) => isoStr.replace(/-|:|\.\d+/g, '');
 
-            // Garante que as datas existem antes de formatar
             const dates = event.startDate && event.endDate 
                 ? `${formatISODate(event.startDate)}/${formatISODate(event.endDate)}`
                 : '';
@@ -672,40 +569,30 @@
             return `${baseUrl}&text=${text}&dates=${dates}&details=${details}&location=${loc}`;
         }
 
-        // --- 4. INICIALIZAÇÃO QUANDO A PÁGINA CARREGA ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Esta função inicializa o site
             initializeApp();
         });
 
-        /**
-         * Função que inicializa o site
-         */
         function initializeApp() {
-            // Inicializa os ícones do Lucide
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
 
-            // Configura o <select> de filtro global
             const unitSelect = document.getElementById('unit-select-filter');
             unitSelect.addEventListener('change', (event) => {
                 const unitId = event.target.value;
                 updatePageContent(unitId);
             });
 
-            // Configura a caixa de pesquisa de eventos
             document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
 
-            // Inicializa o Swiper de EVENTOS
             swiperEventos = new Swiper('#eventos-slider', {
-                slidesPerView: 1, // Quantos slides por vez
-                spaceBetween: 20,  // Espaço entre eles
+                slidesPerView: 1,
+                spaceBetween: 20,
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
-                // Responsivo: mostra mais slides em telas maiores
                 breakpoints: {
                     640: {
                         slidesPerView: 2,
@@ -722,45 +609,30 @@
                 }
             });
 
-            // 
-            //  =========== ATUALIZAÇÃO DO JAVASCRIPT (AQUI!) ===========
-            // 
             new Swiper('#fotos-slider', {
-                // NOVO (Requisito 3): Ativa o loop
                 loop: true,
-
-                // NOVO (Requisito 2): Ativa o autoplay (passando a cada 3 segundos)
                 autoplay: {
                     delay: 3000,
-                    disableOnInteraction: false, // Não para o autoplay se o usuário mexer
+                    disableOnInteraction: false,
                 },
-
                 spaceBetween: 30,
-
-                // NOVO (Requisito 1): Define quantos slides aparecem
-                slidesPerView: 1, // 1 slide em telas pequenas (celular)
-                
-                // Define breakpoints para telas maiores
+                slidesPerView: 1,
                 breakpoints: {
-                    // A partir de 768px (tablet)
                     768: {
-                        slidesPerView: 2, // Mostra 2 slides
+                        slidesPerView: 2,
                         spaceBetween: 30,
                     },
-                    // A partir de 1024px (desktop)
                     1024: {
-                        slidesPerView: 3, // Mostra 3 slides (seu pedido)
+                        slidesPerView: 3,
                         spaceBetween: 30,
                     }
                 },
-                
                 navigation: {
-                    nextEl: '#fotos .swiper-button-next', // Escopo para a seção #fotos
+                    nextEl: '#fotos .swiper-button-next',
                     prevEl: '#fotos .swiper-button-prev',
                 },
             });
 
-            // Carrega o conteúdo da unidade padrão (Sede)
             updatePageContent(currentUnitId);
         }
     </script>
