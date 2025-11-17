@@ -122,6 +122,56 @@
             object-fit: cover;
             border-radius: 30px;
         }
+
+        /* Estilo do botão do álbum (baseado no CSS fornecido) */
+        .btn-album-animado {
+            /* Variáveis adaptadas para a cor 'accent' (#005DCC) */
+            --btn-bg-1: hsla(211, 100%, 70% / 1); /* Azul claro (derivado do accent) */
+            --btn-bg-2: hsla(211, 100%, 40% / 1); /* Azul accent (#005DCC) */
+            --btn-bg-color: hsla(0, 0%, 100% / 1); /* Branco */
+            --radii: 0.5em; /* 8px */
+
+            cursor: pointer;
+            padding: 0.9em 1.4em;
+            min-width: 120px;
+            min-height: 44px;
+            font-size: 1.125rem; /* 18px, (era text-lg) */
+            font-weight: 700; /* (era font-bold) */
+            transition: 0.8s;
+            background-size: 280% auto;
+            background-image: linear-gradient(
+                325deg,
+                var(--btn-bg-2) 0%,
+                var(--btn-bg-1) 55%,
+                var(--btn-bg-2) 90%
+            );
+            border: none;
+            border-radius: var(--radii);
+            color: var(--btn-bg-color);
+            /* Sombra adaptada do CSS fornecido */
+            box-shadow:
+                0px 0px 20px rgba(0, 93, 204, 0.5), /* Sombra externa com cor accent */
+                0px 5px 5px -1px rgba(0, 93, 204, 0.25), /* Sombra direcional com cor accent */
+                inset 4px 4px 8px rgba(0, 123, 255, 0.5), /* Sombra interna clara */
+                inset -4px -4px 8px rgba(0, 68, 153, 0.35); /* Sombra interna escura */
+        }
+
+        .btn-album-animado:hover {
+            background-position: right top; /* Ativa a animação do gradiente */
+        }
+
+        .btn-album-animado:is(:focus, :focus-visible, :active) {
+            outline: none;
+            box-shadow:
+                0 0 0 3px var(--btn-bg-color),
+                0 0 0 6px var(--btn-bg-2);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .btn-album-animado {
+                transition: linear;
+            }
+        }
     </style>
 </head>
 
@@ -143,10 +193,8 @@
                 <label for="unit-select-filter" class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
                 <div class="relative w-full max-w-sm mx-auto px-4 sm:px-0">
                     <select id="unit-select-filter" class="custom-select-filter">
-                        <option value="cajuru">CAJURU</option>
-                        <option value="ribeiraopreto">RIBEIRÃO PRETO</option>
-                        <option value="santarosa">SANTA ROSA DE VITERBO</option>
-                        <option value="santoandre">SANTO ANDRÉ</option>
+                        <!-- Opções carregadas dinamicamente pelo Firebase -->
+                        <option value="">Carregando unidades...</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-300">
                         <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -223,7 +271,7 @@
         <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Eventos</h2>
             <p class="text-lg text-gray-600 dark:text-gray-400 text-center mb-10">
-                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Cajuru</span>
+                Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Carregando...</span>
             </p>
 
             <!-- Caixa de Pesquisa -->
@@ -236,6 +284,7 @@
                 <div id="eventos-slider" class="swiper-container overflow-hidden">
                     <div class="swiper-wrapper" id="eventos-wrapper">
                         <!-- Os slides serão injetados aqui pelo JavaScript -->
+                        <p classclass="text-center text-gray-500">Carregando eventos...</p>
                     </div>
                 </div>
                 <!-- Botões de Navegação -->
@@ -245,7 +294,7 @@
 
             <!-- Mensagem de "Nenhum resultado" -->
             <p id="eventos-nenhum-resultado" class="text-center text-gray-500 dark:text-gray-400 mt-8 text-lg hidden">
-                Nenhum evento encontrado com esse nome.
+                Nenhum evento encontrado.
             </p>
         </section>
 
@@ -276,12 +325,12 @@
                         </div>
                         <div class="swiper-slide p-2">
                             <div class="photo-gallery-card-frame">
-                                <img src="https://placehold.co/400x500/5E35B1/EDE7F6?text=Foto+4" alt="Foto da galeria 4">
+                                <img src="https://placehold.co/400x500/5E35B1/EDE7F6?text=Foto+4" alt="Foto placeholder 4">
                             </div>
                         </div>
                         <div class="swiper-slide p-2">
                             <div class="photo-gallery-card-frame">
-                                <img src="https://placehold.co/400x500/1f2937/9ca3af?text=Foto+5" alt="Foto da galeria 5">
+                                <img src="https://placehold.co/400x500/1f2937/9ca3af?text=Foto+5" alt="Foto placeholder 5">
                             </div>
                         </div>
                         <div class="swiper-slide p-2">
@@ -298,8 +347,8 @@
 
             <!-- Botão do Álbum (Link dinâmico) -->
             <div class="text-center mt-10">
-                <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-accent text-white font-bold py-3 px-8 rounded-1g text-lg transition-transform duration-200 hover:bg-accent/90 hover:scale-105">
-                    Ver álbum completo de <span id="fotos-unidade-nome">Cajuru</span>
+                <a id="fotos-album-link" href="#" target="_blank" class="inline-block btn-album-animado">
+                    Ver álbum completo de <span id="fotos-unidade-nome">Carregando...</span>
                 </a>
             </div>
         </section>
@@ -310,7 +359,7 @@
             <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
                 
                 <!-- Coluna Esquerda: Mapa -->
-                <div class="h-96 md:h-full min-h-[400px] rounded-lg overflow-hidden shadow-lg">
+                <div class="h-96 md:h-full min-h-[400px] rounded-lg overflow-hidden">
                     <iframe 
                         id="mapa-iframe"
                         src="" 
@@ -356,10 +405,10 @@
                         <div>
                             <h4 class="text-xl font-bold mb-1">Siga-nos</h4>
                             <div class="flex gap-5 mt-2">
-                                <a id="social-instagram" href="#" target="_blank" aria-label="Instagram" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
+                                <a id="social-instagram" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
                                     <svg aria-hidden="true" focusable="false" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                                 </a>
-                                <a id="social-youtube" href="#" target="_blank" aria-label="YouTube" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
+                                <a id="social-youtube" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
                                     <svg aria-hidden="true" focusable="false" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                                 </a>
                             </div>
@@ -373,131 +422,241 @@
     </main>
 
     <!-- ===== JAVASCRIPT PRINCIPAL ===== -->
-    <script>
-        // --- 1. BASE DE DADOS (Embutida para Teste) ---
-        const churchData = {
-            "cajuru": {
-                "id": "cajuru",
-                "name": "Cajuru",
-                "address": "R. Dr. Mata, 1230 - Jardim Santa Maria Goretti, Cajuru - SP",
-                "times": "Domingo: 18h30\nQuinta-feira: 20h00",
-                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3717.9188596146923!2d-47.3137659!3d-21.274679199999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b7786d1d2bbda5%3A0x5db85ec94f106d39!2sR.%20Dr.%20Mata%2C%201230%20-%20Jardim%20Santa%20Maria%20Goretti%2C%20Cajuru%20-%20SP%2C%2014240-000!5e0!3m2!1spt-BR!2sbr!4v1763307958832!5m2!1spt-BR!2sbr",
-                "albumUrl": "https://photos.app.goo.gl/exemploAlbumCajuru",
-                "socials": {
-                    "instagram": "https://www.instagram.com/iapv.cajuru?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
-                    "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2"
-                },
-                "events": [
-                    { "id": 0, "title": "EVENTO PASSADO (TESTE)", "date": "15/11/2025", "time": "18h00", "location": "Unidade Cajuru", "startDate": "2025-11-15T18:00:00", "endDate": "2025-11-15T20:00:00", "img": "https://placehold.co/400x200/ef4444/fff?text=EVENTO+PASSADO" },
-                    { "id": 1, "title": "Culto da Família", "date": "Todos os Domingos", "time": "18h30", "location": "Unidade Cajuru", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00", "img": "https://placehold.co/400x200/0284c7/fff?text=Culto+da+Família" },
-                    { "id": 2, "title": "Célula de Jovens", "date": "Toda Sexta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-21T20:00:00", "endDate": "2025-11-21T21:30:00", "img": "https://placehold.co/400x200/c2410c/fff?text=Célula+Jovens" },
-                    { "id": 3, "title": "Noite de Oração", "date": "Toda Quarta-feira", "time": "20h00", "location": "Unidade Cajuru", "startDate": "2025-11-19T20:00:00", "endDate": "2025-11-19T21:00:00", "img": "https://placehold.co/400x200/16a34a/fff?text=Oração" },
-                    { "id": 4, "title": "Batismo", "date": "25/12/2025", "time": "10h00", "location": "Unidade Cajuru", "startDate": "2025-12-25T10:00:00", "endDate": "2025-12-25T12:00:00", "img": "https://placehold.co/400x200/6d28d9/fff?text=Batismo" }
-                ]
-            },
-            "ribeiraopreto": {
-                "id": "ribeiraopreto",
-                "name": "Ribeirão Preto",
-                "address": "R. Monte Santo, 455 - Sumarezinho, Ribeirão Preto - SP",
-                "times": "Domingo: 18h30\nQuinta-feira: 20h00",
-                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3720.8037817045547!2d-47.84004278877633!3d-21.160205680440967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b9be735151d6f3%3A0x232ecb692c950ec0!2sR.%20Monte%20Santo%2C%20455%20-%20Sumarezinho%2C%20Ribeir%C3%A3o%20Preto%20-%20SP%2C%2014051-270!5e0!3m2!1spt-BR!2sbr!4v1763308022469!5m2!1spt-BR!2sbr",
-                "albumUrl": "https://photos.app.goo.gl/foaSEW2m3V44mFQj6",
-                "socials": {
-                    "instagram": "https://www.instagram.com/iapv.ribeiraopreto?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
-                    "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2"
-                },
-                "events": [
-                    { "id": 5, "title": "Culto de Celebração", "date": "Todo Domingo", "time": "18h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-16T18:30:00", "endDate": "2025-11-16T20:00:00", "img": "https://placehold.co/400x200/059669/fff?text=Celebração" },
-                    { "id": 6, "title": "Célula Mista", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Ribeirão Preto", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00", "img": "https://placehold.co/400x200/b45309/fff?text=Célula+Mista" },
-                    { "id": 7, "title": "Café com Pastores", "date": "15/12/2025", "time": "09h00", "location": "Unidade Ribeirão Preto", "startDate": "2025-12-15T09:00:00", "endDate": "2025-12-15T10:30:00", "img": "https://placehold.co/400x200/be185d/fff?text=Café" }
-                ]
-            },
-            "santarosa": {
-                "id": "santarosa",
-                "name": "Santa Rosa de Viterbo",
-                "address": "R. Ângelo Sordi, 505 - Santa Rosa de Viterbo, SP",
-                "times": "Domingo: 19h00\nQuarta-feira: 19h30",
-                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3712.3876752940737!2d-47.37881828876797!3d-21.492529880193267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b788d14e37fb6b%3A0x815c01291b99bd48!2sR.%20%C3%82ngelo%20Sordi%2C%20505%2C%20Santa%20Rosa%20de%20Viterbo%20-%20SP%2C%2014270-000!5e0!3m2!1spt-BR!2sbr!4v1763307988606!5m2!1spt-BR!2sbr",
-                "albumUrl": "https://photos.app.goo.gl/TVtHSetEbgANVNCt8",
-                "socials": {
-                    "instagram": "https://www.instagram.com/iapv.srv/?utm_source=ig_web_button_share_sheet",
-                    "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2"
-                },
-                "events": [
-                    { "id": 8, "title": "Culto (Santa Rosa)", "date": "Todo Domingo", "time": "19h00", "location": "Unidade Santa Rosa", "startDate": "2025-11-16T19:00:00", "endDate": "2025-11-16T20:30:00", "img": "https://placehold.co/400x200/1d4ed8/fff?text=Culto+Santa+Rosa" },
-                    { "id": 9, "title": "Estudo Bíblico", "date": "Toda Terça-feira", "time": "19h30", "location": "Unidade Santa Rosa", "startDate": "2025-11-18T19:30:00", "endDate": "2025-11-18T21:00:00", "img": "https://placehold.co/400x200/9d174d/fff?text=Estudo" }
-                ]
-            },
-            "santoandre": {
-                "id": "santoandre",
-                "name": "Santo André",
-                "address": "Av. da Paz, 974 - Utinga, Santo André - SP",
-                "times": "Domingo: 10h00\nQuarta-feira: 20h00",
-                "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.486085089794!2d-46.541219288711204!3d-23.622757078669128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5d36ef90bdd3%3A0x837ee62116e35569!2sAv.%20da%2Ex%20da%20Paz%2C%20974%20-%20Utinga%2C%20Santo%20Andr%C3%A9%20-%20SP%2C%2009220-310!5e0!3m2!1spt-BR!2sbr!4v1763308041456!5m2!1spt-BR!2sbr",
-                "albumUrl": "https://photos.app.goo.gl/Ns7QAGbsaR2FJ7Td8",
-                "socials": {
-                    "instagram": "https://www.instagram.com/iapv.santoandre?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
-                    "youtube": "https://youtube.com/@palavraeverdade?si=Gi5Z2hR6X3Moplb2"
-                },
-                "events": [
-                    { "id": 10, "title": "Culto de Fim de Semana", "date": "Todo Sábado", "time": "19h00", "location": "Unidade Santo André", "startDate": "2025-11-22T19:00:00", "endDate": "2025-11-22T20:30:00", "img": "https://placehold.co/400x200/86198f/fff?text=Culto+Sábado" },
-                    { "id": 11, "title": "Vigília", "date": "Toda última Sexta do mês", "time": "22h00", "location": "Unidade Santo André", "startDate": "2025-11-28T22:00:00", "endDate": "2025-11-29T05:00:00", "img": "https://placehold.co/400x200/1e3a8a/fff?text=Vigília" }
-                ]
-            }
-        };
+    
+    <!-- 4. Firebase SDKs -->
+    <script type="module">
+        // Importe as funções que você precisa
+        // **** ERRO CORRIGIDO AQUI (https://) ****
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy, setLogLevel } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-        let currentUnitId = 'cajuru';
+        // =================================================================================
+        // SUA CONFIGURAÇÃO DO FIREBASE
+        // =================================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyB1-NkxI4ZxBqsHIK6dzq3c365HLl_DZFs",
+            authDomain: "site-iapv-9fdd1.firebaseapp.com",
+            projectId: "site-iapv-9fdd1",
+            storageBucket: "site-iapv-9fdd1.firebasestorage.app",
+            messagingSenderId: "353341906524",
+            appId: "1:353341906524:web:f6ec38996a2b336f9d1099",
+            measurementId: "G-9JPBKP1R12"
+        };
+        // =================================================================================
+
+        // Variáveis globais
+        let db;
         let swiperEventos;
-        
+        let currentUnitId = null;
+        let allUnitsData = {}; // Cache para guardar os dados de todas as unidades
+
+        // Inicializa o Firebase
+        try {
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app); // Inicializa o Analytics
+            db = getFirestore(app);
+            // setLogLevel('debug'); // Descomente para ver logs detalhados do Firestore
+            console.log("Firebase inicializado com sucesso!");
+        } catch (error) {
+            console.error("Erro ao inicializar o Firebase: ", error);
+            // Mostra um erro amigável para o usuário
+            document.getElementById('eventos-unidade').textContent = "Erro de conexão";
+            document.getElementById('eventos-wrapper').innerHTML = '<p class="text-center text-red-500">Não foi possível conectar ao banco de dados.</p>';
+        }
+
+
+        // --- Funções de Inicialização ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(db) { // Só inicializa o app se o DB conectou
+                initializeAppLogic();
+            }
+        });
+
+        async function initializeAppLogic() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Inicializa os sliders (mesmo vazios)
+            initializeSwipers();
+
+            // Carrega os dados das unidades e preenche o dropdown
+            await loadUnitsDropdown();
+
+            // Adiciona o listener ao dropdown
+            const unitSelect = document.getElementById('unit-select-filter');
+            unitSelect.addEventListener('change', (event) => {
+                const unitId = event.target.value;
+                if(unitId) {
+                    updatePageContent(unitId);
+                }
+            });
+
+            // Adiciona o listener à caixa de busca
+            document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
+        }
+
+        function initializeSwipers() {
+            swiperEventos = new Swiper('#eventos-slider', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                breakpoints: {
+                    640: { slidesPerView: 2, spaceBetween: 20 },
+                    1024: { slidesPerView: 3, spaceBetween: 30 },
+                    1280: { slidesPerView: 4, spaceBetween: 30 }
+                }
+            });
+
+            new Swiper('#fotos-slider', {
+                loop: true,
+                autoplay: { delay: 3000, disableOnInteraction: false },
+                spaceBetween: 30,
+                slidesPerView: 1,
+                breakpoints: {
+                    768: { slidesPerView: 2, spaceBetween: 30 },
+                    1024: { slidesPerView: 3, spaceBetween: 30 }
+                },
+                navigation: {
+                    nextEl: '#fotos .swiper-button-next',
+                    prevEl: '#fotos .swiper-button-prev',
+                },
+            });
+        }
+
+        // --- Funções de Carregamento de Dados (Firestore) ---
+
+        async function loadUnitsDropdown() {
+            const unitsCollection = collection(db, "units");
+            const unitSelect = document.getElementById('unit-select-filter');
+
+            try {
+                const querySnapshot = await getDocs(query(unitsCollection));
+                
+                if (querySnapshot.empty) {
+                    console.warn("Nenhuma unidade encontrada no Firestore.");
+                    unitSelect.innerHTML = '<option value="">Nenhuma unidade cadastrada</option>';
+                    return;
+                }
+
+                let optionsHtml = '';
+                let firstUnitId = null;
+
+                querySnapshot.forEach((doc) => {
+                    const unit = doc.data();
+                    unit.id = doc.id; // Armazena o ID do documento
+                    allUnitsData[doc.id] = unit; // Salva no cache
+                    
+                    if (!firstUnitId) firstUnitId = doc.id; // Pega a primeira unidade como padrão
+                    
+                    optionsHtml += `<option value="${doc.id}">${unit.name.toUpperCase()}</option>`;
+                });
+
+                unitSelect.innerHTML = optionsHtml;
+                
+                // Seleciona e carrega a primeira unidade da lista
+                if (firstUnitId) {
+                    currentUnitId = firstUnitId;
+                    unitSelect.value = firstUnitId;
+                    updatePageContent(firstUnitId);
+                }
+
+            } catch (error) {
+                console.error("Erro ao carregar unidades: ", error);
+                unitSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+            }
+        }
+
+        // --- Funções de Atualização de Conteúdo ---
+
         function updatePageContent(unitId) {
             currentUnitId = unitId;
-            const unitData = churchData[unitId];
+            const unitData = allUnitsData[unitId];
+            
             if (!unitData) {
-                console.error('Dados da unidade não encontrados:', unitId);
+                console.error('Dados da unidade não encontrados no cache:', unitId);
                 return;
             }
 
+            // Atualiza o filtro de dropdown (caso a chamada venha de outro lugar)
             document.getElementById('unit-select-filter').value = unitId;
 
-            const now = new Date();
-            // Filtra eventos onde a data de TÉRMINO é maior ou igual a agora
-            const futureEvents = unitData.events.filter(event => new Date(event.endDate) >= now);
+            // Atualiza a seção de Eventos
             document.getElementById('eventos-unidade').textContent = unitData.name;
-            updateEventSlider(futureEvents, unitData.name);
+            loadEventsForUnit(unitId, unitData.name); // Busca os eventos para esta unidade
 
+            // Atualiza a seção de Fotos
             document.getElementById('fotos-unidade-nome').textContent = unitData.name;
-            document.getElementById('fotos-album-link').href = unitData.albumUrl;
+            document.getElementById('fotos-album-link').href = unitData.albumUrl || '#';
 
-            document.getElementById('mapa-iframe').src = unitData.mapUrl;
-            document.getElementById('contato-endereco').textContent = unitData.address;
-            document.getElementById('contato-horarios').textContent = unitData.times;
-            document.getElementById('social-instagram').href = unitData.socials.instagram;
-            document.getElementById('social-youtube').href = unitData.socials.youtube;
+            // Atualiza a seção de Contato/Footer
+            document.getElementById('mapa-iframe').src = unitData.mapUrl || '';
+            document.getElementById('contato-endereco').textContent = unitData.address || 'Endereço não informado';
+            document.getElementById('contato-horarios').textContent = unitData.times || 'Horários não informados';
+            document.getElementById('social-instagram').href = unitData.socials?.instagram || '#';
+            document.getElementById('social-youtube').href = unitData.socials?.youtube || '#';
             
-            // Limpa a busca ao trocar de unidade
+            // Limpa a busca
             document.getElementById('event-search-box').value = '';
         }
 
+        async function loadEventsForUnit(unitId, unitName) {
+            const wrapper = document.getElementById('eventos-wrapper');
+            wrapper.innerHTML = '<p class="text-center text-gray-500">Carregando eventos...</p>';
+            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
+            noResultsMsg.classList.add('hidden');
+
+            const now = new Date();
+            const eventsCollection = collection(db, `units/${unitId}/events`);
+            
+            // Query para buscar eventos que terminam hoje ou no futuro,
+            // ordenados pela data de início
+            const q = query(eventsCollection, 
+                where("endDate", ">=", now.toISOString().split('T')[0]), // Compara como string YYYY-MM-DD
+                orderBy("endDate"), // Ordena pela data de término
+                orderBy("startDate") // Depois pela de início
+            );
+
+            try {
+                const querySnapshot = await getDocs(q);
+                let eventsToShow = [];
+                
+                querySnapshot.forEach((doc) => {
+                    eventsToShow.push(doc.data());
+                });
+
+                // Armazena os eventos no cache da unidade
+                allUnitsData[unitId].events = eventsToShow;
+                
+                updateEventSlider(eventsToShow, unitName);
+
+            } catch (error) {
+                console.error("Erro ao buscar eventos: ", error);
+                wrapper.innerHTML = `<p class="text-center text-red-500">Erro ao carregar eventos. (${error.message})</p>`;
+            }
+        }
+
+        // --- Funções Auxiliares (Eventos) ---
+
         function createEventCard(event, unitName) {
             const location = event.location || unitName;
-            // Gera o link do Google Calendar
             const calendarLink = createGoogleCalendarLink(event, location);
 
-            // Ícones SVG inline para evitar dependência do Lucide após a carga inicial
             const calendarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
             const mapPinIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon w-4 h-4 inline-block"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
 
             return `
                 <div class="swiper-slide h-auto p-4">
-                    <!-- O card agora é um link direto para o Google Calendar -->
                     <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" 
-                       class="relative shadow-lg shadow-accent/20 w-full h-64 overflow-hidden rounded-[30px] bg-white block group transition-all duration-300 hover:-translate-y-2"> 
+                       class="group relative block w-full h-64 min-h-[250px] bg-white rounded-[30px] shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-200"
+                       style="box-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgba(0, 93, 204, 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgba(0, 93, 204, 0.1));">
                         
-                        <!-- Fundo brilhante (efeito) -->
-                        <div class="absolute w-56 h-48 bg-accent blur-[50px] -left-1/4 -top-1/4 transition-all duration-500 group-hover:blur-[60px] group-hover:w-72 group-hover:h-56"></div>
-                        
-                        <!-- Conteúdo do Card -->
-                        <div class="absolute flex flex-col justify-center items-center text-gray-800 z-[1] rounded-[30px] inset-0 bg-white p-5 text-center">
+                        <div class="relative z-[1] flex flex-col justify-center items-center h-full p-5 text-center">
                             
                             <!-- Informações do Evento -->
                             <div>
@@ -515,11 +674,10 @@
                             </div>
 
                             <!-- Botão (Call-to-Action) -->
-                            <span class="mt-4 inline-block bg-accent text-white font-bold py-2 px-4 rounded-lg text-xs transition-transform duration-200 group-hover:scale-105 shadow-md">
+                            <span class="mt-6 inline-block bg-accent text-white font-bold py-2 px-4 rounded-lg text-xs transition-transform duration-200 group-hover:scale-105 shadow-md">
                                 Adicionar à Agenda
                             </span>
                         </div>
-                        
                     </a>
                 </div>
             `;
@@ -532,6 +690,7 @@
             if (!eventsToShow || eventsToShow.length === 0) {
                 wrapper.innerHTML = '';
                 noResultsMsg.classList.remove('hidden');
+                noResultsMsg.textContent = "Nenhum evento futuro encontrado para esta unidade.";
             } else {
                 wrapper.innerHTML = eventsToShow.map(event => createEventCard(event, unitName)).join('');
                 noResultsMsg.classList.add('hidden');
@@ -546,14 +705,18 @@
         function filterEventsBySearch() {
             const searchTerm = document.getElementById('event-search-box').value.toLowerCase();
             
-            if (!churchData || !churchData[currentUnitId]) return;
+            if (!currentUnitId || !allUnitsData[currentUnitId] || !allUnitsData[currentUnitId].events) {
+                // Se os eventos ainda não foram carregados, não faz nada
+                return;
+            }
 
-            const now = new Date();
-            const allFutureEvents = churchData[currentUnitId].events.filter(event => new Date(event.endDate) >= now);
-            const unitName = churchData[currentUnitId].name;
+            const allFutureEvents = allUnitsData[currentUnitId].events;
+            const unitName = allUnitsData[currentUnitId].name;
+            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
             
             if (!searchTerm) {
                 updateEventSlider(allFutureEvents, unitName);
+                noResultsMsg.textContent = "Nenhum evento futuro encontrado para esta unidade.";
                 return;
             }
             
@@ -562,17 +725,26 @@
             );
             
             updateEventSlider(filteredEvents, unitName);
+            
+            if (filteredEvents.length === 0) {
+                noResultsMsg.textContent = "Nenhum evento encontrado com esse nome.";
+            }
         }
 
-        // Função para formatar datas para o link do Google Calendar
         function createGoogleCalendarLink(event, location) {
             const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
+            
+            // Tenta formatar as datas ISO. Ex: "2025-11-16T18:30:00"
             const formatISODate = (isoStr) => isoStr.replace(/-|:|\.\d+/g, '');
-
-            // Formata as datas (se existirem)
-            const dates = event.startDate && event.endDate 
-                ? `${formatISODate(event.startDate)}/${formatISODate(event.endDate)}`
-                : '';
+            
+            let dates = '';
+            if (event.startDate && event.endDate) {
+                try {
+                     dates = `${formatISODate(event.startDate)}/${formatISODate(event.endDate)}`;
+                } catch(e) {
+                    console.warn("Não foi possível formatar data do evento para Google Calendar", e);
+                }
+            }
 
             const text = encodeURIComponent(event.title);
             const details = encodeURIComponent(`Participe conosco do evento "${event.title}" na ${location}.`);
@@ -581,79 +753,6 @@
             return `${baseUrl}&text=${text}&dates=${dates}&details=${details}&location=${loc}`;
         }
 
-        // --- 2. INICIALIZAÇÃO ---
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeApp();
-        });
-
-        function initializeApp() {
-            // Garante que os ícones do Lucide sejam renderizados
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-
-            // Listener para o Filtro Global (Select)
-            const unitSelect = document.getElementById('unit-select-filter');
-            unitSelect.addEventListener('change', (event) => {
-                const unitId = event.target.value;
-                updatePageContent(unitId);
-            });
-
-            // Listener para a Caixa de Pesquisa de Eventos
-            document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
-
-            // Inicializa o Swiper (Carrossel) de Eventos
-            swiperEventos = new Swiper('#eventos-slider', {
-                slidesPerView: 1,
-                spaceBetween: 20,
-                navigation: {
-                    nextEl: '#eventos .swiper-button-next',
-                    prevEl: '#eventos .swiper-button-prev',
-                },
-                breakpoints: {
-                    640: {
-                        slidesPerView: 2,
-                        spaceBetween: 20,
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 30,
-                    },
-                    1280: { // Breakpoint extra para 4 slides em telas muito largas
-                        slidesPerView: 4,
-                        spaceBetween: 30,
-                    }
-                }
-            });
-
-            // Inicializa o Swiper (Carrossel) de Fotos
-            new Swiper('#fotos-slider', {
-                loop: true,
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-                },
-                spaceBetween: 30,
-                slidesPerView: 1, // Padrão para mobile
-                breakpoints: {
-                    768: { // Tablet
-                        slidesPerView: 2,
-                        spaceBetween: 30,
-                    },
-                    1024: { // Desktop
-                        slidesPerView: 3,
-                        spaceBetween: 30,
-                    }
-                },
-                navigation: {
-                    nextEl: '#fotos .swiper-button-next',
-                    prevEl: '#fotos .swiper-button-prev',
-                },
-            });
-
-            // Carrega o conteúdo da unidade padrão (Cajuru)
-            updatePageContent(currentUnitId);
-        }
     </script>
 </body>
 </html>
