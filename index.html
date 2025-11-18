@@ -123,11 +123,55 @@
             border-radius: 30px;
         }
 
-        /* Estilo do botão do álbum (baseado no CSS fornecido) - REMOVIDO
+        /* Estilo do botão do álbum (baseado no CSS fornecido) */
         .btn-album-animado {
-           ...
+            /* Variáveis adaptadas para a cor 'accent' (#005DCC) */
+            --btn-bg-1: hsla(211, 100%, 70% / 1); /* Azul claro (derivado do accent) */
+            --btn-bg-2: hsla(211, 100%, 40% / 1); /* Azul accent (#005DCC) */
+            --btn-bg-color: hsla(0, 0%, 100% / 1); /* Branco */
+            --radii: 0.5em; /* 8px */
+
+            cursor: pointer;
+            padding: 0.9em 1.4em;
+            min-width: 120px;
+            min-height: 44px;
+            font-size: 1.125rem; /* 18px, (era text-lg) */
+            font-weight: 700; /* (era font-bold) */
+            transition: 0.8s;
+            background-size: 280% auto;
+            background-image: linear-gradient(
+                325deg,
+                var(--btn-bg-2) 0%,
+                var(--btn-bg-1) 55%,
+                var(--btn-bg-2) 90%
+            );
+            border: none;
+            border-radius: var(--radii);
+            color: var(--btn-bg-color);
+            /* Sombra adaptada do CSS fornecido */
+            box-shadow:
+                0px 0px 20px rgba(0, 93, 204, 0.5), /* Sombra externa com cor accent */
+                0px 5px 5px -1px rgba(0, 93, 204, 0.25), /* Sombra direcional com cor accent */
+                inset 4px 4px 8px rgba(0, 123, 255, 0.5), /* Sombra interna clara */
+                inset -4px -4px 8px rgba(0, 68, 153, 0.35); /* Sombra interna escura */
         }
-        */
+
+        .btn-album-animado:hover {
+            background-position: right top; /* Ativa a animação do gradiente */
+        }
+
+        .btn-album-animado:is(:focus, :focus-visible, :active) {
+            outline: none;
+            box-shadow:
+                0 0 0 3px var(--btn-bg-color),
+                0 0 0 6px var(--btn-bg-2);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .btn-album-animado {
+                transition: linear;
+            }
+        }
     </style>
 </head>
 
@@ -156,6 +200,7 @@
                         <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                     </div>
                 </div>
+                <p id="location-status" class="text-center text-xs text-gray-400 mt-2 h-4"></p>
             </div>
         </div>
     </header>
@@ -384,7 +429,6 @@
     <!-- 4. Firebase SDKs -->
     <script type="module">
         // Importe as funções que você precisa
-        // **** ERRO CORRIGIDO AQUI (https://) ****
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
         import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy, setLogLevel } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
@@ -402,6 +446,16 @@
             measurementId: "G-9JPBKP1R12"
         };
         // =================================================================================
+
+        // --- COORDENADAS DAS UNIDADES PARA GEOLOCALIZAÇÃO ---
+        // (Hardcoded para simplificar o cálculo sem precisar ler tudo do DB antes)
+        const unitCoordinates = {
+            'cajuru': { lat: -21.274679, lng: -47.313766 },
+            'ribeiraopreto': { lat: -21.160206, lng: -47.840043 },
+            'santarosa': { lat: -21.492530, lng: -47.378818 },
+            'santoandre': { lat: -23.622757, lng: -46.541219 }
+        };
+
 
         // Variáveis globais
         let db;
@@ -443,12 +497,17 @@
             // Carrega os dados das unidades e preenche o dropdown
             await loadUnitsDropdown();
 
+            // Tenta detectar a localização para selecionar a unidade
+            attemptGeolocation();
+
             // Adiciona o listener ao dropdown
             const unitSelect = document.getElementById('unit-select-filter');
             unitSelect.addEventListener('change', (event) => {
                 const unitId = event.target.value;
                 if(unitId) {
                     updatePageContent(unitId);
+                    // Limpa a mensagem de localização se o usuário trocar manualmente
+                    document.getElementById('location-status').textContent = "";
                 }
             });
 
@@ -487,6 +546,74 @@
             });
         }
 
+        // --- GEOLOCALIZAÇÃO ---
+
+        function attemptGeolocation() {
+            const statusText = document.getElementById('location-status');
+
+            if ("geolocation" in navigator) {
+                statusText.textContent = "Localizando unidade mais próxima...";
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLat = position.coords.latitude;
+                        const userLng = position.coords.longitude;
+                        
+                        const closestUnitId = findNearestUnit(userLat, userLng);
+                        
+                        if (closestUnitId && closestUnitId !== currentUnitId) {
+                            console.log(`Geolocalização: Unidade mais próxima é ${closestUnitId}`);
+                            updatePageContent(closestUnitId);
+                            // Atualiza o visual do select
+                            document.getElementById('unit-select-filter').value = closestUnitId;
+                            statusText.textContent = `Localizado: ${allUnitsData[closestUnitId].name}`;
+                        } else {
+                            statusText.textContent = "";
+                        }
+                    },
+                    (error) => {
+                        console.warn("Geolocalização negada ou falhou:", error.message);
+                        statusText.textContent = ""; // Limpa msg, deixa no padrão (Cajuru)
+                    }
+                );
+            } else {
+                console.log("Geolocalização não suportada.");
+            }
+        }
+
+        function findNearestUnit(userLat, userLng) {
+            let minDistance = Infinity;
+            let closestUnit = null;
+
+            for (const [unitId, coords] of Object.entries(unitCoordinates)) {
+                const distance = getDistanceFromLatLonInKm(userLat, userLng, coords.lat, coords.lng);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestUnit = unitId;
+                }
+            }
+            return closestUnit;
+        }
+
+        // Fórmula de Haversine para calcular distância em km
+        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Raio da terra em km
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const d = R * c; // Distância em km
+            return d;
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
+        }
+
+
         // --- Funções de Carregamento de Dados (Firestore) ---
 
         async function loadUnitsDropdown() {
@@ -503,28 +630,35 @@
                 }
 
                 let optionsHtml = '';
-                let firstUnitId = null;
+                // Define Cajuru como padrão caso a geolocalização falhe
+                let defaultUnitId = 'cajuru'; 
+                let foundDefault = false;
 
                 querySnapshot.forEach((doc) => {
-                    // ADICIONADO: Filtra a unidade 'global' da lista pública
+                    // Filtra a unidade 'global' da lista pública
                     if (doc.id === 'global') return; 
 
                     const unit = doc.data();
                     unit.id = doc.id; // Armazena o ID do documento
                     allUnitsData[doc.id] = unit; // Salva no cache
                     
-                    if (!firstUnitId) firstUnitId = doc.id; // Pega a primeira unidade como padrão
+                    if (doc.id === defaultUnitId) foundDefault = true;
                     
                     optionsHtml += `<option value="${doc.id}">${unit.name.toUpperCase()}</option>`;
                 });
 
                 unitSelect.innerHTML = optionsHtml;
                 
-                // Seleciona e carrega a primeira unidade da lista
-                if (firstUnitId) {
-                    currentUnitId = firstUnitId;
-                    unitSelect.value = firstUnitId;
-                    updatePageContent(firstUnitId);
+                // Se Cajuru não existir no banco, pega o primeiro que vier
+                if (!foundDefault && Object.keys(allUnitsData).length > 0) {
+                    defaultUnitId = Object.keys(allUnitsData)[0];
+                }
+
+                // Carrega a unidade padrão inicialmente
+                if (defaultUnitId) {
+                    currentUnitId = defaultUnitId;
+                    unitSelect.value = defaultUnitId;
+                    updatePageContent(defaultUnitId);
                 }
 
             } catch (error) {
@@ -611,7 +745,6 @@
                 });
 
                 // Remove duplicatas (improvável, mas bom ter)
-                // (Nota: JSON.stringify/parse é um truque para 'deep unique')
                 const uniqueEvents = allEvents.map(e => JSON.stringify(e));
                 const uniqueSet = new Set(uniqueEvents);
                 const eventsToShow = Array.from(uniqueSet).map(s => JSON.parse(s));
