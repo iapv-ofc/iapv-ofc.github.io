@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="_vbBwR2qhq2Km07SbSLoWRYjwh2v9AOg4arKykouJVE" />
+
     <!-- SEO Básico -->
     <title>IAPV - Igreja Apostólica Palavra e Verdade | Uma Igreja em Célula</title>
     <meta name="description" content="Bem-vindo à IAPV - Igreja Apostólica Palavra e Verdade. Somos uma igreja em célula focada em comunhão, adoração e discipulado. Encontre uma unidade em Cajuru, Ribeirão Preto, Santa Rosa e região.">
@@ -13,16 +16,20 @@
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://site-iapv-9fdd1.web.app/">
     <meta property="og:title" content="IAPV - Igreja Apostólica Palavra e Verdade">
     <meta property="og:description" content="Uma igreja em célula. Venha nos visitar e conhecer nossa família!">
     <meta property="og:image" content="https://i.ibb.co/kg5D1brF/IMG-7186.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://site-iapv-9fdd1.web.app/">
     <meta property="twitter:title" content="IAPV - Igreja Apostólica Palavra e Verdade">
     <meta property="twitter:description" content="Uma igreja em célula. Venha nos visitar e conhecer nossa família!">
     <meta property="twitter:image" content="https://i.ibb.co/kg5D1brF/IMG-7186.jpg">
 
+    <link rel="icon" href="images/simbolo-iapv.svg?v=1" type="image/svg+xml">
+    
     <!-- Fonte Montserrat (Google Fonts) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,7 +70,6 @@
             width: 44px;
             height: 44px;
             transition: all 0.2s ease-in-out;
-            z-index: 20;
         }
         .swiper-button-next:after,
         .swiper-button-prev:after {
@@ -131,7 +137,7 @@
             border-radius: 30px;
             box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
             padding: 0; 
-            overflow: hidden;
+            @apply dark:shadow-black/30;
         }
 
         .photo-gallery-card-frame img {
@@ -139,11 +145,6 @@
             height: 100%;
             object-fit: cover;
             border-radius: 30px;
-            transition: transform 0.3s ease;
-        }
-        
-        .photo-gallery-card-frame:hover img {
-            transform: scale(1.05);
         }
 
         .btn-album-animado {
@@ -175,7 +176,7 @@
             outline: none;
             box-shadow: 0 0 0 3px var(--btn-bg-color), 0 0 0 6px var(--btn-bg-2);
         }
-        
+
         /* Efeito para os Logos dos Projetos */
         .project-logo {
             filter: grayscale(100%);
@@ -202,17 +203,17 @@
     <header class="h-screen min-h-[600px] w-full flex flex-col items-center justify-center relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://i.ibb.co/kg5D1brF/IMG-7186.jpg');">
         <div class="absolute inset-0 bg-black/60 z-0"></div>
 
-        <div class="relative z-10 flex flex-col items-center text-center px-4 w-full max-w-4xl">
-            <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold text-white shadow-lg tracking-tight">
-                Bem vindo(a) à Igreja Palavra e Verdade
+        <div class="relative z-10 flex flex-col items-center text-center px-4">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white shadow-lg">
+                Bem vindo(a) á Igreja Palavra e Verdade
             </h1>
-            <p class="mt-4 text-base sm:text-lg md:text-xl text-gray-200 font-light shadow-md tracking-wide">
+            <p class="mt-4 text-base sm:text-lg md:text-xl text-gray-200 font-light shadow-md">
                 Uma igreja em célula
             </p>
 
-            <div class="mt-12 w-full max-w-sm">
-                <label for="unit-select-filter" class="text-lg text-white mb-4 block font-medium">Selecione sua unidade:</label>
-                <div class="relative w-full">
+            <div class="mt-12">
+                <label for="unit-select-filter" class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
+                <div class="relative w-full max-w-sm mx-auto px-4 sm:px-0">
                     <select id="unit-select-filter" class="custom-select-filter">
                         <option value="">Carregando unidades...</option>
                     </select>
@@ -220,7 +221,7 @@
                         <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                     </div>
                 </div>
-                <p id="location-status" class="text-center text-xs text-gray-400 mt-2 h-4 font-medium"></p>
+                <p id="location-status" class="text-center text-xs text-gray-400 mt-2 h-4"></p>
             </div>
         </div>
     </header>
@@ -269,7 +270,7 @@
         <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" />
 
         <!-- ===== SEÇÃO 3: EVENTOS ===== -->
-        <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto min-h-[600px]">
+        <section id="eventos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Eventos</h2>
             <p class="text-lg text-gray-600 dark:text-gray-400 text-center mb-10">
                 Fique por dentro da nossa agenda para a unidade <span id="eventos-unidade" class="font-bold text-accent">Carregando...</span>
@@ -277,26 +278,25 @@
 
             <!-- Caixa de Pesquisa -->
             <div class="mb-8 max-w-lg mx-auto">
-                <input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent shadow-sm transition-all">
+                <input type="text" id="event-search-box" placeholder="Pesquisar evento..." class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent">
             </div>
 
             <!-- Carrossel (Swiper.js) -->
-            <div class="relative px-8 md:px-12">
-                <div id="eventos-slider" class="swiper-container overflow-hidden pb-10">
+            <div class="relative">
+                <div id="eventos-slider" class="swiper-container overflow-hidden">
                     <div class="swiper-wrapper" id="eventos-wrapper">
                         <!-- Os slides serão injetados aqui pelo JavaScript -->
                     </div>
-                    <div class="swiper-pagination"></div>
                 </div>
                 <!-- Botões de Navegação -->
-                <div class="swiper-button-prev !hidden md:!flex"></div>
-                <div class="swiper-button-next !hidden md:!flex"></div>
+                <div class="swiper-button-prev -left-4 md:-left-12"></div>
+                <div class="swiper-button-next -right-4 md:-right-12"></div>
             </div>
 
             <!-- Mensagem de "Nenhum resultado" -->
-            <div id="eventos-nenhum-resultado" class="text-center mt-8 hidden">
-                 <p class="text-gray-500 dark:text-gray-400 text-lg">Nenhum evento encontrado.</p>
-            </div>
+            <p id="eventos-nenhum-resultado" class="text-center text-gray-500 dark:text-gray-400 mt-8 text-lg hidden">
+                Nenhum evento encontrado.
+            </p>
         </section>
 
         <hr class="border-gray-300 dark:border-gray-700/50 max-w-6xl mx-auto" />
@@ -311,23 +311,23 @@
                         <div class="swiper-wrapper items-center select-none">
                             <!-- Logo 1 -->
                             <div class="swiper-slide flex justify-center p-4">
-                                <img src="https://i.ibb.co/ns6F89BY/Kids.png" alt="Projeto Kids" class="project-logo max-h-20 w-auto object-contain">
+                                <img src="https://placehold.co/200x100/transparent/555?text=Projeto+Kids" alt="Projeto Kids" class="project-logo max-h-20 w-auto object-contain">
                             </div>
                             <!-- Logo 2 -->
                             <div class="swiper-slide flex justify-center p-4">
-                                <img src="https://i.ibb.co/rR6MXrDn/Acamp.png" alt="Ação Social" class="project-logo max-h-20 w-auto object-contain">
+                                <img src="https://placehold.co/200x100/transparent/555?text=Ação+Social" alt="Ação Social" class="project-logo max-h-20 w-auto object-contain">
                             </div>
                             <!-- Logo 3 -->
                             <div class="swiper-slide flex justify-center p-4">
-                                <img src="https://i.ibb.co/QjkzvbS8/Remidas.png" alt="Ministério de Louvor" class="project-logo max-h-20 w-auto object-contain">
+                                <img src="https://placehold.co/200x100/transparent/555?text=Louvor" alt="Ministério de Louvor" class="project-logo max-h-20 w-auto object-contain">
                             </div>
                             <!-- Logo 4 -->
                             <div class="swiper-slide flex justify-center p-4">
-                                <img src="https://i.ibb.co/pBQFNnZk/CNX.png" alt="Ministério de Mulheres" class="project-logo max-h-20 w-auto object-contain">
+                                <img src="https://placehold.co/200x100/transparent/555?text=Mulheres" alt="Ministério de Mulheres" class="project-logo max-h-20 w-auto object-contain">
                             </div>
                             <!-- Logo 5 -->
                             <div class="swiper-slide flex justify-center p-4">
-                                <img src="https://i.ibb.co/TBLxprxz/Eden.png" alt="Ministério de Homens" class="project-logo max-h-20 w-auto object-contain">
+                                <img src="https://placehold.co/200x100/transparent/555?text=Homens" alt="Ministério de Homens" class="project-logo max-h-20 w-auto object-contain">
                             </div>
                             <!-- Logo 6 -->
                             <div class="swiper-slide flex justify-center p-4">
@@ -345,58 +345,58 @@
         <section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">Galeria de Fotos</h2>
             
-            <div class="relative px-8 md:px-12">
-                <div id="fotos-slider" class="swiper-container overflow-hidden pb-8">
+            <div class="relative">
+                <div id="fotos-slider" class="swiper-container overflow-hidden">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/qMGGTywr/IMG-8079.jpg" alt="Foto 1" loading="lazy"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/gLgBVJ8W/IMG-1839.jpg" alt="Foto 2" loading="lazy"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/BKCn1r03/IMG-4173.jpg" alt="Foto 3" loading="lazy"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://placehold.co/400x500/5E35B1/EDE7F6?text=FotoCajuru1" alt="Foto 4" loading="lazy"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/1GR4CFN0/Firefly-20251118174131.png" alt="Foto 5" loading="lazy"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/hFxtcRX5/IMG-2089.jpg" alt="Foto 6" loading="lazy"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/gZd68K20/IMG-7168.jpg" alt="Foto 7" loading="lazy"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://placehold.co/400x500/1f2937/9ca3af?text=FotoCajuru2" alt="Foto 8" loading="lazy"></div></div>
+                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/qMGGTywr/IMG-8079.jpg" alt="Foto 1"></div></div>
+                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/gLgBVJ8W/IMG-1839.jpg" alt="Foto 2"></div></div>
+                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/BKCn1r03/IMG-4173.jpg" alt="Foto 3"></div></div>
+                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://placehold.co/400x500/5E35B1/EDE7F6?text=FotoCajuru1" alt="Foto 4"></div></div>
+                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/1GR4CFN0/Firefly-20251118174131.png" alt="Foto 5"></div></div>
+                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/hFxtcRX5/IMG-2089.jpg" alt="Foto 6"></div></div>
+                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/gZd68K20/IMG-7168.jpg" alt="Foto 7"></div></div>
+                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://placehold.co/400x500/1f2937/9ca3af?text=FotoCajuru2" alt="Foto 8"></div></div>
                     </div>
                 </div>
-                <div class="swiper-button-prev !hidden md:!flex"></div>
-                <div class="swiper-button-next !hidden md:!flex"></div>
+                <div class="swiper-button-prev -left-4 md:-left-12"></div>
+                <div class="swiper-button-next -right-4 md:-right-12"></div>
             </div>
 
             <!-- Botão do Álbum -->
             <div class="text-center mt-10">
-                <a id="fotos-album-link" href="#" target="_blank" class="btn-album-animado inline-flex items-center justify-center text-white no-underline">
-                    Ver álbum completo
+                <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-accent text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-200 hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2">
+                    Ver álbum completo de <span id="fotos-unidade-nome">Carregando...</span>
                 </a>
             </div>
         </section>
 
         <!-- ===== SEÇÃO 5: CONTATO E MAPA ===== -->
-        <footer id="contato" class="py-20 px-4 bg-gray-100 border-t border-gray-200">
+        <footer id="contato" class="py-20 px-4 bg-gray-100 dark:bg-gray-900/50">
             <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
                 <!-- Coluna Esquerda: Mapa -->
-                <div class="h-96 md:h-full min-h-[400px] rounded-2xl overflow-hidden shadow-lg bg-gray-200">
+                <div class="h-96 md:h-full min-h-[400px] rounded-lg overflow-hidden">
                     <iframe id="mapa-iframe" src="" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
                 <!-- Coluna Direita: Informações -->
                 <div class="flex flex-col justify-center gap-10">
                     <div class="flex items-start gap-4">
-                        <div class="pt-1"><i data-lucide="map-pin" class="lucide-icon w-8 h-8 text-accent"></i></div>
-                        <div><h4 class="text-xl font-bold mb-1">Endereço</h4><p id="contato-endereco" class="text-lg text-gray-700">Carregando...</p></div>
+                        <div class="pt-1"><i data-lucide="map-pin" class="lucide-icon w-6 h-6 text-accent"></i></div>
+                        <div><h4 class="text-xl font-bold mb-1">Endereço</h4><p id="contato-endereco" class="text-lg text-gray-700 dark:text-gray-300">Carregando...</p></div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <div class="pt-1"><i data-lucide="clock" class="lucide-icon w-8 h-8 text-accent"></i></div>
-                        <div><h4 class="text-xl font-bold mb-1">Horário dos Cultos</h4><p id="contato-horarios" class="text-lg text-gray-700 whitespace-pre-line">Carregando...</p></div>
+                        <div class="pt-1"><i data-lucide="clock" class="lucide-icon w-6 h-6 text-accent"></i></div>
+                        <div><h4 class="text-xl font-bold mb-1">Horário dos Cultos</h4><p id="contato-horarios" class="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line">Carregando...</p></div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <div class="pt-1"><i data-lucide="heart-handshake" class="lucide-icon w-8 h-8 text-accent"></i></div>
+                        <div class="pt-1"><i data-lucide="heart-handshake" class="lucide-icon w-6 h-6 text-accent"></i></div>
                         <div>
                             <h4 class="text-xl font-bold mb-1">Siga-nos</h4>
                             <div class="flex gap-5 mt-2">
-                                <a id="social-instagram" href="#" target="_blank" class="text-gray-500 hover:text-accent transition-colors transform hover:scale-110">
-                                    <svg aria-hidden="true" focusable="false" class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                <a id="social-instagram" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
+                                    <svg aria-hidden="true" focusable="false" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                                 </a>
-                                <a id="social-youtube" href="#" target="_blank" class="text-gray-500 hover:text-accent transition-colors transform hover:scale-110">
-                                    <svg aria-hidden="true" focusable="false" class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                <a id="social-youtube" href="#" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors">
+                                    <svg aria-hidden="true" focusable="false" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                                 </a>
                             </div>
                         </div>
@@ -409,10 +409,9 @@
     <!-- ===== JAVASCRIPT PRINCIPAL ===== -->
     
     <script type="module">
-        // Usando versão 9/10 do Firebase que é mais estável em CDNs públicos
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy, setLogLevel } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB1-NkxI4ZxBqsHIK6dzq3c365HLl_DZFs",
@@ -443,14 +442,12 @@
             console.log("Firebase inicializado com sucesso!");
         } catch (error) {
             console.error("Erro ao inicializar o Firebase: ", error);
-            document.getElementById('eventos-unidade').textContent = "Modo Offline";
-            document.getElementById('eventos-wrapper').innerHTML = '<div class="w-full p-4 text-center"><p class="text-red-500 bg-red-100 p-3 rounded-lg inline-block">Não foi possível conectar ao banco de dados. Verifique sua conexão ou as regras do Firebase.</p></div>';
+            document.getElementById('eventos-unidade').textContent = "Erro de conexão";
+            document.getElementById('eventos-wrapper').innerHTML = '<p class="text-center text-red-500">Não foi possível conectar ao banco de dados.</p>';
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             if(db) initializeAppLogic();
-            // Força a renderização dos ícones
-            if (typeof lucide !== 'undefined') lucide.createIcons();
         });
 
         async function initializeAppLogic() {
@@ -475,15 +472,11 @@
             swiperEventos = new Swiper('#eventos-slider', {
                 slidesPerView: 1,
                 spaceBetween: 20,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                navigation: { nextEl: '#eventos .swiper-button-next', prevEl: '#eventos .swiper-button-prev' },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                 breakpoints: {
                     640: { slidesPerView: 2, spaceBetween: 20 },
                     1024: { slidesPerView: 3, spaceBetween: 30 },
-                    1280: { slidesPerView: 3, spaceBetween: 30 }
+                    1280: { slidesPerView: 4, spaceBetween: 30 }
                 }
             });
 
@@ -524,11 +517,9 @@
                     (position) => {
                         const closestUnitId = findNearestUnit(position.coords.latitude, position.coords.longitude);
                         if (closestUnitId && closestUnitId !== currentUnitId) {
-                            if(allUnitsData[closestUnitId]) {
-                                updatePageContent(closestUnitId);
-                                document.getElementById('unit-select-filter').value = closestUnitId;
-                                statusText.textContent = `Você está perto da IAPV ${allUnitsData[closestUnitId].name}`;
-                            }
+                            updatePageContent(closestUnitId);
+                            document.getElementById('unit-select-filter').value = closestUnitId;
+                            statusText.textContent = `Localizado: ${allUnitsData[closestUnitId].name}`;
                         } else {
                             statusText.textContent = "";
                         }
@@ -568,7 +559,6 @@
                 const querySnapshot = await getDocs(query(unitsCollection));
                 if (querySnapshot.empty) {
                     unitSelect.innerHTML = '<option value="">Nenhuma unidade cadastrada</option>';
-                    // Fallback manual se o banco estiver vazio
                     return;
                 }
                 let optionsHtml = '';
@@ -584,14 +574,14 @@
                 });
                 unitSelect.innerHTML = optionsHtml;
                 if (!foundDefault && Object.keys(allUnitsData).length > 0) defaultUnitId = Object.keys(allUnitsData)[0];
-                if (defaultUnitId && allUnitsData[defaultUnitId]) {
+                if (defaultUnitId) {
                     currentUnitId = defaultUnitId;
                     unitSelect.value = defaultUnitId;
                     updatePageContent(defaultUnitId);
                 }
             } catch (error) {
                 console.error("Erro ao carregar unidades: ", error);
-                unitSelect.innerHTML = '<option value="">Erro ao carregar (Firebase)</option>';
+                unitSelect.innerHTML = '<option value="">Erro ao carregar</option>';
             }
         }
 
@@ -600,44 +590,22 @@
             const unitData = allUnitsData[unitId];
             if (!unitData) return;
 
-            // Atualiza informações estáticas
             document.getElementById('unit-select-filter').value = unitId;
             document.getElementById('eventos-unidade').textContent = unitData.name;
-            document.getElementById('fotos-unidade-nome').textContent = unitData.name || "esta unidade";
+            loadEventsForUnit(unitId, unitData.name);
+            document.getElementById('fotos-unidade-nome').textContent = unitData.name;
             document.getElementById('fotos-album-link').href = unitData.albumUrl || '#';
             document.getElementById('mapa-iframe').src = unitData.mapUrl || '';
             document.getElementById('contato-endereco').textContent = unitData.address || 'Endereço não informado';
             document.getElementById('contato-horarios').textContent = unitData.times || 'Horários não informados';
-            
-            const instaBtn = document.getElementById('social-instagram');
-            const ytBtn = document.getElementById('social-youtube');
-            
-            if (unitData.socials?.instagram) {
-                instaBtn.href = unitData.socials.instagram;
-                instaBtn.classList.remove('hidden');
-            } else {
-                instaBtn.classList.add('hidden');
-            }
-
-            if (unitData.socials?.youtube) {
-                ytBtn.href = unitData.socials.youtube;
-                ytBtn.classList.remove('hidden');
-            } else {
-                ytBtn.classList.add('hidden');
-            }
-
+            document.getElementById('social-instagram').href = unitData.socials?.instagram || '#';
+            document.getElementById('social-youtube').href = unitData.socials?.youtube || '#';
             document.getElementById('event-search-box').value = '';
-            
-            // Carrega Eventos
-            loadEventsForUnit(unitId, unitData.name);
-            
-            // Recarrega Icones (importante em SPAs, mas bom prevenir aqui)
-            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         async function loadEventsForUnit(unitId, unitName) {
             const wrapper = document.getElementById('eventos-wrapper');
-            wrapper.innerHTML = '<div class="swiper-slide w-full text-center pt-10"><p class="text-gray-500">Carregando eventos...</p></div>';
+            wrapper.innerHTML = '<p class="text-center text-gray-500">Carregando eventos...</p>';
             const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
             noResultsMsg.classList.add('hidden');
 
@@ -650,7 +618,6 @@
             const qGlobal = query(globalEventsCollection, where("endDate", ">=", todayString));
 
             try {
-                // Tenta carregar. Se falhar por permissão, vai pro catch.
                 const [unitSnapshot, globalSnapshot] = await Promise.all([
                     getDocs(qUnit),
                     getDocs(qGlobal)
@@ -666,9 +633,8 @@
                         const resultDate = new Date();
                         
                         // Calcula quantos dias faltam até o próximo dia da semana desejado
-                        // 0 = Domingo, 1 = Segunda...
-                        let dayOfWeekInt = parseInt(data.dayOfWeek);
-                        let daysUntil = (dayOfWeekInt - today.getDay() + 7) % 7;
+                        // Fórmula: (DiaAlvo - DiaHoje + 7) % 7
+                        let daysUntil = (data.dayOfWeek - today.getDay() + 7) % 7;
                         
                         // Se cair hoje (0), verifica se o horário já passou
                         if (daysUntil === 0) {
@@ -690,9 +656,9 @@
                         const day = String(resultDate.getDate()).padStart(2, '0');
                         const month = String(resultDate.getMonth() + 1).padStart(2, '0');
                         
-                        data.displayNextDate = `${day}/${month}`; 
-                        data.date = `Todo(a) ${getDayName(data.dayOfWeek)}`; 
-                        data.startDate = resultDate.toISOString(); 
+                        data.displayNextDate = `${day}/${month}`; // Ex: 24/11
+                        data.date = `Todo(a) ${getDayName(data.dayOfWeek)}`; // Texto principal
+                        data.startDate = resultDate.toISOString(); // Data ISO para o sort()
                         data.isRecurringInstance = true;
                     }
                     allEvents.push(data);
@@ -701,25 +667,22 @@
                 unitSnapshot.forEach(pushEvent);
                 globalSnapshot.forEach(pushEvent);
 
-                // Remove duplicatas e ordena
+                // Remove duplicatas (por segurança) e ordena
                 const uniqueEvents = Array.from(new Set(allEvents.map(e => JSON.stringify(e)))).map(s => JSON.parse(s));
                 uniqueEvents.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
                 
-                // Salva no cache local de memória
-                if (!allUnitsData[unitId]) allUnitsData[unitId] = {};
                 allUnitsData[unitId].events = uniqueEvents;
-                
                 updateEventSlider(uniqueEvents, unitName);
 
             } catch (error) {
-                console.error("Erro ao buscar eventos (possível erro de permissão ou rede): ", error);
-                wrapper.innerHTML = `<div class="swiper-slide w-full text-center pt-10"><p class="text-red-500">Não foi possível carregar a agenda.</p></div>`;
+                console.error("Erro ao buscar eventos: ", error);
+                wrapper.innerHTML = `<p class="text-center text-red-500">Erro ao carregar eventos.</p>`;
             }
         }
 
         function getDayName(dayIndex) {
             const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-            return days[parseInt(dayIndex)] || '';
+            return days[dayIndex] || '';
         }
 
         function createEventCard(event, unitName) {
@@ -731,36 +694,30 @@
                 ? `<span class="block text-xs font-bold text-accent uppercase tracking-wider mb-1">Próximo: ${event.displayNextDate}</span>${event.date}` 
                 : event.date;
 
-            return `
-                <div class="swiper-slide h-auto pb-10 px-1">
-                    <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" 
-                       class="group relative block w-full h-full min-h-[320px] bg-white dark:bg-gray-800 rounded-[30px] shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700 flex flex-col">
-                        
-                        <div class="relative h-32 bg-accent/10 w-full flex items-center justify-center overflow-hidden">
-                             <div class="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent"></div>
-                             <h1 class="text-4xl font-black text-accent/20 select-none scale-150 transform group-hover:scale-110 transition-transform duration-700">IAPV</h1>
-                        </div>
+            const calendarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon inline-block text-accent"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
+            const mapPinIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon inline-block text-accent"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
 
-                        <div class="relative z-[1] flex flex-col flex-grow p-6 text-center -mt-10">
-                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-4 mb-4 flex-grow flex flex-col justify-center min-h-[140px]">
-                                <h4 class="text-xl font-bold text-gray-800 dark:text-white mb-3 leading-tight line-clamp-2">${event.title}</h4>
-                                
-                                <div class="text-sm text-gray-600 dark:text-gray-300 space-y-2">
-                                    <div class="flex items-center justify-center font-medium text-accent">
-                                        <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
+            return `
+                <div class="swiper-slide h-auto p-4">
+                    <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" 
+                       class="group relative block w-full h-72 min-h-[280px] bg-white rounded-[30px] shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-200"
+                       style="box-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgba(0, 93, 204, 0.1));">
+                        <div class="relative z-[1] flex flex-col justify-center items-center h-full p-5 text-center">
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 leading-tight">${event.title}</h4>
+                                <div class="text-sm text-gray-600 mb-3 flex flex-col items-center justify-center gap-1">
+                                    <div class="flex items-center font-medium">
+                                        ${calendarIcon}
                                         <span class="ml-1.5">${event.time}</span>
                                     </div>
-                                    <div class="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wide border-t border-gray-100 dark:border-gray-700 pt-2 mt-1">
-                                        ${dateDisplay}
-                                    </div>
-                                    <div class="flex items-center justify-center text-xs text-gray-400 pt-1">
-                                        <i data-lucide="map-pin" class="w-3 h-3 mr-1"></i>
-                                        <span class="truncate max-w-[150px]">${location}</span>
-                                    </div>
+                                    <span class="text-gray-500">${dateDisplay}</span>
+                                </div>
+                                <div class="text-sm text-gray-600 flex items-center justify-center">
+                                    ${mapPinIcon}
+                                    <span class="ml-1.5 truncate max-w-[200px]">${location}</span>
                                 </div>
                             </div>
-                            
-                            <span class="inline-block w-full bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-bold py-2 px-4 rounded-lg text-xs transition-colors duration-200 group-hover:bg-accent group-hover:text-white">
+                            <span class="mt-6 inline-block bg-accent text-white font-bold py-2 px-4 rounded-lg text-xs transition-transform duration-200 group-hover:scale-105 shadow-md">
                                 Adicionar à Agenda
                             </span>
                         </div>
@@ -772,41 +729,34 @@
         function updateEventSlider(eventsToShow, unitName) {
             const wrapper = document.getElementById('eventos-wrapper');
             const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
-            
             if (!eventsToShow || eventsToShow.length === 0) {
                 wrapper.innerHTML = '';
                 noResultsMsg.classList.remove('hidden');
-                if(swiperEventos) swiperEventos.destroy(true, true); // Destroi para não bugar layout
+                noResultsMsg.textContent = "Nenhum evento futuro encontrado para esta unidade.";
             } else {
-                noResultsMsg.classList.add('hidden');
                 wrapper.innerHTML = eventsToShow.map(event => createEventCard(event, unitName)).join('');
-                
-                // Reinicializa icones nos novos cards
-                if (typeof lucide !== 'undefined') lucide.createIcons();
-
-                if (swiperEventos && swiperEventos.destroyed === false) {
-                    swiperEventos.update();
-                    swiperEventos.slideTo(0);
-                } else {
-                    initializeSwipers();
-                }
+                noResultsMsg.classList.add('hidden');
+            }
+            if (swiperEventos) {
+                swiperEventos.update();
+                swiperEventos.slideTo(0);
             }
         }
         
         function filterEventsBySearch() {
             const searchTerm = document.getElementById('event-search-box').value.toLowerCase();
             if (!currentUnitId || !allUnitsData[currentUnitId] || !allUnitsData[currentUnitId].events) return;
-            
             const allFutureEvents = allUnitsData[currentUnitId].events;
             const unitName = allUnitsData[currentUnitId].name;
-            
+            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
             if (!searchTerm) {
                 updateEventSlider(allFutureEvents, unitName);
+                noResultsMsg.textContent = "Nenhum evento futuro encontrado para esta unidade.";
                 return;
             }
-            
             const filteredEvents = allFutureEvents.filter(event => event.title.toLowerCase().includes(searchTerm));
             updateEventSlider(filteredEvents, unitName);
+            if (filteredEvents.length === 0) noResultsMsg.textContent = "Nenhum evento encontrado com esse nome.";
         }
 
         function createGoogleCalendarLink(event, location) {
@@ -814,21 +764,23 @@
             const formatISODate = (isoStr) => isoStr.replace(/-|:|\.\d+/g, '');
             let dates = '';
             if (event.startDate && event.endDate) {
+                // Para eventos recorrentes, gera link apenas para a PRÓXIMA ocorrência calculada
+                // Para garantir compatibilidade, criamos uma 'endDate' fictícia de 1h se não existir
                 let startStr = event.startDate;
                 let endStr = event.endDate;
                 
-                // Ajuste para recorrentes
+                // Se for recorrente, a 'endDate' do banco é 2099. Precisamos calcular a duração real do culto (ex: 2h)
                 if (event.isRecurringInstance) {
                     const startObj = new Date(event.startDate);
                     const endObj = new Date(startObj);
-                    endObj.setHours(endObj.getHours() + 2); // Assume 2h
+                    endObj.setHours(endObj.getHours() + 2); // Assume 2h de duração padrão
                     endStr = endObj.toISOString();
                 }
 
                 try {
                      dates = `${formatISODate(startStr)}/${formatISODate(endStr)}`;
                 } catch(e) {
-                    console.warn("Erro data calendário", e);
+                    console.warn("Erro ao formatar data calendário", e);
                 }
             }
             const text = encodeURIComponent(event.title);
