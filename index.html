@@ -486,13 +486,22 @@
             const horario = ev.Horário || ev.Horario || '';
             const img = ev.URL_Imagem || ev.Url_Imagem || ev.Imagem || 'https://via.placeholder.com/400x225?text=IAPV';
             
+            // Lógica para definir o Local do evento
+            let defaultLocation = '';
+            if (ev.Unidade_ID && ev.Unidade_ID.toLowerCase() !== 'global' && allUnitsData[ev.Unidade_ID]) {
+                defaultLocation = allUnitsData[ev.Unidade_ID].address;
+            } else if (currentUnitId && allUnitsData[currentUnitId]) {
+                defaultLocation = allUnitsData[currentUnitId].address;
+            }
+            const localFinal = ev.Local || ev.Endereço || ev.Endereco || defaultLocation;
+
             let dataFinal = ev.Data || '';
             if (typeof ev.Data === 'string' && ev.Data.includes('T')) {
                 const d = new Date(ev.Data);
                 if (!isNaN(d.getTime())) dataFinal = d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
             }
 
-            const calLink = generateGoogleCalendarLink(titulo, ev.Data, horario, desc);
+            const calLink = generateGoogleCalendarLink(titulo, ev.Data, horario, desc, localFinal);
 
             const slide = `
                 <div class="swiper-slide h-auto">
@@ -522,11 +531,16 @@
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    function generateGoogleCalendarLink(title, dateRaw, timeStr, desc) {
+    function generateGoogleCalendarLink(title, dateRaw, timeStr, desc, location) {
         const baseUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE";
         const params = new URLSearchParams();
         params.append('text', title);
         params.append('details', desc);
+        
+        // Adiciona a localização se ela existir
+        if (location) {
+            params.append('location', location);
+        }
 
         if (typeof dateRaw === 'string' && dateRaw.includes('T')) {
             const d = new Date(dateRaw);
