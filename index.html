@@ -237,8 +237,6 @@
                         <!-- O Javascript preencherá as fotos aqui -->
                     </div>
                 </div>
-                <div class="swiper-button-prev -left-4 md:-left-12"></div>
-                <div class="swiper-button-next -right-4 md:-right-12"></div>
             </div>
             <div class="text-center mt-10">
                 <a id="fotos-album-link" href="#" target="_blank" class="inline-block bg-accent text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-accent/90 transition-all">
@@ -444,8 +442,10 @@
             swiperFotos.update();
             if(fotosFiltradas.length > 3) {
                 swiperFotos.params.loop = true;
+                swiperFotos.autoplay.start();
             } else {
                 swiperFotos.params.loop = false;
+                swiperFotos.autoplay.stop();
             }
             swiperFotos.slideTo(0);
         }
@@ -597,9 +597,11 @@
         });
         
         swiperFotos = new Swiper('#fotos-slider', {
-            loop: true, autoplay: { delay: 3000 }, spaceBetween: 24, slidesPerView: 1,
-            breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
-            navigation: { nextEl: '#fotos .swiper-button-next', prevEl: '#fotos .swiper-button-prev' },
+            loop: true, 
+            autoplay: { delay: 3000, disableOnInteraction: false }, 
+            spaceBetween: 24, 
+            slidesPerView: 1,
+            breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
         });
     }
 
