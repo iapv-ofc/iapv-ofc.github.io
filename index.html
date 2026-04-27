@@ -203,16 +203,14 @@
             <p id="eventos-nenhum-resultado" class="text-center text-gray-500 mt-8 text-lg hidden">Nenhum evento encontrado.</p>
         </section>
 
-        <!-- ===== SEÇÃO 4: FOTOS ===== -->
+        <!-- ===== SEÇÃO 4: FOTOS (AGORA DINÂMICA) ===== -->
         <section id="fotos" class="py-20 px-4 w-full max-w-7xl mx-auto">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">Galeria de Fotos</h2>
             <div class="relative">
                 <div id="fotos-slider" class="swiper-container overflow-hidden">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/qMGGTywr/IMG-8079.jpg" alt="Foto 1"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/gLgBVJ8W/IMG-1839.jpg" alt="Foto 2"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/BKCn1r03/IMG-4173.jpg" alt="Foto 3"></div></div>
-                        <div class="swiper-slide p-2"><div class="photo-gallery-card-frame"><img src="https://i.ibb.co/1GR4CFN0/Firefly-20251118174131.png" alt="Foto 5"></div></div>
+                    <!-- Esqueleto pronto para receber as fotos dinâmicas -->
+                    <div class="swiper-wrapper" id="fotos-wrapper">
+                        <!-- O Javascript preencherá as fotos aqui -->
                     </div>
                 </div>
                 <div class="swiper-button-prev -left-4 md:-left-12"></div>
@@ -259,8 +257,10 @@
     };
 
     let swiperEventos;
+    let swiperFotos; // Nova variável para o Swiper de fotos
     let allUnitsData = {};
     let allEventsData = [];
+    let allFotosData = []; // Nova variável para guardar as fotos da planilha
     let currentUnitId = null;
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -273,29 +273,38 @@
 
     async function loadDataFromSheets() {
         try {
-            const [unidades, eventos] = await Promise.all([
+            // Agora buscamos unidades, eventos e fotos ao mesmo tempo
+            const [unidadesResponse, eventosResponse, fotosResponse] = await Promise.allSettled([
                 fetch(`${API_URL}?sheet=unidades`).then(r => r.json()),
-                fetch(`${API_URL}?sheet=eventos`).then(r => r.json())
+                fetch(`${API_URL}?sheet=eventos`).then(r => r.json()),
+                fetch(`${API_URL}?sheet=fotos`).then(r => r.json()) // Tentativa de buscar a aba "fotos"
             ]);
 
-            allEventsData = eventos;
+            const unidades = unidadesResponse.status === 'fulfilled' ? unidadesResponse.value : [];
+            allEventsData = eventosResponse.status === 'fulfilled' ? eventosResponse.value : [];
+            
+            // Se der erro (ex: aba não existe ainda), definimos como vazio
+            allFotosData = fotosResponse.status === 'fulfilled' && !fotosResponse.value.error ? fotosResponse.value : [];
+
             const unitSelect = document.getElementById('unit-select-filter');
             let options = '';
 
-            unidades.forEach(unit => {
-                allUnitsData[unit.ID] = {
-                    id: unit.ID, name: unit.Nome, address: unit.Endereço, times: unit.Horários,
-                    mapUrl: unit.Link_Mapa, albumUrl: unit.Link_Álbum, instagram: unit.Instagram, youtube: unit.YouTube
-                };
-                options += `<option value="${unit.ID}">${unit.Nome.toUpperCase()}</option>`;
-            });
+            if (unidades && unidades.length > 0) {
+                unidades.forEach(unit => {
+                    allUnitsData[unit.ID] = {
+                        id: unit.ID, name: unit.Nome, address: unit.Endereço, times: unit.Horários,
+                        mapUrl: unit.Link_Mapa, albumUrl: unit.Link_Álbum, instagram: unit.Instagram, youtube: unit.YouTube
+                    };
+                    options += `<option value="${unit.ID}">${unit.Nome.toUpperCase()}</option>`;
+                });
 
-            unitSelect.innerHTML = options;
-            const startUnit = allUnitsData['cajuru'] ? 'cajuru' : unidades[0].ID;
-            unitSelect.value = startUnit;
-            updatePageContent(startUnit);
-            attemptGeolocation();
-        } catch (e) { console.error("Erro na carga:", e); }
+                unitSelect.innerHTML = options;
+                const startUnit = allUnitsData['cajuru'] ? 'cajuru' : unidades[0].ID;
+                unitSelect.value = startUnit;
+                updatePageContent(startUnit);
+                attemptGeolocation();
+            }
+        } catch (e) { console.error("Erro na carga de dados:", e); }
     }
 
     function updatePageContent(unitId) {
@@ -313,8 +322,61 @@
         document.getElementById('mapa-iframe').src = unit.mapUrl;
 
         renderEvents(unitId);
+        renderFotos(unitId); // Chamamos a nova função de renderizar fotos
+
         // Garante que os ícones globais (estáticos) sejam carregados
         if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // --- NOVA FUNÇÃO: Renderiza as fotos dinamicamente ---
+    function renderFotos(unitId) {
+        const wrapper = document.getElementById('fotos-wrapper');
+        wrapper.innerHTML = ""; // Limpa as fotos atuais
+
+        // 1. Tenta achar fotos específicas dessa unidade ou 'global'
+        let fotosFiltradas = [];
+        if (allFotosData && allFotosData.length > 0) {
+             fotosFiltradas = allFotosData.filter(foto => {
+                const idFoto = foto.Unidade_ID || foto.Unidade_Id || '';
+                return idFoto.toLowerCase() === unitId.toLowerCase() || idFoto.toLowerCase() === 'global';
+            });
+        }
+
+        // 2. MODO DE SEGURANÇA (Fallback): Se a planilha "fotos" ainda não existe ou está vazia, usa fotos padrão
+        if (fotosFiltradas.length === 0) {
+            fotosFiltradas = [
+                { URL_Imagem: 'https://i.ibb.co/qMGGTywr/IMG-8079.jpg' },
+                { URL_Imagem: 'https://i.ibb.co/gLgBVJ8W/IMG-1839.jpg' },
+                { URL_Imagem: 'https://i.ibb.co/BKCn1r03/IMG-4173.jpg' },
+                { URL_Imagem: 'https://i.ibb.co/1GR4CFN0/Firefly-20251118174131.png' }
+            ];
+        }
+
+        // 3. Monta o HTML para cada foto
+        fotosFiltradas.forEach(foto => {
+            const imgUrl = foto.URL_Imagem || foto.Url_Imagem || foto.Imagem;
+            if (imgUrl) {
+                const slideHTML = `
+                    <div class="swiper-slide p-2">
+                        <div class="photo-gallery-card-frame">
+                            <img src="${imgUrl}" alt="Momento IAPV">
+                        </div>
+                    </div>`;
+                wrapper.innerHTML += slideHTML;
+            }
+        });
+
+        // 4. Atualiza o carrossel (Swiper) para ele recalcular o tamanho e rodar
+        if (swiperFotos) {
+            swiperFotos.update();
+            // Se houver fotos o suficiente, reativa o loop
+            if(fotosFiltradas.length > 3) {
+                swiperFotos.params.loop = true;
+            } else {
+                swiperFotos.params.loop = false;
+            }
+            swiperFotos.slideTo(0);
+        }
     }
 
     function renderEvents(unitId) {
@@ -351,7 +413,6 @@
                         <div class="p-6 flex flex-col flex-grow text-left">
                             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight">${titulo}</h3>
                             
-                            <!-- DATA E HORA SEM ICONES COMO SOLICITADO -->
                             <div class="flex flex-col gap-0.5 mb-4">
                                 <span class="text-accent font-bold text-sm uppercase tracking-wide">${dataFinal}</span>
                                 ${horario ? `<span class="text-gray-500 dark:text-gray-400 font-medium text-sm italic">${horario}</span>` : ''}
@@ -376,7 +437,9 @@
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
             breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 }, 1280: { slidesPerView: 4 } }
         });
-        new Swiper('#fotos-slider', {
+        
+        // Salvamos o Swiper das fotos na variável swiperFotos
+        swiperFotos = new Swiper('#fotos-slider', {
             loop: true, autoplay: { delay: 3000 }, spaceBetween: 24, slidesPerView: 1,
             breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
             navigation: { nextEl: '#fotos .swiper-button-next', prevEl: '#fotos .swiper-button-prev' },
