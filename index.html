@@ -78,7 +78,7 @@
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            padding: 12px 48px 12px 24px; 
+            padding: 12px 24px; 
             font-size: 16px;
             font-weight: 600;
             color: #e0e0e0;
@@ -123,6 +123,18 @@
         .event-card:hover .event-card-img-container img {
             transform: scale(1.1);
         }
+
+        /* Oculta a scrollbar customizada do menu dropdown */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
     </style>
 </head>
 
@@ -132,7 +144,7 @@
     <header class="h-screen min-h-[600px] w-full flex flex-col items-center justify-center relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://i.ibb.co/kg5D1brF/IMG-7186.jpg');">
         <div class="absolute inset-0 bg-black/60 z-0"></div>
 
-        <div class="relative z-10 flex flex-col items-center text-center px-4">
+        <div class="relative z-10 flex flex-col items-center text-center px-4 w-full">
             <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white shadow-lg">
                 Bem vindo(a) à Igreja Palavra e Verdade
             </h1>
@@ -140,13 +152,25 @@
                 Uma igreja em célula
             </p>
 
-            <div class="mt-12">
-                <label for="unit-select-filter" class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
-                <div class="relative w-full max-w-sm mx-auto px-4 sm:px-0">
-                    <select id="unit-select-filter" class="custom-select-filter">
-                        <option value="">Carregando unidades...</option>
-                    </select>
+            <div class="mt-12 w-full">
+                <label class="text-lg text-white mb-4 block">Selecione sua unidade:</label>
+                
+                <!-- DROPDOWN CUSTOMIZADO -->
+                <div class="w-full max-w-sm mx-auto px-4 sm:px-0">
+                    <div class="relative w-full text-left" id="custom-dropdown-container">
+                        <!-- Botão que abre o menu -->
+                        <button type="button" id="dropdown-trigger" class="custom-select-filter flex justify-between items-center w-full">
+                            <span id="dropdown-selected-text">Carregando unidades...</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-white/70 transition-transform duration-300" id="dropdown-icon"></i>
+                        </button>
+
+                        <!-- Lista de opções -->
+                        <ul id="dropdown-menu" class="absolute z-50 w-full mt-2 bg-black/70 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl overflow-y-auto max-h-60 hidden transition-all duration-200 opacity-0 transform -translate-y-2 custom-scrollbar">
+                            <!-- As opções serão injetadas aqui pelo JS -->
+                        </ul>
+                    </div>
                 </div>
+                
                 <p id="location-status" class="text-center text-xs text-gray-400 mt-2 h-4"></p>
             </div>
         </div>
@@ -257,37 +281,84 @@
     };
 
     let swiperEventos;
-    let swiperFotos; // Nova variável para o Swiper de fotos
+    let swiperFotos; 
     let allUnitsData = {};
     let allEventsData = [];
-    let allFotosData = []; // Nova variável para guardar as fotos da planilha
+    let allFotosData = []; 
     let currentUnitId = null;
+
+    // Elementos do Dropdown Customizado
+    const dropdownTrigger = document.getElementById('dropdown-trigger');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    const dropdownSelectedText = document.getElementById('dropdown-selected-text');
+    const dropdownIcon = document.getElementById('dropdown-icon');
 
     document.addEventListener('DOMContentLoaded', () => {
         initializeSwipers();
         loadDataFromSheets();
         
-        document.getElementById('unit-select-filter').addEventListener('change', (e) => updatePageContent(e.target.value));
         document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
+        
+        // Lógica de abrir/fechar o dropdown customizado
+        dropdownTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleDropdown();
+        });
+
+        // Fechar dropdown ao clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('custom-dropdown-container').contains(e.target)) {
+                closeDropdown();
+            }
+        });
+        
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     });
+
+    // Funções do Dropdown Customizado
+    function toggleDropdown() {
+        const isHidden = dropdownMenu.classList.contains('hidden');
+        if (isHidden) {
+            dropdownMenu.classList.remove('hidden');
+            dropdownIcon.classList.add('rotate-180');
+            setTimeout(() => {
+                dropdownMenu.classList.remove('opacity-0', '-translate-y-2');
+                dropdownMenu.classList.add('opacity-100', 'translate-y-0');
+            }, 10);
+        } else {
+            closeDropdown();
+        }
+    }
+
+    function closeDropdown() {
+        dropdownMenu.classList.remove('opacity-100', 'translate-y-0');
+        dropdownMenu.classList.add('opacity-0', '-translate-y-2');
+        dropdownIcon.classList.remove('rotate-180');
+        setTimeout(() => {
+            dropdownMenu.classList.add('hidden');
+        }, 200);
+    }
+
+    // Função exposta globalmente para ser chamada pelo HTML das opções
+    window.selectOption = function(id, name) {
+        dropdownSelectedText.textContent = name.toUpperCase();
+        updatePageContent(id);
+        closeDropdown();
+    };
 
     async function loadDataFromSheets() {
         try {
-            // Agora buscamos unidades, eventos e fotos ao mesmo tempo
             const [unidadesResponse, eventosResponse, fotosResponse] = await Promise.allSettled([
                 fetch(`${API_URL}?sheet=unidades`).then(r => r.json()),
                 fetch(`${API_URL}?sheet=eventos`).then(r => r.json()),
-                fetch(`${API_URL}?sheet=fotos`).then(r => r.json()) // Tentativa de buscar a aba "fotos"
+                fetch(`${API_URL}?sheet=fotos`).then(r => r.json()) 
             ]);
 
             const unidades = unidadesResponse.status === 'fulfilled' ? unidadesResponse.value : [];
             allEventsData = eventosResponse.status === 'fulfilled' ? eventosResponse.value : [];
-            
-            // Se der erro (ex: aba não existe ainda), definimos como vazio
             allFotosData = fotosResponse.status === 'fulfilled' && !fotosResponse.value.error ? fotosResponse.value : [];
 
-            const unitSelect = document.getElementById('unit-select-filter');
-            let options = '';
+            let optionsHTML = '';
 
             if (unidades && unidades.length > 0) {
                 unidades.forEach(unit => {
@@ -295,12 +366,20 @@
                         id: unit.ID, name: unit.Nome, address: unit.Endereço, times: unit.Horários,
                         mapUrl: unit.Link_Mapa, albumUrl: unit.Link_Álbum, instagram: unit.Instagram, youtube: unit.YouTube
                     };
-                    options += `<option value="${unit.ID}">${unit.Nome.toUpperCase()}</option>`;
+                    
+                    // Criação da opção na lista customizada
+                    optionsHTML += `
+                        <li class="px-6 py-4 hover:bg-white/10 cursor-pointer transition-colors text-white font-medium border-b border-white/10 last:border-0" 
+                            onclick="selectOption('${unit.ID}', '${unit.Nome}')">
+                            ${unit.Nome.toUpperCase()}
+                        </li>
+                    `;
                 });
 
-                unitSelect.innerHTML = options;
+                dropdownMenu.innerHTML = optionsHTML;
+                
                 const startUnit = allUnitsData['cajuru'] ? 'cajuru' : unidades[0].ID;
-                unitSelect.value = startUnit;
+                dropdownSelectedText.textContent = allUnitsData[startUnit].name.toUpperCase();
                 updatePageContent(startUnit);
                 attemptGeolocation();
             }
@@ -322,18 +401,15 @@
         document.getElementById('mapa-iframe').src = unit.mapUrl;
 
         renderEvents(unitId);
-        renderFotos(unitId); // Chamamos a nova função de renderizar fotos
+        renderFotos(unitId); 
 
-        // Garante que os ícones globais (estáticos) sejam carregados
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    // --- NOVA FUNÇÃO: Renderiza as fotos dinamicamente ---
     function renderFotos(unitId) {
         const wrapper = document.getElementById('fotos-wrapper');
-        wrapper.innerHTML = ""; // Limpa as fotos atuais
+        wrapper.innerHTML = ""; 
 
-        // 1. Tenta achar fotos específicas dessa unidade ou 'global'
         let fotosFiltradas = [];
         if (allFotosData && allFotosData.length > 0) {
              fotosFiltradas = allFotosData.filter(foto => {
@@ -342,7 +418,6 @@
             });
         }
 
-        // 2. MODO DE SEGURANÇA (Fallback): Se a planilha "fotos" ainda não existe ou está vazia, usa fotos padrão
         if (fotosFiltradas.length === 0) {
             fotosFiltradas = [
                 { URL_Imagem: 'https://i.ibb.co/qMGGTywr/IMG-8079.jpg' },
@@ -352,7 +427,6 @@
             ];
         }
 
-        // 3. Monta o HTML para cada foto
         fotosFiltradas.forEach(foto => {
             const imgUrl = foto.URL_Imagem || foto.Url_Imagem || foto.Imagem;
             if (imgUrl) {
@@ -366,10 +440,8 @@
             }
         });
 
-        // 4. Atualiza o carrossel (Swiper) para ele recalcular o tamanho e rodar
         if (swiperFotos) {
             swiperFotos.update();
-            // Se houver fotos o suficiente, reativa o loop
             if(fotosFiltradas.length > 3) {
                 swiperFotos.params.loop = true;
             } else {
@@ -438,7 +510,6 @@
             breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 }, 1280: { slidesPerView: 4 } }
         });
         
-        // Salvamos o Swiper das fotos na variável swiperFotos
         swiperFotos = new Swiper('#fotos-slider', {
             loop: true, autoplay: { delay: 3000 }, spaceBetween: 24, slidesPerView: 1,
             breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
@@ -455,12 +526,9 @@
                     const d = Math.hypot(lat - c.lat, lng - c.lng);
                     if (d < min) { min = d; closest = id; }
                 }
-                if (closest) {
-                    const select = document.getElementById('unit-select-filter');
-                    if (select.querySelector(`option[value="${closest}"]`)) {
-                        select.value = closest;
-                        updatePageContent(closest);
-                    }
+                if (closest && allUnitsData[closest]) {
+                    // Seleciona a opção automaticamente via geolocalização no novo formato
+                    selectOption(closest, allUnitsData[closest].name);
                 }
             });
         }
