@@ -529,18 +529,34 @@
         document.getElementById('eventos-nenhum-resultado').classList.add('hidden');
 
         filtered.forEach(ev => {
+            // Tratamento inteligente: Busca com ou sem acento conforme o que estiver no Sheets
+            const titulo = ev.Título || ev.Titulo || 'Evento Sem Título';
+            const descricao = ev.Descrição || ev.Descricao || '';
+            const horario = ev.Horário || ev.Horario || '';
+            const imgUrl = ev.URL_Imagem || ev.Url_Imagem || ev.Imagem || 'https://via.placeholder.com/400x225?text=IAPV';
+
+            // Tratamento da Data (Converte o formato de máquina do Sheets para DD/MM/AAAA ou aceita seu texto puro)
+            let dataFormatada = ev.Data || '';
+            if (typeof ev.Data === 'string' && ev.Data.includes('T')) {
+                const dataObj = new Date(ev.Data);
+                if (!isNaN(dataObj.getTime())) {
+                    // timeZone UTC previne que a data volte 1 dia para trás por causa do horário do Brasil
+                    dataFormatada = dataObj.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                }
+            }
+
             // Mantendo exatamente a estrutura de HTML que seu Tailwind usa
             const slide = `
                 <div class="swiper-slide h-auto">
                     <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
-                        <img src="${ev.URL_Imagem}" alt="${ev.Título}" class="w-full aspect-video object-cover" onerror="this.src='https://via.placeholder.com/400x225?text=IAPV'">
+                        <img src="${imgUrl}" alt="${titulo}" class="w-full aspect-video object-cover" onerror="this.src='https://via.placeholder.com/400x225?text=IAPV'">
                         <div class="p-6 flex flex-col flex-grow">
                             <div class="flex items-center gap-2 text-accent text-sm font-semibold mb-2">
                                 <i data-lucide="calendar" class="w-4 h-4"></i>
-                                ${new Date(ev.Data).toLocaleDateString('pt-BR')} - ${ev.Horário}
+                                ${dataFormatada} ${horario ? '- ' + horario : ''}
                             </div>
-                            <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">${ev.Título}</h3>
-                            <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">${ev.Descrição}</p>
+                            <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">${titulo}</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">${descricao}</p>
                         </div>
                     </div>
                 </div>`;
