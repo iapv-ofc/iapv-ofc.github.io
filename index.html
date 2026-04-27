@@ -456,10 +456,26 @@
         wrapper.innerHTML = "";
         const term = document.getElementById('event-search-box').value.toLowerCase();
 
+        // Pega a data de hoje, ignorando as horas (para não ocultar um evento que será hoje à noite)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         const filtered = allEventsData.filter(e => {
             const isUnit = e.Unidade_ID === unitId || e.Unidade_ID.toLowerCase() === 'global';
             const matchesSearch = (e.Título || e.Titulo || '').toLowerCase().includes(term) || (e.Descrição || e.Descricao || '').toLowerCase().includes(term);
-            return isUnit && matchesSearch;
+            
+            // Verificação de Data: só mostrar hoje e eventos futuros
+            let isFutureOrToday = true; // Por padrão verdadeiro (mostra se não houver data preenchida na planilha)
+            if (e.Data && typeof e.Data === 'string' && e.Data.includes('T')) {
+                const eventDate = new Date(e.Data);
+                if (!isNaN(eventDate.getTime())) {
+                    // Extraímos ano, mês e dia e recriamos a data na meia-noite local (evita bug de fuso horário da string)
+                    const eventDateLocal = new Date(eventDate.getUTCFullYear(), eventDate.getUTCMonth(), eventDate.getUTCDate());
+                    isFutureOrToday = eventDateLocal >= today;
+                }
+            }
+
+            return isUnit && matchesSearch && isFutureOrToday;
         });
 
         document.getElementById('eventos-nenhum-resultado').classList.toggle('hidden', filtered.length > 0);
