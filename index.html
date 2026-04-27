@@ -502,26 +502,32 @@
             }
 
             const calLink = generateGoogleCalendarLink(titulo, ev.Data, horario, desc, localFinal);
+            const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(localFinal)}`;
 
             const slide = `
                 <div class="swiper-slide h-auto">
-                    <a href="${calLink}" target="_blank" class="event-card block bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100 dark:border-gray-700 cursor-pointer group">
+                    <div class="event-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100 dark:border-gray-700 group">
                         <div class="event-card-img-container aspect-video">
                             <img src="${img}" alt="${titulo}" class="w-full h-full object-cover">
                         </div>
                         <div class="p-6 flex flex-col flex-grow text-left">
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight group-hover:text-accent transition-colors">${titulo}</h3>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight">${titulo}</h3>
                             
                             <div class="flex flex-col gap-0.5 mb-4">
                                 <span class="text-accent font-bold text-sm uppercase tracking-wide">${dataFinal}</span>
                                 ${horario ? `<span class="text-gray-500 dark:text-gray-400 font-medium text-sm italic">${horario}</span>` : ''}
                             </div>
                             
-                            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center gap-2 text-accent text-sm font-bold mt-auto group-hover:scale-105 transition-transform origin-left">
-                                <i data-lucide="calendar-plus" class="w-5 h-5"></i> Adicionar ao Calendário
+                            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between gap-3 mt-auto">
+                                <a href="${calLink}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 text-accent text-sm font-bold bg-accent/10 hover:bg-accent hover:text-white transition-colors px-3 py-2 rounded-lg">
+                                    <i data-lucide="calendar-plus" class="w-4 h-4"></i> Agenda
+                                </a>
+                                <a href="${mapsLink}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 text-accent text-sm font-bold bg-accent/10 hover:bg-accent hover:text-white transition-colors px-3 py-2 rounded-lg">
+                                    <i data-lucide="map-pin" class="w-4 h-4"></i> Maps
+                                </a>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>`;
             wrapper.innerHTML += slide;
         });
