@@ -403,387 +403,224 @@
     </main>
 
     <!-- ===== JAVASCRIPT PRINCIPAL ===== -->
-    
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, where, orderBy, setLogLevel } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyB1-NkxI4ZxBqsHIK6dzq3c365HLl_DZFs",
-            authDomain: "site-iapv-9fdd1.firebaseapp.com",
-            projectId: "site-iapv-9fdd1",
-            storageBucket: "site-iapv-9fdd1.firebasestorage.app",
-            messagingSenderId: "353341906524",
-            appId: "1:353341906524:web:f6ec38996a2b336f9d1099",
-            measurementId: "G-9JPBKP1R12"
-        };
+<script>
+    // --- 1. CONFIGURAÇÕES DA PLANILHA ---
+    const API_URL = "https://script.google.com/macros/s/AKfycbwENgIzxVzb11HwvfELC2QthmyIyyinHpqw3M1QUoAYApFfGNSQpZO005Pe40EcjY2guA/exec"; 
+    const AUTH_KEY = "1008"; 
 
-        const unitCoordinates = {
-            'cajuru': { lat: -21.274679, lng: -47.313766 },
-            'ribeiraopreto': { lat: -21.160206, lng: -47.840043 },
-            'santarosa': { lat: -21.492530, lng: -47.378818 },
-            'santoandre': { lat: -23.622757, lng: -46.541219 }
-        };
+    // Mantendo sua lógica de coordenadas para o GPS funcionar
+    const unitCoordinates = {
+        'cajuru': { lat: -21.274679, lng: -47.313766 },
+        'ribeiraopreto': { lat: -21.160206, lng: -47.840043 },
+        'santarosa': { lat: -21.492530, lng: -47.378818 },
+        'santoandre': { lat: -23.622757, lng: -46.541219 }
+    };
 
-        let db;
-        let swiperEventos;
-        let currentUnitId = null;
-        let allUnitsData = {};
+    let swiperEventos;
+    let currentUnitId = null;
+    let allUnitsData = {}; // Objeto para busca rápida
+    let allEventsData = []; // Array com todos os eventos
 
-        try {
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app);
-            db = getFirestore(app);
-            console.log("Firebase inicializado com sucesso!");
-        } catch (error) {
-            console.error("Erro ao inicializar o Firebase: ", error);
-            document.getElementById('eventos-unidade').textContent = "Erro de conexão";
-            document.getElementById('eventos-wrapper').innerHTML = '<p class="text-center text-red-500">Não foi possível conectar ao banco de dados.</p>';
-        }
+    // --- 2. INICIALIZAÇÃO ---
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeAppLogic();
+    });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if(db) initializeAppLogic();
+    async function initializeAppLogic() {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        initializeSwipers();
+        
+        // Carrega os dados da planilha antes de tudo
+        await loadDataFromSheets();
+
+        const unitSelect = document.getElementById('unit-select-filter');
+        unitSelect.addEventListener('change', (event) => {
+            const unitId = event.target.value;
+            if(unitId) {
+                updatePageContent(unitId);
+                document.getElementById('location-status').textContent = "";
+            }
         });
 
-        async function initializeAppLogic() {
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-            initializeSwipers();
-            await loadUnitsDropdown();
-            attemptGeolocation();
+        document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
+        attemptGeolocation();
+    }
 
-            const unitSelect = document.getElementById('unit-select-filter');
-            unitSelect.addEventListener('change', (event) => {
-                const unitId = event.target.value;
-                if(unitId) {
-                    updatePageContent(unitId);
-                    document.getElementById('location-status').textContent = "";
-                }
-            });
+    // --- 3. BUSCA DE DADOS (Substituindo Firebase) ---
+    async function loadDataFromSheets() {
+        const statusText = document.getElementById('eventos-unidade');
+        statusText.textContent = "Sincronizando...";
 
-            document.getElementById('event-search-box').addEventListener('input', filterEventsBySearch);
-        }
+        try {
+            // Busca unidades e eventos simultaneamente
+            const [unidades, eventos] = await Promise.all([
+                fetch(`${API_URL}?sheet=unidades`).then(r => r.json()),
+                fetch(`${API_URL}?sheet=eventos`).then(r => r.json())
+            ]);
 
-        function initializeSwipers() {
-            swiperEventos = new Swiper('#eventos-slider', {
-                slidesPerView: 1,
-                spaceBetween: 20,
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                breakpoints: {
-                    640: { slidesPerView: 2, spaceBetween: 20 },
-                    1024: { slidesPerView: 3, spaceBetween: 30 },
-                    1280: { slidesPerView: 4, spaceBetween: 30 }
-                }
-            });
-
-            // Inicializa o Slider de Projetos
-            new Swiper('#projetos-slider', {
-                slidesPerView: 2,
-                spaceBetween: 30,
-                loop: true,
-                autoplay: {
-                    delay: 2000,
-                    disableOnInteraction: false,
-                },
-                breakpoints: {
-                    480: { slidesPerView: 3, spaceBetween: 30 },
-                    768: { slidesPerView: 4, spaceBetween: 40 },
-                    1024: { slidesPerView: 5, spaceBetween: 50 }
-                }
-            });
-
-            new Swiper('#fotos-slider', {
-                loop: true,
-                autoplay: { delay: 3000, disableOnInteraction: false },
-                spaceBetween: 30,
-                slidesPerView: 1,
-                breakpoints: {
-                    768: { slidesPerView: 2, spaceBetween: 30 },
-                    1024: { slidesPerView: 3, spaceBetween: 30 }
-                },
-                navigation: { nextEl: '#fotos .swiper-button-next', prevEl: '#fotos .swiper-button-prev' },
-            });
-        }
-
-        function attemptGeolocation() {
-            const statusText = document.getElementById('location-status');
-            if ("geolocation" in navigator) {
-                statusText.textContent = "Localizando unidade mais próxima...";
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const closestUnitId = findNearestUnit(position.coords.latitude, position.coords.longitude);
-                        if (closestUnitId && closestUnitId !== currentUnitId) {
-                            updatePageContent(closestUnitId);
-                            document.getElementById('unit-select-filter').value = closestUnitId;
-                            statusText.textContent = `Localizado: ${allUnitsData[closestUnitId].name}`;
-                        } else {
-                            statusText.textContent = "";
-                        }
-                    },
-                    (error) => {
-                        console.warn("Geolocalização negada ou falhou:", error.message);
-                        statusText.textContent = ""; 
-                    }
-                );
-            }
-        }
-
-        function findNearestUnit(userLat, userLng) {
-            let minDistance = Infinity;
-            let closestUnit = null;
-            for (const [unitId, coords] of Object.entries(unitCoordinates)) {
-                const distance = getDistanceFromLatLonInKm(userLat, userLng, coords.lat, coords.lng);
-                if (distance < minDistance) { minDistance = distance; closestUnit = unitId; }
-            }
-            return closestUnit;
-        }
-
-        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-            const R = 6371; 
-            const dLat = deg2rad(lat2 - lat1);
-            const dLon = deg2rad(lon2 - lon1);
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c;
-        }
-        function deg2rad(deg) { return deg * (Math.PI / 180); }
-
-        async function loadUnitsDropdown() {
-            const unitsCollection = collection(db, "units");
-            const unitSelect = document.getElementById('unit-select-filter');
-            try {
-                const querySnapshot = await getDocs(query(unitsCollection));
-                if (querySnapshot.empty) {
-                    unitSelect.innerHTML = '<option value="">Nenhuma unidade cadastrada</option>';
-                    return;
-                }
-                let optionsHtml = '';
-                let defaultUnitId = 'cajuru'; 
-                let foundDefault = false;
-                querySnapshot.forEach((doc) => {
-                    if (doc.id === 'global') return; 
-                    const unit = doc.data();
-                    unit.id = doc.id; 
-                    allUnitsData[doc.id] = unit; 
-                    if (doc.id === defaultUnitId) foundDefault = true;
-                    optionsHtml += `<option value="${doc.id}">${unit.name.toUpperCase()}</option>`;
-                });
-                unitSelect.innerHTML = optionsHtml;
-                if (!foundDefault && Object.keys(allUnitsData).length > 0) defaultUnitId = Object.keys(allUnitsData)[0];
-                if (defaultUnitId) {
-                    currentUnitId = defaultUnitId;
-                    unitSelect.value = defaultUnitId;
-                    updatePageContent(defaultUnitId);
-                }
-            } catch (error) {
-                console.error("Erro ao carregar unidades: ", error);
-                unitSelect.innerHTML = '<option value="">Erro ao carregar</option>';
-            }
-        }
-
-        function updatePageContent(unitId) {
-            currentUnitId = unitId;
-            const unitData = allUnitsData[unitId];
-            if (!unitData) return;
-
-            document.getElementById('unit-select-filter').value = unitId;
-            document.getElementById('eventos-unidade').textContent = unitData.name;
-            loadEventsForUnit(unitId, unitData.name);
-            document.getElementById('fotos-unidade-nome').textContent = unitData.name;
-            document.getElementById('fotos-album-link').href = unitData.albumUrl || '#';
-            document.getElementById('mapa-iframe').src = unitData.mapUrl || '';
-            document.getElementById('contato-endereco').textContent = unitData.address || 'Endereço não informado';
-            document.getElementById('contato-horarios').textContent = unitData.times || 'Horários não informados';
-            document.getElementById('social-instagram').href = unitData.socials?.instagram || '#';
-            document.getElementById('social-youtube').href = unitData.socials?.youtube || '#';
-            document.getElementById('event-search-box').value = '';
-        }
-
-        async function loadEventsForUnit(unitId, unitName) {
-            const wrapper = document.getElementById('eventos-wrapper');
-            wrapper.innerHTML = '<p class="text-center text-gray-500">Carregando eventos...</p>';
-            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
-            noResultsMsg.classList.add('hidden');
-
-            const todayString = new Date().toISOString().split('T')[0];
-
-            // Busca eventos que ainda não terminaram (ou que são recorrentes com data de fim longínqua)
-            const unitEventsCollection = collection(db, `units/${unitId}/events`);
-            const qUnit = query(unitEventsCollection, where("endDate", ">=", todayString));
-            const globalEventsCollection = collection(db, `units/global/events`);
-            const qGlobal = query(globalEventsCollection, where("endDate", ">=", todayString));
-
-            try {
-                const [unitSnapshot, globalSnapshot] = await Promise.all([
-                    getDocs(qUnit),
-                    getDocs(qGlobal)
-                ]);
-
-                let allEvents = [];
-                const pushEvent = (doc) => {
-                    let data = doc.data();
-                    
-                    // --- LÓGICA PARA EVENTOS RECORRENTES ---
-                    if (data.isRecurring && data.dayOfWeek !== undefined) {
-                        const today = new Date();
-                        const resultDate = new Date();
-                        
-                        // Calcula quantos dias faltam até o próximo dia da semana desejado
-                        // Fórmula: (DiaAlvo - DiaHoje + 7) % 7
-                        let daysUntil = (data.dayOfWeek - today.getDay() + 7) % 7;
-                        
-                        // Se cair hoje (0), verifica se o horário já passou
-                        if (daysUntil === 0) {
-                            const [h, m] = (data.time || "00:00").split(':');
-                            const eventTime = new Date();
-                            eventTime.setHours(parseInt(h), parseInt(m), 0);
-                            if (today > eventTime) {
-                                daysUntil = 7; // Já passou, joga para a próxima semana
-                            }
-                        }
-                        
-                        resultDate.setDate(today.getDate() + daysUntil);
-                        
-                        // Define o horário correto para a ordenação funcionar
-                        const [h, m] = (data.time || "00:00").split(':');
-                        resultDate.setHours(parseInt(h), parseInt(m), 0);
-                        
-                        // Atualiza os dados de exibição (sem salvar no banco)
-                        const day = String(resultDate.getDate()).padStart(2, '0');
-                        const month = String(resultDate.getMonth() + 1).padStart(2, '0');
-                        
-                        data.displayNextDate = `${day}/${month}`; // Ex: 24/11
-                        data.date = `Todo(a) ${getDayName(data.dayOfWeek)}`; // Texto principal
-                        data.startDate = resultDate.toISOString(); // Data ISO para o sort()
-                        data.isRecurringInstance = true;
-                    }
-                    allEvents.push(data);
-                };
-
-                unitSnapshot.forEach(pushEvent);
-                globalSnapshot.forEach(pushEvent);
-
-                // Remove duplicatas (por segurança) e ordena
-                const uniqueEvents = Array.from(new Set(allEvents.map(e => JSON.stringify(e)))).map(s => JSON.parse(s));
-                uniqueEvents.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
-                
-                allUnitsData[unitId].events = uniqueEvents;
-                updateEventSlider(uniqueEvents, unitName);
-
-            } catch (error) {
-                console.error("Erro ao buscar eventos: ", error);
-                wrapper.innerHTML = `<p class="text-center text-red-500">Erro ao carregar eventos.</p>`;
-            }
-        }
-
-        function getDayName(dayIndex) {
-            const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-            return days[dayIndex] || '';
-        }
-
-        function createEventCard(event, unitName) {
-            const location = event.location || unitName;
-            const calendarLink = createGoogleCalendarLink(event, location);
+            allEventsData = eventos;
             
-            // Exibe data calculada se for recorrente
-            const dateDisplay = event.isRecurringInstance 
-                ? `<span class="block text-xs font-bold text-accent uppercase tracking-wider mb-1">Próximo: ${event.displayNextDate}</span>${event.date}` 
-                : event.date;
+            // Popula o Dropdown e o objeto de unidades
+            const unitSelect = document.getElementById('unit-select-filter');
+            let optionsHtml = '';
 
-            const calendarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon inline-block text-accent"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
-            const mapPinIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon inline-block text-accent"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
+            unidades.forEach(unit => {
+                // Mapeia os nomes da planilha para o formato que seu HTML já usa
+                allUnitsData[unit.ID] = {
+                    id: unit.ID,
+                    name: unit.Nome,
+                    address: unit.Endereço,
+                    times: unit.Horários,
+                    mapUrl: unit.Link_Mapa,
+                    albumUrl: unit.Link_Álbum,
+                    instagram: unit.Instagram,
+                    youtube: unit.YouTube
+                };
+                optionsHtml += `<option value="${unit.ID}">${unit.Nome.toUpperCase()}</option>`;
+            });
 
-            return `
-                <div class="swiper-slide h-auto p-4">
-                    <a href="${calendarLink}" target="_blank" rel="noopener noreferrer" 
-                       class="group relative block w-full h-72 min-h-[280px] bg-white rounded-[30px] shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-200"
-                       style="box-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgba(0, 93, 204, 0.1));">
-                        <div class="relative z-[1] flex flex-col justify-center items-center h-full p-5 text-center">
-                            <div>
-                                <h4 class="text-xl font-bold text-gray-800 mb-3 leading-tight">${event.title}</h4>
-                                <div class="text-sm text-gray-600 mb-3 flex flex-col items-center justify-center gap-1">
-                                    <div class="flex items-center font-medium">
-                                        ${calendarIcon}
-                                        <span class="ml-1.5">${event.time}</span>
-                                    </div>
-                                    <span class="text-gray-500">${dateDisplay}</span>
-                                </div>
-                                <div class="text-sm text-gray-600 flex items-center justify-center">
-                                    ${mapPinIcon}
-                                    <span class="ml-1.5 truncate max-w-[200px]">${location}</span>
-                                </div>
+            unitSelect.innerHTML = optionsHtml;
+
+            // Define a unidade padrão (Cajuru ou a primeira da lista)
+            const defaultUnit = allUnitsData['cajuru'] ? 'cajuru' : unidades[0].ID;
+            unitSelect.value = defaultUnit;
+            updatePageContent(defaultUnit);
+
+        } catch (error) {
+            console.error("Erro ao carregar Sheets:", error);
+            statusText.textContent = "Erro ao carregar dados";
+        }
+    }
+
+    // --- 4. ATUALIZAÇÃO DA INTERFACE (Mantendo seu layout) ---
+    function updatePageContent(unitId) {
+        currentUnitId = unitId;
+        const unit = allUnitsData[unitId];
+        if(!unit) return;
+
+        // Atualiza textos
+        document.getElementById('eventos-unidade').textContent = unit.name;
+        document.getElementById('fotos-unidade-nome').textContent = unit.name;
+        document.getElementById('contato-endereco').textContent = unit.address;
+        document.getElementById('contato-horarios').textContent = unit.times;
+        
+        // Atualiza links
+        document.getElementById('fotos-album-link').href = unit.albumUrl;
+        document.getElementById('social-instagram').href = unit.instagram;
+        document.getElementById('social-youtube').href = unit.youtube;
+        document.getElementById('mapa-iframe').src = unit.mapUrl;
+
+        renderEvents(unitId);
+    }
+
+    function renderEvents(unitId) {
+        const wrapper = document.getElementById('eventos-wrapper');
+        wrapper.innerHTML = "";
+
+        // Filtra eventos da unidade selecionada + eventos marcados como "global"
+        const filtered = allEventsData.filter(e => e.Unidade_ID === unitId || e.Unidade_ID.toLowerCase() === 'global');
+
+        if (filtered.length === 0) {
+            document.getElementById('eventos-nenhum-resultado').classList.remove('hidden');
+            return;
+        }
+
+        document.getElementById('eventos-nenhum-resultado').classList.add('hidden');
+
+        filtered.forEach(ev => {
+            // Mantendo exatamente a estrutura de HTML que seu Tailwind usa
+            const slide = `
+                <div class="swiper-slide h-auto">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
+                        <img src="${ev.URL_Imagem}" alt="${ev.Título}" class="w-full aspect-video object-cover" onerror="this.src='https://via.placeholder.com/400x225?text=IAPV'">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex items-center gap-2 text-accent text-sm font-semibold mb-2">
+                                <i data-lucide="calendar" class="w-4 h-4"></i>
+                                ${new Date(ev.Data).toLocaleDateString('pt-BR')} - ${ev.Horário}
                             </div>
-                            <span class="mt-6 inline-block bg-accent text-white font-bold py-2 px-4 rounded-lg text-xs transition-transform duration-200 group-hover:scale-105 shadow-md">
-                                Adicionar à Agenda
-                            </span>
+                            <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">${ev.Título}</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">${ev.Descrição}</p>
                         </div>
-                    </a>
-                </div>
-            `;
-        }
-        
-        function updateEventSlider(eventsToShow, unitName) {
-            const wrapper = document.getElementById('eventos-wrapper');
-            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
-            if (!eventsToShow || eventsToShow.length === 0) {
-                wrapper.innerHTML = '';
-                noResultsMsg.classList.remove('hidden');
-                noResultsMsg.textContent = "Nenhum evento futuro encontrado para esta unidade.";
+                    </div>
+                </div>`;
+            wrapper.innerHTML += slide;
+        });
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        swiperEventos.update();
+        swiperEventos.slideTo(0);
+    }
+
+    // --- 5. LÓGICAS DE AUXÍLIO (GPS, Swiper, Busca) ---
+    function filterEventsBySearch() {
+        const term = document.getElementById('event-search-box').value.toLowerCase();
+        const slides = document.querySelectorAll('#eventos-wrapper .swiper-slide');
+        let count = 0;
+
+        slides.forEach(slide => {
+            const title = slide.querySelector('h3').innerText.toLowerCase();
+            const desc = slide.querySelector('p').innerText.toLowerCase();
+            if (title.includes(term) || desc.includes(term)) {
+                slide.style.display = "";
+                count++;
             } else {
-                wrapper.innerHTML = eventsToShow.map(event => createEventCard(event, unitName)).join('');
-                noResultsMsg.classList.add('hidden');
+                slide.style.display = "none";
             }
-            if (swiperEventos) {
-                swiperEventos.update();
-                swiperEventos.slideTo(0);
-            }
-        }
-        
-        function filterEventsBySearch() {
-            const searchTerm = document.getElementById('event-search-box').value.toLowerCase();
-            if (!currentUnitId || !allUnitsData[currentUnitId] || !allUnitsData[currentUnitId].events) return;
-            const allFutureEvents = allUnitsData[currentUnitId].events;
-            const unitName = allUnitsData[currentUnitId].name;
-            const noResultsMsg = document.getElementById('eventos-nenhum-resultado');
-            if (!searchTerm) {
-                updateEventSlider(allFutureEvents, unitName);
-                noResultsMsg.textContent = "Nenhum evento futuro encontrado para esta unidade.";
-                return;
-            }
-            const filteredEvents = allFutureEvents.filter(event => event.title.toLowerCase().includes(searchTerm));
-            updateEventSlider(filteredEvents, unitName);
-            if (filteredEvents.length === 0) noResultsMsg.textContent = "Nenhum evento encontrado com esse nome.";
-        }
+        });
 
-        function createGoogleCalendarLink(event, location) {
-            const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
-            const formatISODate = (isoStr) => isoStr.replace(/-|:|\.\d+/g, '');
-            let dates = '';
-            if (event.startDate && event.endDate) {
-                // Para eventos recorrentes, gera link apenas para a PRÓXIMA ocorrência calculada
-                // Para garantir compatibilidade, criamos uma 'endDate' fictícia de 1h se não existir
-                let startStr = event.startDate;
-                let endStr = event.endDate;
-                
-                // Se for recorrente, a 'endDate' do banco é 2099. Precisamos calcular a duração real do culto (ex: 2h)
-                if (event.isRecurringInstance) {
-                    const startObj = new Date(event.startDate);
-                    const endObj = new Date(startObj);
-                    endObj.setHours(endObj.getHours() + 2); // Assume 2h de duração padrão
-                    endStr = endObj.toISOString();
-                }
+        document.getElementById('eventos-nenhum-resultado').classList.toggle('hidden', count > 0);
+        swiperEventos.update();
+    }
 
-                try {
-                     dates = `${formatISODate(startStr)}/${formatISODate(endStr)}`;
-                } catch(e) {
-                    console.warn("Erro ao formatar data calendário", e);
-                }
+    function initializeSwipers() {
+        swiperEventos = new Swiper('#eventos-slider', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            breakpoints: {
+                640: { slidesPerView: 2, spaceBetween: 20 },
+                1024: { slidesPerView: 3, spaceBetween: 30 },
+                1280: { slidesPerView: 4, spaceBetween: 30 }
             }
-            const text = encodeURIComponent(event.title);
-            const details = encodeURIComponent(`Participe conosco do evento "${event.title}" na ${location}.`);
-            const loc = encodeURIComponent(location);
-            return `${baseUrl}&text=${text}&dates=${dates}&details=${details}&location=${loc}`;
+        });
+
+        new Swiper('#projetos-slider', {
+            slidesPerView: 2, spaceBetween: 30, loop: true,
+            autoplay: { delay: 2000 },
+            breakpoints: { 480: { slidesPerView: 3 }, 768: { slidesPerView: 4 }, 1024: { slidesPerView: 5 } }
+        });
+
+        new Swiper('#fotos-slider', {
+            loop: true, autoplay: { delay: 3000 }, spaceBetween: 30, slidesPerView: 1,
+            breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
+            navigation: { nextEl: '#fotos .swiper-button-next', prevEl: '#fotos .swiper-button-prev' },
+        });
+    }
+
+    function attemptGeolocation() {
+        const statusText = document.getElementById('location-status');
+        if ("geolocation" in navigator) {
+            statusText.textContent = "Buscando unidade próxima...";
+            navigator.geolocation.getCurrentPosition((position) => {
+                const closest = findNearestUnit(position.coords.latitude, position.coords.longitude);
+                if (closest && closest !== currentUnitId) {
+                    document.getElementById('unit-select-filter').value = closest;
+                    updatePageContent(closest);
+                    statusText.textContent = `Unidade mais próxima: ${allUnitsData[closest].name}`;
+                } else { statusText.textContent = ""; }
+            }, () => { statusText.textContent = ""; });
         }
-    </script>
+    }
+
+    function findNearestUnit(lat, lng) {
+        let min = Infinity, closest = null;
+        for (const [id, coords] of Object.entries(unitCoordinates)) {
+            const d = Math.hypot(lat - coords.lat, lng - coords.lng);
+            if (d < min) { min = d; closest = id; }
+        }
+        return closest;
+    }
+</script>
 </body>
 </html>
