@@ -476,29 +476,79 @@
                 if (!isNaN(d.getTime())) dataFinal = d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
             }
 
+            const calLink = generateGoogleCalendarLink(titulo, ev.Data, horario, desc);
+
             const slide = `
                 <div class="swiper-slide h-auto">
-                    <div class="event-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100 dark:border-gray-700">
+                    <a href="${calLink}" target="_blank" class="event-card block bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100 dark:border-gray-700 cursor-pointer group">
                         <div class="event-card-img-container aspect-video">
                             <img src="${img}" alt="${titulo}" class="w-full h-full object-cover">
                         </div>
                         <div class="p-6 flex flex-col flex-grow text-left">
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight">${titulo}</h3>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight group-hover:text-accent transition-colors">${titulo}</h3>
                             
                             <div class="flex flex-col gap-0.5 mb-4">
                                 <span class="text-accent font-bold text-sm uppercase tracking-wide">${dataFinal}</span>
                                 ${horario ? `<span class="text-gray-500 dark:text-gray-400 font-medium text-sm italic">${horario}</span>` : ''}
                             </div>
-
-                            <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 leading-relaxed border-t border-gray-100 dark:border-gray-700 pt-4 mt-auto">${desc}</p>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center gap-2 text-accent text-sm font-bold mt-auto group-hover:scale-105 transition-transform origin-left">
+                                <i data-lucide="calendar-plus" class="w-5 h-5"></i> Adicionar ao Calendário
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>`;
             wrapper.innerHTML += slide;
         });
 
         swiperEventos.update();
         swiperEventos.slideTo(0);
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function generateGoogleCalendarLink(title, dateRaw, timeStr, desc) {
+        const baseUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+        const params = new URLSearchParams();
+        params.append('text', title);
+        params.append('details', desc);
+
+        if (typeof dateRaw === 'string' && dateRaw.includes('T')) {
+            const d = new Date(dateRaw);
+            if (!isNaN(d.getTime())) {
+                const year = d.getUTCFullYear();
+                const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+                const day = String(d.getUTCDate()).padStart(2, '0');
+                
+                let hour = '19'; // Horário padrão se não conseguir ler
+                let minute = '00';
+
+                // Tenta extrair a hora e os minutos (ex: "19h30", "19:00", "19")
+                if (timeStr) {
+                    const timeMatch = timeStr.match(/(\d{1,2})[:hH]?(\d{2})?/);
+                    if (timeMatch) {
+                        hour = String(timeMatch[1]).padStart(2, '0');
+                        minute = timeMatch[2] ? String(timeMatch[2]).padStart(2, '0') : '00';
+                    }
+                }
+
+                const startString = `${year}${month}${day}T${hour}${minute}00`;
+                
+                // Estima 2 horas de duração para o evento
+                let endHourNum = parseInt(hour) + 2;
+                let endHour = String(endHourNum).padStart(2, '0');
+                let endMinute = minute;
+
+                // Evita bugar caso o evento passe da meia-noite (24h+) limitando até 23:59 do mesmo dia
+                if (endHourNum >= 24) {
+                    endHour = '23';
+                    endMinute = '59';
+                }
+                
+                const endString = `${year}${month}${day}T${endHour}${endMinute}00`;
+                params.append('dates', `${startString}/${endString}`);
+            }
+        }
+        return `${baseUrl}&${params.toString()}`;
     }
 
     function filterEventsBySearch() { renderEvents(currentUnitId); }
